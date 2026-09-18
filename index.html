@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -9,24 +10,18 @@
 <style>
 
 /* =========================================================
-   GLOBAL
+   RESET
 ========================================================= */
 
 * {
     box-sizing: border-box;
 }
 
-html {
-    scroll-behavior: smooth;
-}
-
 html,
 body {
     margin: 0;
     padding: 0;
-
     width: 100%;
-
     background: #ffffff;
     color: #111111;
 
@@ -44,231 +39,52 @@ a {
 
 
 /* =========================================================
-   PAGE CONTAINER
-
-   GitHub Pages를 Google Sites full-page embed할 것을 고려
+   PAGE
 ========================================================= */
 
 .people-wrap {
-
     width: 100%;
-
-    max-width: 1520px;
+    max-width: 1500px;
 
     margin: 0 auto;
 
     padding:
-        54px
-        clamp(28px, 5vw, 82px)
+        48px
+        clamp(28px, 5vw, 80px)
         100px;
 }
 
 
 /* =========================================================
-   PAGE TITLE
-========================================================= */
-
-.page-header {
-
-    display: flex;
-
-    align-items: flex-end;
-    justify-content: space-between;
-
-    margin-bottom: 46px;
-}
-
-
-.page-title {
-
-    margin: 0;
-
-    font-size: 42px;
-    line-height: 1;
-
-    font-weight: 650;
-
-    letter-spacing: -1.2px;
-}
-
-
-/* =========================================================
-   TERM / CURRENT SELECTOR
-========================================================= */
-
-.people-controls {
-
-    position: relative;
-}
-
-
-.term-picker {
-
-    position: relative;
-}
-
-
-.term-trigger {
-
-    display: flex;
-
-    align-items: center;
-
-    gap: 9px;
-
-    padding: 4px 0;
-
-    border: 0;
-
-    background: transparent;
-
-    color: #111111;
-
-    font-size: 15px;
-
-    cursor: pointer;
-}
-
-
-.term-chevron {
-
-    font-size: 11px;
-
-    transition:
-        transform 0.2s ease;
-}
-
-
-.term-picker.open
-.term-chevron {
-
-    transform: rotate(180deg);
-}
-
-
-.term-menu {
-
-    position: absolute;
-
-    top: calc(100% + 12px);
-    right: 0;
-
-    min-width: 155px;
-
-    padding: 5px 0;
-
-    border:
-        1px solid #dddddd;
-
-    background:
-        #ffffff;
-
-    box-shadow:
-        0 8px 26px
-        rgba(0,0,0,0.07);
-
-    z-index: 30;
-
-    opacity: 0;
-
-    visibility: hidden;
-
-    transform:
-        translateY(-5px);
-
-    transition:
-        opacity 0.18s ease,
-        transform 0.18s ease,
-        visibility 0.18s ease;
-}
-
-
-.term-picker.open
-.term-menu {
-
-    opacity: 1;
-
-    visibility: visible;
-
-    transform:
-        translateY(0);
-}
-
-
-.term-option {
-
-    display: block;
-
-    width: 100%;
-
-    padding:
-        11px
-        16px;
-
-    border: 0;
-
-    background: #fff;
-
-    color: #222;
-
-    text-align: left;
-
-    font-size: 14px;
-
-    cursor: pointer;
-}
-
-
-.term-option:hover {
-
-    background: #f4f4f4;
-}
-
-
-.term-option.active {
-
-    font-weight: 650;
-}
-
-
-/* =========================================================
-   MEMBER DETAIL
-   DSIL처럼 GRID 위쪽에 표시
+   DETAIL PANEL
+   기본 상태에서는 아예 공간을 차지하지 않음
 ========================================================= */
 
 .people-detail {
-
     display: none;
 
     position: relative;
 
-    margin-bottom: 58px;
+    width: 100%;
 
-    padding:
-        0
-        0
-        50px;
+    margin-bottom: 55px;
 
-    border-bottom:
-        1px solid #d7d7d7;
+    padding-bottom: 50px;
+
+    border-bottom: 1px solid #d5d5d5;
 }
-
 
 .people-detail.show {
-
     display: block;
 
-    animation:
-        detailFade
-        0.32s ease;
+    animation: detailOpen 0.25s ease;
 }
 
-
-@keyframes detailFade {
+@keyframes detailOpen {
 
     from {
         opacity: 0;
-        transform: translateY(-7px);
+        transform: translateY(-8px);
     }
 
     to {
@@ -278,45 +94,48 @@ a {
 }
 
 
-.detail-close {
+/* =========================================================
+   DETAIL CLOSE
+========================================================= */
 
+.detail-close {
     position: absolute;
 
     top: 0;
     right: 0;
 
-    width: 38px;
-    height: 38px;
+    width: 36px;
+    height: 36px;
+
+    padding: 0;
 
     border: 0;
 
     background: transparent;
 
     cursor: pointer;
-}
 
+    z-index: 5;
+}
 
 .detail-close::before,
 .detail-close::after {
-
     content: "";
 
     position: absolute;
 
-    top: 18px;
+    top: 17px;
     left: 5px;
 
-    width: 28px;
+    width: 26px;
     height: 1.5px;
 
     background: #111;
 }
 
-
 .detail-close::before {
     transform: rotate(45deg);
 }
-
 
 .detail-close::after {
     transform: rotate(-45deg);
@@ -328,95 +147,92 @@ a {
 ========================================================= */
 
 .detail-layout {
-
     display: grid;
 
     grid-template-columns:
-        minmax(260px, 31%)
+        minmax(240px, 30%)
         minmax(0, 1fr);
 
-    gap:
-        clamp(42px, 6vw, 90px);
+    gap: clamp(42px, 6vw, 85px);
 }
 
 
+/* photo */
+
 .detail-photo {
+    position: relative;
 
     width: 100%;
 
-    /*
-      DSIL 코드의 a4-photo naming을 참고해
-      A4 비율 적용
-    */
-
-    aspect-ratio:
-        210 / 297;
+    aspect-ratio: 4 / 5;
 
     overflow: hidden;
 
-    background:
-        #eeeeee;
+    background: #eeeeee;
 }
 
-
 .detail-photo img {
+    display: block;
 
     width: 100%;
     height: 100%;
 
-    display: block;
-
     object-fit: cover;
-
-    object-position:
-        center center;
+    object-position: center center;
 }
 
+
+/* fallback */
+
+.detail-photo-fallback {
+    display: none;
+
+    position: absolute;
+
+    inset: 0;
+
+    align-items: center;
+    justify-content: center;
+
+    padding: 20px;
+
+    text-align: center;
+
+    font-size: 24px;
+
+    font-weight: 700;
+
+    color: #999999;
+}
+
+
+/* content */
 
 .detail-content {
-
-    padding:
-        7px
-        50px
-        0
-        0;
+    padding-top: 4px;
+    padding-right: 45px;
 }
-
 
 .detail-name {
+    margin: 0 0 8px;
 
-    margin:
-        0
-        0
-        8px;
+    font-size: clamp(30px, 3vw, 42px);
 
-    font-size:
-        clamp(30px, 3vw, 42px);
+    line-height: 1.12;
 
-    line-height:
-        1.12;
+    font-weight: 700;
 
-    font-weight:
-        650;
-
-    letter-spacing:
-        -0.8px;
+    letter-spacing: -0.8px;
 }
 
-
 .detail-role {
+    margin-bottom: 35px;
 
-    margin-bottom:
-        36px;
+    color: #666666;
 
-    color:
-        #666666;
+    font-size: 16px;
 
-    font-size:
-        16px;
-
-    line-height:
-        1.5;
+    line-height: 1.5;
 }
 
 
@@ -425,289 +241,290 @@ a {
 ========================================================= */
 
 .detail-section {
-
-    margin-top:
-        29px;
+    margin-top: 28px;
 }
-
 
 .detail-heading {
+    margin-bottom: 10px;
 
-    margin-bottom:
-        11px;
+    font-size: 12px;
 
-    font-size:
-        12px;
+    font-weight: 700;
 
-    font-weight:
-        700;
+    letter-spacing: 1.1px;
 
-    letter-spacing:
-        1.1px;
-
-    text-transform:
-        uppercase;
+    text-transform: uppercase;
 }
-
 
 .detail-body {
+    color: #333333;
 
-    color:
-        #333333;
+    font-size: 15px;
 
-    font-size:
-        14.5px;
-
-    line-height:
-        1.75;
+    line-height: 1.75;
 }
-
 
 .detail-body p {
-
-    margin:
-        0
-        0
-        7px;
+    margin: 0 0 6px;
 }
-
-
-.detail-body ul {
-
-    margin:
-        4px
-        0
-        0;
-
-    padding-left:
-        19px;
-}
-
-
-.detail-body li {
-
-    margin-bottom:
-        4px;
-}
-
-
-/* research */
-
-.research-area {
-
-    margin-bottom:
-        17px;
-}
-
-
-.research-area-title {
-
-    margin-bottom:
-        4px;
-
-    font-weight:
-        600;
-
-    color:
-        #1c1c1c;
-}
-
-
-/* contact */
 
 .detail-email {
+    color: #111111;
 
-    color:
-        #111111;
+    text-decoration: none;
 
-    text-decoration:
-        none;
-
-    border-bottom:
-        1px solid #bdbdbd;
+    border-bottom: 1px solid #bdbdbd;
 }
-
 
 .detail-email:hover {
-
-    border-bottom-color:
-        #111111;
-}
-
-
-/* external links */
-
-.member-links {
-
-    display: flex;
-
-    flex-wrap: wrap;
-
-    gap:
-        12px;
-
-    margin-top:
-        31px;
-}
-
-
-.member-link {
-
-    display: inline-flex;
-
-    align-items: center;
-
-    gap: 6px;
-
-    color:
-        #111111;
-
-    text-decoration:
-        none;
-
-    font-size:
-        14px;
-
-    font-weight:
-        500;
-}
-
-
-.member-link:hover {
-
-    text-decoration:
-        underline;
+    border-bottom-color: #111111;
 }
 
 
 /* =========================================================
-   GRID
+   HEADER
+========================================================= */
+
+.people-header {
+    display: flex;
+
+    align-items: center;
+    justify-content: space-between;
+
+    margin-bottom: 42px;
+}
+
+.people-title {
+    margin: 0;
+
+    font-size: 40px;
+
+    line-height: 1;
+
+    font-weight: 700;
+
+    letter-spacing: -1.2px;
+}
+
+
+/* =========================================================
+   CURRENT DROPDOWN
+========================================================= */
+
+.people-filter {
+    position: relative;
+}
+
+.filter-button {
+    display: flex;
+
+    align-items: center;
+
+    gap: 8px;
+
+    padding: 5px 0;
+
+    border: 0;
+
+    background: transparent;
+
+    color: #111111;
+
+    font-size: 14px;
+
+    cursor: pointer;
+}
+
+.filter-chevron {
+    display: inline-block;
+
+    font-size: 10px;
+
+    transition: transform 0.2s ease;
+}
+
+.people-filter.open .filter-chevron {
+    transform: rotate(180deg);
+}
+
+.filter-menu {
+    display: none;
+
+    position: absolute;
+
+    top: calc(100% + 8px);
+    right: 0;
+
+    min-width: 130px;
+
+    background: #ffffff;
+
+    border: 1px solid #dddddd;
+
+    box-shadow:
+        0 8px 25px
+        rgba(0, 0, 0, 0.07);
+
+    z-index: 50;
+}
+
+.people-filter.open .filter-menu {
+    display: block;
+}
+
+.filter-option {
+    display: block;
+
+    width: 100%;
+
+    padding: 11px 15px;
+
+    border: 0;
+
+    background: #ffffff;
+
+    text-align: left;
+
+    color: #222222;
+
+    font-size: 14px;
+
+    cursor: pointer;
+}
+
+.filter-option:hover {
+    background: #f4f4f4;
+}
+
+.filter-option.active {
+    font-weight: 700;
+}
+
+
+/* =========================================================
+   PEOPLE GRID
 ========================================================= */
 
 .people-grid {
-
     width: 100%;
 
     display: grid;
 
-    /*
-      DSIL 느낌:
-      넓은 화면 5열
-    */
-
     grid-template-columns:
         repeat(5, minmax(0, 1fr));
 
-    column-gap:
-        clamp(18px, 2.2vw, 32px);
+    column-gap: clamp(18px, 2vw, 30px);
 
-    row-gap:
-        54px;
+    row-gap: 52px;
 }
 
 
 /* =========================================================
    MEMBER CARD
-
-   border / shadow / radius 없음
 ========================================================= */
 
 .member-card {
-
     display: block;
 
     width: 100%;
+
+    min-width: 0;
 
     margin: 0;
     padding: 0;
 
     border: 0;
 
-    background:
-        transparent;
+    background: transparent;
 
-    color:
-        inherit;
+    color: inherit;
 
-    text-align:
-        left;
+    text-align: left;
 
-    cursor:
-        pointer;
+    cursor: pointer;
 
-    appearance:
-        none;
+    appearance: none;
 }
 
 
-.member-card-photo-wrap {
+/* =========================================================
+   CARD PHOTO
+========================================================= */
 
+.member-photo-wrap {
     position: relative;
 
     width: 100%;
 
-    aspect-ratio:
-        210 / 297;
+    aspect-ratio: 4 / 5;
 
-    overflow:
-        hidden;
+    overflow: hidden;
 
-    background:
-        #eeeeee;
+    margin-bottom: 14px;
 
-    margin-bottom:
-        14px;
+    background: #eeeeee;
 }
 
-
-.member-card-photo {
-
+.member-photo {
     display: block;
 
     width: 100%;
     height: 100%;
 
-    object-fit:
-        cover;
-
-    object-position:
-        center center;
+    object-fit: cover;
+    object-position: center center;
 
     transition:
-        transform 0.35s ease,
+        transform 0.3s ease,
         opacity 0.3s ease;
 }
 
+.member-card:hover .member-photo {
+    transform: scale(1.025);
 
-.member-card:hover
-.member-card-photo {
-
-    transform:
-        scale(1.025);
-
-    opacity:
-        0.93;
+    opacity: 0.94;
 }
 
 
-/* Selected member */
+/* 사진 없을 때 */
+
+.member-photo-fallback {
+    display: none;
+
+    position: absolute;
+
+    inset: 0;
+
+    align-items: center;
+    justify-content: center;
+
+    padding: 15px;
+
+    text-align: center;
+
+    color: #999999;
+
+    font-size: 20px;
+
+    font-weight: 700;
+}
+
+
+/* selected */
 
 .member-card.selected
-.member-card-photo-wrap::after {
-
+.member-photo-wrap::after {
     content: "";
 
     position: absolute;
 
-    bottom: 0;
     left: 0;
     right: 0;
+    bottom: 0;
 
-    height:
-        3px;
+    height: 3px;
 
-    background:
-        #111111;
+    background: #111111;
 }
 
 
@@ -715,170 +532,111 @@ a {
    CARD TEXT
 ========================================================= */
 
-.member-card-name {
+.member-name {
+    margin-bottom: 6px;
 
-    margin-bottom:
-        5px;
+    font-size: 17px;
 
-    font-size:
-        17px;
+    line-height: 1.3;
 
-    line-height:
-        1.25;
+    font-weight: 700;
 
-    font-weight:
-        650;
-
-    letter-spacing:
-        -0.2px;
+    letter-spacing: -0.2px;
 }
 
+.member-role {
+    color: #6c6c6c;
 
-.member-card-role {
+    font-size: 13px;
 
-    color:
-        #6d6d6d;
-
-    font-size:
-        13px;
-
-    line-height:
-        1.45;
+    line-height: 1.45;
 }
 
 
 /* =========================================================
-   TABLET
+   RESPONSIVE
 ========================================================= */
 
-@media
-(max-width: 1200px) {
+@media (max-width: 1200px) {
 
     .people-grid {
-
         grid-template-columns:
-            repeat(4, minmax(0,1fr));
+            repeat(4, minmax(0, 1fr));
     }
 
 }
 
 
-@media
-(max-width: 900px) {
+@media (max-width: 900px) {
 
     .people-grid {
-
         grid-template-columns:
-            repeat(3, minmax(0,1fr));
+            repeat(3, minmax(0, 1fr));
     }
-
 
     .detail-layout {
-
         grid-template-columns:
-            minmax(230px, 34%)
-            minmax(0,1fr);
+            minmax(220px, 34%)
+            minmax(0, 1fr);
 
-        gap:
-            40px;
+        gap: 38px;
     }
 
 }
 
 
-/* =========================================================
-   MOBILE
-========================================================= */
-
-@media
-(max-width: 620px) {
+@media (max-width: 620px) {
 
     .people-wrap {
-
         padding:
-            30px
-            15px
+            28px
+            14px
             60px;
     }
 
-
-    .page-header {
-
-        margin-bottom:
-            30px;
+    .people-header {
+        margin-bottom: 28px;
     }
 
-
-    .page-title {
-
-        font-size:
-            30px;
+    .people-title {
+        font-size: 30px;
     }
-
 
     .people-grid {
-
         grid-template-columns:
-            repeat(2, minmax(0,1fr));
+            repeat(2, minmax(0, 1fr));
 
-        column-gap:
-            14px;
+        column-gap: 14px;
 
-        row-gap:
-            36px;
+        row-gap: 34px;
     }
 
-
-    .member-card-name {
-
-        font-size:
-            15px;
+    .member-name {
+        font-size: 15px;
     }
 
-
-    .member-card-role {
-
-        font-size:
-            12px;
+    .member-role {
+        font-size: 12px;
     }
-
 
     .detail-layout {
-
-        display:
-            block;
+        display: block;
     }
 
-
     .detail-photo {
-
-        max-width:
-            430px;
+        max-width: 420px;
 
         margin:
             0 auto
-            29px;
+            28px;
     }
-
 
     .detail-content {
-
-        padding:
-            0;
+        padding-right: 0;
     }
-
-
-    .detail-name {
-
-        font-size:
-            29px;
-    }
-
 
     .detail-close {
-
-        top:
-            -43px;
+        top: -42px;
     }
 
 }
@@ -887,27 +645,27 @@ a {
 </head>
 
 
-<body>
 
+<body>
 
 <main class="people-wrap">
 
 
-    <!-- ===================================================
-         DETAIL
-         DSIL과 동일하게 Grid보다 위에 존재
-    ==================================================== -->
+    <!-- =====================================================
+         MEMBER DETAIL
+         처음에는 display:none
+    ====================================================== -->
 
     <section
-        id="member-detail"
         class="people-detail"
+        id="memberDetail"
     >
 
         <button
             type="button"
             class="detail-close"
             id="detailClose"
-            aria-label="Close profile"
+            aria-label="Close"
         ></button>
 
 
@@ -921,6 +679,11 @@ a {
                     src=""
                     alt=""
                 >
+
+                <div
+                    class="detail-photo-fallback"
+                    id="detailPhotoFallback"
+                ></div>
 
             </div>
 
@@ -945,7 +708,7 @@ a {
 
                 <section
                     class="detail-section"
-                    id="researchSection"
+                    id="detailResearchSection"
                 >
 
                     <div class="detail-heading">
@@ -961,51 +724,11 @@ a {
 
 
 
-                <!-- EDUCATION -->
-
-                <section
-                    class="detail-section"
-                    id="educationSection"
-                >
-
-                    <div class="detail-heading">
-                        Education
-                    </div>
-
-                    <div
-                        class="detail-body"
-                        id="detailEducation"
-                    ></div>
-
-                </section>
-
-
-
-                <!-- CAREER -->
-
-                <section
-                    class="detail-section"
-                    id="careerSection"
-                >
-
-                    <div class="detail-heading">
-                        Career
-                    </div>
-
-                    <div
-                        class="detail-body"
-                        id="detailCareer"
-                    ></div>
-
-                </section>
-
-
-
                 <!-- CONTACT -->
 
                 <section
                     class="detail-section"
-                    id="contactSection"
+                    id="detailContactSection"
                 >
 
                     <div class="detail-heading">
@@ -1020,13 +743,6 @@ a {
                 </section>
 
 
-
-                <div
-                    class="member-links"
-                    id="detailLinks"
-                ></div>
-
-
             </div>
 
         </div>
@@ -1035,72 +751,61 @@ a {
 
 
 
-    <!-- ===================================================
-         HEADER + CURRENT SELECTOR
-    ==================================================== -->
+    <!-- =====================================================
+         HEADER
+    ====================================================== -->
 
-    <div class="page-header">
+    <div class="people-header">
 
 
-        <h1 class="page-title">
+        <h1 class="people-title">
             Researchers
         </h1>
 
 
-        <div class="people-controls">
+        <div
+            class="people-filter"
+            id="peopleFilter"
+        >
 
 
-            <div
-                class="term-picker"
-                id="termPicker"
+            <button
+                type="button"
+                class="filter-button"
+                id="filterButton"
             >
+
+                <span id="filterLabel">
+                    Current
+                </span>
+
+                <span class="filter-chevron">
+                    ▾
+                </span>
+
+            </button>
+
+
+            <div class="filter-menu">
 
 
                 <button
                     type="button"
-                    class="term-trigger"
-                    id="termTrigger"
-                    aria-haspopup="listbox"
-                    aria-expanded="false"
+                    class="filter-option active"
+                    data-filter="current"
                 >
-
-                    <span id="termLabel">
-                        Current
-                    </span>
-
-                    <span
-                        class="term-chevron"
-                        aria-hidden="true"
-                    >
-                        ▾
-                    </span>
-
+                    Current
                 </button>
 
 
-                <div
-                    class="term-menu"
-                    id="termMenu"
+                <button
+                    type="button"
+                    class="filter-option"
+                    data-filter="alumni"
                 >
+                    Alumni
+                </button>
 
-
-                    <button
-                        class="term-option active"
-                        data-term="current"
-                    >
-                        Current
-                    </button>
-
-
-                    <button
-                        class="term-option"
-                        data-term="alumni"
-                    >
-                        Alumni
-                    </button>
-
-
-                </div>
 
             </div>
 
@@ -1110,9 +815,9 @@ a {
 
 
 
-    <!-- ===================================================
-         MEMBER GRID
-    ==================================================== -->
+    <!-- =====================================================
+         GRID
+    ====================================================== -->
 
     <div
         class="people-grid"
@@ -1126,467 +831,392 @@ a {
 
 <script>
 
-
 /* =========================================================
-   IPC MEMBER DATA
-
-   이 부분만 수정하면 됨.
+   IPC MEMBER DATABASE
 ========================================================= */
 
-
 const peopleData = {
 
-
-    /* =====================================================
-       CURRENT RESEARCHERS
-    ====================================================== */
-
-const peopleData = {
 
     current: [
 
+
         {
             id: "doyeon-eom",
-            name: "Doyeon Eom (Student Leader)",
-            role: "Ph.D. Student",
-            photo: "images/doyeon-eom.jpg",
 
-            research: [
-                {
-                    area: "Electric Vehicles",
-                    topics: []
-                }
-            ],
+            name:
+                "Doyeon Eom",
 
-            education: [],
-            career: [],
+            leader:
+                true,
 
-            email: "doyeon.eom@kaist.ac.kr",
-            links: []
+            role:
+                "Ph.D. Student",
+
+            research:
+                "Electric Vehicles",
+
+            email:
+                "doyeon.eom@kaist.ac.kr",
+
+            photo:
+                "images/doyeon-eom.jpg"
         },
+
 
         {
             id: "youngjoon-song",
-            name: "Youngjoon Song",
-            role: "Ph.D. Student",
-            photo: "images/youngjoon-song.jpg",
 
-            research: [
-                {
-                    area: "Digital Twin",
-                    topics: []
-                }
-            ],
+            name:
+                "Youngjoon Song",
 
-            education: [],
-            career: [],
+            role:
+                "Ph.D. Student",
 
-            email: "yjsong98@kaist.ac.kr",
-            links: []
+            research:
+                "Digital Twin",
+
+            email:
+                "yjsong98@kaist.ac.kr",
+
+            photo:
+                "images/youngjoon-song.jpg"
         },
+
 
         {
             id: "yunsu-kang",
-            name: "Yunsu Kang",
-            role: "MS-Ph.D. Integrated Student",
-            photo: "images/yunsu-kang.jpg",
 
-            research: [
-                {
-                    area: "Humanoid",
-                    topics: []
-                }
-            ],
+            name:
+                "Yunsu Kang",
 
-            education: [],
-            career: [],
+            role:
+                "MS-Ph.D. Integrated Student",
 
-            email: "yunsu.k@kaist.ac.kr",
-            links: []
+            research:
+                "Humanoid",
+
+            email:
+                "yunsu.k@kaist.ac.kr",
+
+            photo:
+                "images/yunsu-kang.jpg"
         },
+
 
         {
             id: "hoonjoon-lee",
-            name: "Hoonjoon Lee",
-            role: "MS-Ph.D. Integrated Student",
-            photo: "images/hoonjoon-lee.jpg",
 
-            research: [
-                {
-                    area: "Magnetics",
-                    topics: []
-                }
-            ],
+            name:
+                "Hoonjoon Lee",
 
-            education: [],
-            career: [],
+            role:
+                "MS-Ph.D. Integrated Student",
 
-            email: "hoonjoon.lee@kaist.ac.kr",
-            links: []
+            research:
+                "Magnetics",
+
+            email:
+                "hoonjoon.lee@kaist.ac.kr",
+
+            photo:
+                "images/hoonjoon-lee.jpg"
         },
+
 
         {
             id: "chaeyoung-moon",
-            name: "Chaeyoung Moon",
-            role: "Master Student",
-            photo: "images/chaeyoung-moon.jpg",
 
-            research: [
-                {
-                    area: "High Power RF System",
-                    topics: []
-                }
-            ],
+            name:
+                "Chaeyoung Moon",
 
-            education: [],
-            career: [],
+            role:
+                "Master Student",
 
-            email: "swc50101@kaist.ac.kr",
-            links: []
+            research:
+                "High Power RF System",
+
+            email:
+                "swc50101@kaist.ac.kr",
+
+            photo:
+                "images/chaeyoung-moon.jpg"
         },
+
 
         {
             id: "dongjin-chae",
-            name: "Dongjin Chae",
-            role: "Master Student",
-            photo: "images/dongjin-chae.jpg",
 
-            research: [
-                {
-                    area: "Data Center & AI Semiconductors",
-                    topics: []
-                }
-            ],
+            name:
+                "Dongjin Chae",
 
-            education: [],
-            career: [],
+            role:
+                "Master Student",
 
-            email: "chaedongjin20@kaist.ac.kr",
-            links: []
+            research:
+                "Data Center & AI Semiconductors",
+
+            email:
+                "chaedongjin20@kaist.ac.kr",
+
+            photo:
+                "images/dongjin-chae.jpg"
         },
+
 
         {
             id: "daehyung-lim",
-            name: "Daehyung Lim",
-            role: "Master Student",
-            photo: "images/daehyung-lim.jpg",
 
-            research: [
-                {
-                    area: "Wireless Power Transfer",
-                    topics: []
-                }
-            ],
+            name:
+                "Daehyung Lim",
 
-            education: [],
-            career: [],
+            role:
+                "Master Student",
 
-            email: "limdh@kaist.ac.kr",
-            links: []
+            research:
+                "Wireless Power Transfer",
+
+            email:
+                "limdh@kaist.ac.kr",
+
+            photo:
+                "images/daehyung-lim.jpg"
         },
+
 
         {
             id: "hyeonseo-kim",
-            name: "Hyeonseo Kim",
-            role: "Master Student",
-            photo: "images/hyeonseo-kim.jpg",
 
-            research: [
-                {
-                    area: "Data Center & AI Semiconductors",
-                    topics: []
-                }
-            ],
+            name:
+                "Hyeonseo Kim",
 
-            education: [],
-            career: [],
+            role:
+                "Master Student",
 
-            email: "pcpoptv@kaist.ac.kr",
-            links: []
+            research:
+                "Data Center & AI Semiconductors",
+
+            email:
+                "pcpoptv@kaist.ac.kr",
+
+            photo:
+                "images/hyeonseo-kim.jpg"
         },
+
 
         {
             id: "chaewon-yoon",
-            name: "Chaewon Yoon",
-            role: "Master Student",
-            photo: "images/chaewon-yoon.jpg",
 
-            research: [
-                {
-                    area: "Data Center & AI Semiconductors",
-                    topics: []
-                }
-            ],
+            name:
+                "Chaewon Yoon",
 
-            education: [],
-            career: [],
+            role:
+                "Master Student",
 
-            email: "success259@kaist.ac.kr",
-            links: []
+            research:
+                "Data Center & AI Semiconductors",
+
+            email:
+                "success259@kaist.ac.kr",
+
+            photo:
+                "images/chaewon-yoon.jpg"
         },
+
 
         {
             id: "junseo-yang",
-            name: "Junseo Yang",
-            role: "Master Student",
-            photo: "images/junseo-yang.jpg",
 
-            research: [
-                {
-                    area: "Magnetics",
-                    topics: []
-                }
-            ],
+            name:
+                "Junseo Yang",
 
-            education: [],
-            career: [],
+            role:
+                "Master Student",
 
-            email: "junseo.yang@kaist.ac.kr",
-            links: []
+            research:
+                "Magnetics",
+
+            email:
+                "junseo.yang@kaist.ac.kr",
+
+            photo:
+                "images/junseo-yang.jpg"
         },
+
 
         {
             id: "kidae-park",
-            name: "Kidae Park",
-            role: "Master Student (SK Hynix)",
-            photo: "images/kidae-park.jpg",
 
-            research: [
-                {
-                    area: "Data Center & AI Semiconductors",
-                    topics: []
-                }
-            ],
+            name:
+                "Kidae Park",
 
-            education: [],
-            career: [],
+            role:
+                "Master Student (SK Hynix)",
 
-            email: "kidae.park@kaist.ac.kr",
-            links: []
+            research:
+                "Data Center & AI Semiconductors",
+
+            email:
+                "kidae.park@kaist.ac.kr",
+
+            photo:
+                "images/kidae-park.jpg"
         },
+
 
         {
             id: "donghyun-lee",
-            name: "Donghyun Lee",
-            role: "Master Student",
-            photo: "images/donghyun-lee.jpg",
 
-            research: [
-                {
-                    area: "Data Center & AI Semiconductors",
-                    topics: []
-                }
-            ],
+            name:
+                "Donghyun Lee",
 
-            education: [],
-            career: [],
+            role:
+                "Master Student",
 
-            email: "triplethriled@kaist.ac.kr",
-            links: []
+            research:
+                "Data Center & AI Semiconductors",
+
+            email:
+                "triplethriled@kaist.ac.kr",
+
+            photo:
+                "images/donghyun-lee.jpg"
         },
+
 
         {
             id: "sangeun-jeon",
-            name: "Sangeun Jeon",
-            role: "Master Student",
-            photo: "images/sangeun-jeon.jpg",
 
-            research: [
-                {
-                    area: "Magnetics",
-                    topics: []
-                }
-            ],
+            name:
+                "Sangeun Jeon",
 
-            education: [],
-            career: [],
+            role:
+                "Master Student",
 
-            email: "sejeon@kaist.ac.kr",
-            links: []
+            research:
+                "Magnetics",
+
+            email:
+                "sejeon@kaist.ac.kr",
+
+            photo:
+                "images/sangeun-jeon.jpg"
         },
 
-
-        /* =================================================
-           아래 5명:
-           현재 IPC 캡처에는 학위과정 표시가 없음
-        ================================================= */
 
         {
             id: "jaeyun-lee",
-            name: "Jaeyun Lee",
-            role: "",
-            photo: "images/jaeyun-lee.jpg",
 
-            research: [
-                {
-                    area: "Humanoid",
-                    topics: []
-                }
-            ],
+            name:
+                "Jaeyun Lee",
 
-            education: [],
-            career: [],
+            role:
+                "",
 
-            email: "jylee13@kaist.ac.kr",
-            links: []
+            research:
+                "Humanoid",
+
+            email:
+                "jylee13@kaist.ac.kr",
+
+            photo:
+                "images/jaeyun-lee.jpg"
         },
+
 
         {
             id: "nayeon-kim",
-            name: "Nayeon Kim",
-            role: "",
-            photo: "images/nayeon-kim.jpg",
 
-            research: [
-                {
-                    area: "Wireless Power Transfer",
-                    topics: []
-                }
-            ],
+            name:
+                "Nayeon Kim",
 
-            education: [],
-            career: [],
+            role:
+                "",
 
-            email: "rlaskdus2045@kaist.ac.kr",
-            links: []
+            research:
+                "Wireless Power Transfer",
+
+            email:
+                "rlaskdus2045@kaist.ac.kr",
+
+            photo:
+                "images/nayeon-kim.jpg"
         },
+
 
         {
             id: "junwoo-kim",
-            name: "Junwoo Kim",
-            role: "",
-            photo: "images/junwoo-kim.jpg",
 
-            research: [
-                {
-                    area: "Digital Twin",
-                    topics: []
-                }
-            ],
+            name:
+                "Junwoo Kim",
 
-            education: [],
-            career: [],
+            role:
+                "",
 
-            email: "woojunkim1228@kaist.ac.kr",
-            links: []
+            research:
+                "Digital Twin",
+
+            email:
+                "woojunkim1228@kaist.ac.kr",
+
+            photo:
+                "images/junwoo-kim.jpg"
         },
+
 
         {
             id: "jinwook-kim",
-            name: "Jinwook Kim",
-            role: "",
-            photo: "images/jinwook-kim.jpg",
 
-            research: [
-                {
-                    area: "Digital Twin",
-                    topics: []
-                }
-            ],
+            name:
+                "Jinwook Kim",
 
-            education: [],
-            career: [],
+            role:
+                "",
 
-            email: "kjinwook@kaist.ac.kr",
-            links: []
+            research:
+                "Digital Twin",
+
+            email:
+                "kjinwook@kaist.ac.kr",
+
+            photo:
+                "images/jinwook-kim.jpg"
         },
+
 
         {
             id: "doyun-gu",
-            name: "Doyun Gu",
-            role: "",
-            photo: "images/doyun-gu.jpg",
 
-            research: [
-                {
-                    area: "Digital Twin & Humanoid",
-                    topics: []
-                }
-            ],
+            name:
+                "Doyun Gu",
 
-            education: [],
-            career: [],
+            role:
+                "",
 
-            email: "doyun.gu@kaist.ac.kr",
-            links: []
+            research:
+                "Digital Twin & Humanoid",
+
+            email:
+                "doyun.gu@kaist.ac.kr",
+
+            photo:
+                "images/doyun-gu.jpg"
         }
 
     ],
 
+
+
+    /* 나중에 alumni 추가 가능 */
 
     alumni: []
 
 };
 
 
-    /* =====================================================
-       ALUMNI
-    ====================================================== */
-
-    alumni: [
-
-
-        {
-            id:
-                "alumni01",
-
-            name:
-                "Alumni Name",
-
-            role:
-                "Alumni",
-
-            photo:
-                "images/alumni01.jpg",
-
-
-            research: [
-
-                {
-                    area:
-                        "Power Electronics",
-
-                    topics: [
-
-                        "Integrated voltage regulators"
-
-                    ]
-                }
-
-            ],
-
-
-            education: [
-
-                "M.S. / KAIST (2024 – 2026)"
-
-            ],
-
-
-            career: [
-
-                "Samsung Electronics"
-
-            ],
-
-
-            email:
-                "",
-
-
-            links: []
-
-        }
-
-    ]
-
-};
-
-
 /* =========================================================
-   ELEMENT REFERENCES
+   GET ELEMENTS
 ========================================================= */
-
 
 const peopleGrid =
     document.getElementById(
@@ -1596,13 +1226,25 @@ const peopleGrid =
 
 const memberDetail =
     document.getElementById(
-        "member-detail"
+        "memberDetail"
+    );
+
+
+const detailClose =
+    document.getElementById(
+        "detailClose"
     );
 
 
 const detailPhoto =
     document.getElementById(
         "detailPhoto"
+    );
+
+
+const detailPhotoFallback =
+    document.getElementById(
+        "detailPhotoFallback"
     );
 
 
@@ -1624,82 +1266,50 @@ const detailResearch =
     );
 
 
-const detailEducation =
-    document.getElementById(
-        "detailEducation"
-    );
-
-
-const detailCareer =
-    document.getElementById(
-        "detailCareer"
-    );
-
-
 const detailContact =
     document.getElementById(
         "detailContact"
     );
 
 
-const detailLinks =
+const detailResearchSection =
     document.getElementById(
-        "detailLinks"
+        "detailResearchSection"
     );
 
 
-const researchSection =
+const detailContactSection =
     document.getElementById(
-        "researchSection"
+        "detailContactSection"
     );
 
 
-const educationSection =
+const peopleFilter =
     document.getElementById(
-        "educationSection"
+        "peopleFilter"
     );
 
 
-const careerSection =
+const filterButton =
     document.getElementById(
-        "careerSection"
+        "filterButton"
     );
 
 
-const contactSection =
+const filterLabel =
     document.getElementById(
-        "contactSection"
+        "filterLabel"
     );
 
 
-const detailClose =
-    document.getElementById(
-        "detailClose"
-    );
-
-
-const termPicker =
-    document.getElementById(
-        "termPicker"
-    );
-
-
-const termTrigger =
-    document.getElementById(
-        "termTrigger"
-    );
-
-
-const termLabel =
-    document.getElementById(
-        "termLabel"
-    );
-
-
-const termOptions =
+const filterOptions =
     document.querySelectorAll(
-        ".term-option"
+        ".filter-option"
     );
+
+
+let currentGroup =
+    "current";
 
 
 let selectedCard =
@@ -1707,12 +1317,54 @@ let selectedCard =
 
 
 /* =========================================================
-   RENDER CARDS
+   CARD PHOTO FALLBACK
 ========================================================= */
 
+function setImageFallback(
+    image,
+    fallback,
+    name
+) {
 
-function renderPeople(term) {
+    fallback.textContent =
+        name;
 
+
+    image.onload =
+        function() {
+
+            image.style.display =
+                "block";
+
+
+            fallback.style.display =
+                "none";
+
+        };
+
+
+    image.onerror =
+        function() {
+
+            image.style.display =
+                "none";
+
+
+            fallback.style.display =
+                "flex";
+
+        };
+
+}
+
+
+/* =========================================================
+   RENDER PEOPLE
+========================================================= */
+
+function renderPeople(
+    group
+) {
 
     peopleGrid.innerHTML =
         "";
@@ -1721,8 +1373,55 @@ function renderPeople(term) {
     closeMember();
 
 
-    peopleData[term].forEach(
-        member => {
+    const members =
+        peopleData[group] || [];
+
+
+    /*
+       Alumni가 비어있는 경우
+    */
+
+    if (
+        members.length === 0
+    ) {
+
+        const empty =
+            document.createElement(
+                "div"
+            );
+
+
+        empty.style.gridColumn =
+            "1 / -1";
+
+
+        empty.style.padding =
+            "30px 0";
+
+
+        empty.style.color =
+            "#777";
+
+
+        empty.style.fontSize =
+            "14px";
+
+
+        empty.textContent =
+            "No members are currently listed.";
+
+
+        peopleGrid.appendChild(
+            empty
+        );
+
+
+        return;
+    }
+
+
+    members.forEach(
+        function(member) {
 
 
             const card =
@@ -1739,40 +1438,89 @@ function renderPeople(term) {
                 "member-card";
 
 
+            /*
+               마지막 학부연구생들은
+               role이 없으므로 연구분야 표시
+            */
+
+            const subtitle =
+                member.role
+                ? member.role
+                : member.research;
+
+
+            /*
+               Student Leader 표시
+            */
+
+            const displayName =
+                member.leader
+                ? member.name +
+                  " (Student Leader)"
+                : member.name;
+
+
             card.innerHTML = `
 
-                <div class="member-card-photo-wrap">
+                <div
+                    class="member-photo-wrap"
+                >
 
                     <img
-                        class="member-card-photo"
+                        class="member-photo"
                         src="${member.photo}"
-                        alt="${member.name}"
+                        alt="${displayName}"
                         loading="lazy"
                         decoding="async"
                     >
 
+                    <div
+                        class="member-photo-fallback"
+                    >
+                        ${displayName}
+                    </div>
+
                 </div>
 
 
-                <div class="member-card-name">
-
-                    ${member.name}
-
+                <div
+                    class="member-name"
+                >
+                    ${displayName}
                 </div>
 
 
-                <div class="member-card-role">
-
-                    ${member.role}
-
+                <div
+                    class="member-role"
+                >
+                    ${subtitle}
                 </div>
 
             `;
 
 
+            const image =
+                card.querySelector(
+                    ".member-photo"
+                );
+
+
+            const fallback =
+                card.querySelector(
+                    ".member-photo-fallback"
+                );
+
+
+            setImageFallback(
+                image,
+                fallback,
+                displayName
+            );
+
+
             card.addEventListener(
                 "click",
-                () => {
+                function() {
 
                     showMember(
                         member,
@@ -1794,18 +1542,17 @@ function renderPeople(term) {
 
 
 /* =========================================================
-   SHOW MEMBER
+   SHOW DETAIL
 ========================================================= */
-
 
 function showMember(
     member,
     card
 ) {
 
-
     /*
-      같은 카드 클릭 시 닫기
+       같은 카드 다시 클릭
+       → 닫기
     */
 
     if (
@@ -1822,19 +1569,25 @@ function showMember(
     }
 
 
+    /*
+       selected 상태 제거
+    */
 
-    /* Selected card */
-
-    document
-        .querySelectorAll(
+    const cards =
+        document.querySelectorAll(
             ".member-card"
-        )
-        .forEach(
-            item =>
-                item.classList.remove(
-                    "selected"
-                )
         );
+
+
+    cards.forEach(
+        function(item) {
+
+            item.classList.remove(
+                "selected"
+            );
+
+        }
+    );
 
 
     card.classList.add(
@@ -1846,170 +1599,66 @@ function showMember(
         card;
 
 
+    /*
+       이름
+    */
 
-    /* Basic */
-
-    detailPhoto.src =
-        member.photo;
-
-
-    detailPhoto.alt =
-        member.name;
+    const displayName =
+        member.leader
+            ? member.name +
+              " (Student Leader)"
+            : member.name;
 
 
     detailName.textContent =
-        member.name;
+        displayName;
 
 
-    detailRole.textContent =
-        member.role;
+    /*
+       Role
+    */
 
+    if (member.role) {
 
-
-    /* =====================================================
-       RESEARCH
-    ====================================================== */
-
-
-    detailResearch.innerHTML =
-        "";
-
-
-    if (
-        member.research
-        &&
-        member.research.length
-    ) {
-
-
-        researchSection.style.display =
+        detailRole.style.display =
             "block";
 
 
-        member.research.forEach(
-            research => {
-
-
-                const area =
-                    document.createElement(
-                        "div"
-                    );
-
-
-                area.className =
-                    "research-area";
-
-
-                const title =
-                    document.createElement(
-                        "div"
-                    );
-
-
-                title.className =
-                    "research-area-title";
-
-
-                title.textContent =
-                    research.area;
-
-
-                area.appendChild(
-                    title
-                );
-
-
-                if (
-                    research.topics
-                    &&
-                    research.topics.length
-                ) {
-
-
-                    const ul =
-                        document.createElement(
-                            "ul"
-                        );
-
-
-                    research.topics.forEach(
-                        topic => {
-
-
-                            const li =
-                                document.createElement(
-                                    "li"
-                                );
-
-
-                            li.textContent =
-                                topic;
-
-
-                            ul.appendChild(
-                                li
-                            );
-
-
-                        }
-                    );
-
-
-                    area.appendChild(
-                        ul
-                    );
-
-                }
-
-
-                detailResearch.appendChild(
-                    area
-                );
-
-            }
-        );
-
+        detailRole.textContent =
+            member.role;
 
     } else {
 
-
-        researchSection.style.display =
+        detailRole.style.display =
             "none";
 
     }
 
 
+    /*
+       Research
+    */
 
-    /* =====================================================
-       EDUCATION
-    ====================================================== */
+    if (member.research) {
 
-
-    renderTextArray(
-        member.education,
-        detailEducation,
-        educationSection
-    );
+        detailResearchSection.style.display =
+            "block";
 
 
+        detailResearch.textContent =
+            member.research;
 
-    /* =====================================================
-       CAREER
-    ====================================================== */
+    } else {
 
+        detailResearchSection.style.display =
+            "none";
 
-    renderTextArray(
-        member.career,
-        detailCareer,
-        careerSection
-    );
+    }
 
 
-
-    /* =====================================================
-       CONTACT
-    ====================================================== */
-
+    /*
+       Contact
+    */
 
     detailContact.innerHTML =
         "";
@@ -2017,8 +1666,7 @@ function showMember(
 
     if (member.email) {
 
-
-        contactSection.style.display =
+        detailContactSection.style.display =
             "block";
 
 
@@ -2033,7 +1681,8 @@ function showMember(
 
 
         email.href =
-            `mailto:${member.email}`;
+            "mailto:" +
+            member.email;
 
 
         email.textContent =
@@ -2044,91 +1693,36 @@ function showMember(
             email
         );
 
-
     } else {
 
-
-        contactSection.style.display =
+        detailContactSection.style.display =
             "none";
 
     }
 
 
+    /*
+       Photo
+    */
 
-    /* =====================================================
-       LINKS
-    ====================================================== */
-
-
-    detailLinks.innerHTML =
-        "";
+    detailPhoto.src =
+        member.photo;
 
 
-    if (
-        member.links
-        &&
-        member.links.length
-    ) {
+    detailPhoto.alt =
+        displayName;
 
 
-        detailLinks.style.display =
-            "flex";
+    setImageFallback(
+        detailPhoto,
+        detailPhotoFallback,
+        displayName
+    );
 
 
-        member.links.forEach(
-            link => {
-
-
-                const a =
-                    document.createElement(
-                        "a"
-                    );
-
-
-                a.className =
-                    "member-link";
-
-
-                a.href =
-                    link.url;
-
-
-                a.target =
-                    "_blank";
-
-
-                a.rel =
-                    "noopener noreferrer";
-
-
-                a.innerHTML = `
-
-                    ${link.label}
-
-                    <span>↗</span>
-
-                `;
-
-
-                detailLinks.appendChild(
-                    a
-                );
-
-            }
-        );
-
-
-    } else {
-
-
-        detailLinks.style.display =
-            "none";
-
-    }
-
-
-
-    /* SHOW */
+    /*
+       detail 표시
+    */
 
     memberDetail.classList.add(
         "show"
@@ -2136,113 +1730,29 @@ function showMember(
 
 
     /*
-      DSIL처럼 상세정보를
-      카드 grid 위쪽에 표시
+       detail 상단으로 이동
     */
 
-    memberDetail.scrollIntoView({
+    setTimeout(
+        function() {
 
-        behavior:
-            "smooth",
+            memberDetail.scrollIntoView({
+                behavior: "smooth",
+                block: "start"
+            });
 
-        block:
-            "start"
-
-    });
-
-
-    /*
-      URL에도 member 표시
-    */
-
-    const url =
-        new URL(
-            window.location
-        );
-
-
-    url.searchParams.set(
-        "member",
-        member.id
-    );
-
-
-    history.replaceState(
-        null,
-        "",
-        url
+        },
+        20
     );
 
 }
 
 
 /* =========================================================
-   TEXT ARRAY
+   CLOSE DETAIL
 ========================================================= */
-
-
-function renderTextArray(
-    list,
-    target,
-    section
-) {
-
-
-    target.innerHTML =
-        "";
-
-
-    if (
-        !list
-        ||
-        !list.length
-    ) {
-
-
-        section.style.display =
-            "none";
-
-
-        return;
-
-    }
-
-
-    section.style.display =
-        "block";
-
-
-    list.forEach(
-        text => {
-
-
-            const p =
-                document.createElement(
-                    "p"
-                );
-
-
-            p.textContent =
-                text;
-
-
-            target.appendChild(
-                p
-            );
-
-        }
-    );
-
-}
-
-
-/* =========================================================
-   CLOSE MEMBER
-========================================================= */
-
 
 function closeMember() {
-
 
     memberDetail.classList.remove(
         "show"
@@ -2250,7 +1760,6 @@ function closeMember() {
 
 
     if (selectedCard) {
-
 
         selectedCard.classList.remove(
             "selected"
@@ -2262,56 +1771,32 @@ function closeMember() {
     selectedCard =
         null;
 
-
-    const url =
-        new URL(
-            window.location
-        );
-
-
-    url.searchParams.delete(
-        "member"
-    );
-
-
-    history.replaceState(
-        null,
-        "",
-        url
-    );
-
 }
 
 
 detailClose.addEventListener(
     "click",
-    closeMember
+    function() {
+
+        closeMember();
+
+    }
 );
 
 
 /* =========================================================
-   TERM PICKER
+   FILTER MENU
 ========================================================= */
 
-
-termTrigger.addEventListener(
+filterButton.addEventListener(
     "click",
-    event => {
-
+    function(event) {
 
         event.stopPropagation();
 
 
-        termPicker.classList.toggle(
+        peopleFilter.classList.toggle(
             "open"
-        );
-
-
-        termTrigger.setAttribute(
-            "aria-expanded",
-            termPicker.classList.contains(
-                "open"
-            )
         );
 
     }
@@ -2319,26 +1804,26 @@ termTrigger.addEventListener(
 
 
 
-termOptions.forEach(
-    option => {
-
+filterOptions.forEach(
+    function(option) {
 
         option.addEventListener(
             "click",
             function() {
 
 
-                const term =
-                    this.dataset.term;
+                const group =
+                    option.getAttribute(
+                        "data-filter"
+                    );
 
 
-                termLabel.textContent =
-                    this.textContent.trim();
+                currentGroup =
+                    group;
 
 
-                termOptions.forEach(
-                    item => {
-
+                filterOptions.forEach(
+                    function(item) {
 
                         item.classList.remove(
                             "active"
@@ -2348,24 +1833,22 @@ termOptions.forEach(
                 );
 
 
-                this.classList.add(
+                option.classList.add(
                     "active"
                 );
 
 
-                termPicker.classList.remove(
+                filterLabel.textContent =
+                    option.textContent.trim();
+
+
+                peopleFilter.classList.remove(
                     "open"
                 );
 
 
-                termTrigger.setAttribute(
-                    "aria-expanded",
-                    "false"
-                );
-
-
                 renderPeople(
-                    term
+                    currentGroup
                 );
 
             }
@@ -2378,24 +1861,16 @@ termOptions.forEach(
 
 document.addEventListener(
     "click",
-    event => {
-
+    function(event) {
 
         if (
-            !termPicker.contains(
+            !peopleFilter.contains(
                 event.target
             )
         ) {
 
-
-            termPicker.classList.remove(
+            peopleFilter.classList.remove(
                 "open"
-            );
-
-
-            termTrigger.setAttribute(
-                "aria-expanded",
-                "false"
             );
 
         }
@@ -2405,16 +1880,23 @@ document.addEventListener(
 
 
 /* =========================================================
-   INITIAL
+   INITIAL LOAD
+
+   ★ 이 부분이 실제 카드들을 생성함
 ========================================================= */
 
+document.addEventListener(
+    "DOMContentLoaded",
+    function() {
 
-renderPeople(
-    "current"
+        renderPeople(
+            "current"
+        );
+
+    }
 );
 
 </script>
-
 
 </body>
 </html>

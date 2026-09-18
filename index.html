@@ -1,0 +1,1900 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+
+/* =========================================================
+   GLOBAL
+========================================================= */
+
+* {
+    box-sizing: border-box;
+}
+
+html,
+body {
+    width: 100%;
+    margin: 0;
+    padding: 0;
+
+    background: #ffffff;
+    color: #111111;
+
+    font-family:
+        Arial,
+        "Helvetica Neue",
+        Helvetica,
+        sans-serif;
+}
+
+
+/* =========================================================
+   PAGE
+   Google Sites iframe 폭을 최대한 전부 사용
+========================================================= */
+
+.people-page {
+    width: 100%;
+
+    /* 기존 1280px 제한 제거 */
+    max-width: none;
+
+    margin: 0;
+
+    /*
+       좌우 여백 최소화
+       0으로 해도 됨
+    */
+    padding:
+        24px
+        8px
+        60px;
+}
+
+
+/* =========================================================
+   HEADER
+========================================================= */
+
+.people-header {
+    display: flex;
+
+    align-items: center;
+    justify-content: space-between;
+
+    margin-bottom: 36px;
+}
+
+
+.people-title {
+    margin: 0;
+
+    font-size: 40px;
+    line-height: 1;
+
+    font-weight: 600;
+
+    letter-spacing: -1.2px;
+}
+
+
+/* =========================================================
+   CURRENT / ALUMNI FILTER
+========================================================= */
+
+.filter {
+    position: relative;
+}
+
+
+.filter-button {
+    display: flex;
+
+    align-items: center;
+
+    gap: 10px;
+
+    padding: 4px 0;
+
+    border: none;
+
+    background: transparent;
+
+    color: #111;
+
+    font-family: inherit;
+
+    font-size: 15px;
+
+    cursor: pointer;
+}
+
+
+.filter-arrow {
+    width: 7px;
+    height: 7px;
+
+    border-right: 1.5px solid #111;
+    border-bottom: 1.5px solid #111;
+
+    transform:
+        rotate(45deg)
+        translateY(-2px);
+
+    transition:
+        transform 0.2s ease;
+}
+
+
+.filter.open
+.filter-arrow {
+    transform:
+        rotate(225deg);
+}
+
+
+.filter-menu {
+    position: absolute;
+
+    top: calc(100% + 10px);
+    right: 0;
+
+    min-width: 135px;
+
+    background: #fff;
+
+    border: 1px solid #ddd;
+
+    z-index: 100;
+
+    opacity: 0;
+    visibility: hidden;
+
+    transform: translateY(-4px);
+
+    transition:
+        opacity 0.15s ease,
+        transform 0.15s ease,
+        visibility 0.15s ease;
+}
+
+
+.filter.open
+.filter-menu {
+    opacity: 1;
+    visibility: visible;
+
+    transform: translateY(0);
+}
+
+
+.filter-option {
+    display: block;
+
+    width: 100%;
+
+    padding:
+        12px
+        15px;
+
+    border: 0;
+
+    background: #fff;
+
+    font-family: inherit;
+
+    font-size: 14px;
+
+    text-align: left;
+
+    cursor: pointer;
+}
+
+
+.filter-option:hover {
+    background: #f5f5f5;
+}
+
+
+.filter-option.active {
+    font-weight: 600;
+}
+
+
+/* =========================================================
+   PEOPLE GRID
+========================================================= */
+
+.people-grid {
+    width: 100%;
+
+    display: grid;
+
+    /*
+       큰 화면에서는 5명
+    */
+    grid-template-columns:
+        repeat(5, minmax(0, 1fr));
+
+    column-gap: 20px;
+    row-gap: 46px;
+}
+
+
+/* =========================================================
+   MEMBER CARD
+========================================================= */
+
+.person-card {
+    width: 100%;
+
+    min-width: 0;
+
+    cursor: pointer;
+
+    outline: none;
+}
+
+
+.person-photo {
+    position: relative;
+
+    width: 100%;
+
+    /*
+       DSIL 느낌의 세로형 사진
+    */
+    aspect-ratio: 4 / 5;
+
+    margin-bottom: 13px;
+
+    overflow: hidden;
+
+    background: #eeeeee;
+}
+
+
+.person-photo img {
+    display: block;
+
+    width: 100%;
+    height: 100%;
+
+    object-fit: cover;
+    object-position: center center;
+
+    transition:
+        transform 0.35s ease,
+        opacity 0.25s ease;
+}
+
+
+.person-card:hover
+.person-photo img {
+    transform: scale(1.025);
+
+    opacity: 0.94;
+}
+
+
+/* 선택된 멤버 */
+
+.person-card.selected
+.person-photo::after {
+    content: "";
+
+    position: absolute;
+
+    left: 0;
+    right: 0;
+    bottom: 0;
+
+    height: 3px;
+
+    background: #111;
+}
+
+
+/* =========================================================
+   MEMBER TEXT
+========================================================= */
+
+.person-name {
+    margin-bottom: 5px;
+
+    font-size: 17px;
+
+    line-height: 1.25;
+
+    font-weight: 600;
+
+    letter-spacing: -0.2px;
+}
+
+
+.person-role {
+    font-size: 13px;
+
+    line-height: 1.45;
+
+    color: #666666;
+}
+
+
+/* =========================================================
+   DETAIL PROFILE PANEL
+========================================================= */
+
+.profile-panel {
+    display: none;
+
+    position: relative;
+
+    width: 100%;
+
+    margin-top: 56px;
+
+    padding:
+        46px
+        0
+        20px;
+
+    border-top: 1px solid #ccc;
+}
+
+
+.profile-panel.show {
+    display: block;
+
+    animation:
+        profileAppear
+        0.3s ease;
+}
+
+
+@keyframes profileAppear {
+
+    from {
+        opacity: 0;
+
+        transform: translateY(8px);
+    }
+
+    to {
+        opacity: 1;
+
+        transform: translateY(0);
+    }
+
+}
+
+
+/* =========================================================
+   CLOSE BUTTON
+========================================================= */
+
+.profile-close {
+    position: absolute;
+
+    top: 18px;
+    right: 0;
+
+    width: 32px;
+    height: 32px;
+
+    border: none;
+
+    background: transparent;
+
+    cursor: pointer;
+}
+
+
+.profile-close::before,
+.profile-close::after {
+    content: "";
+
+    position: absolute;
+
+    top: 15px;
+    left: 4px;
+
+    width: 24px;
+    height: 1.5px;
+
+    background: #111;
+}
+
+
+.profile-close::before {
+    transform: rotate(45deg);
+}
+
+
+.profile-close::after {
+    transform: rotate(-45deg);
+}
+
+
+/* =========================================================
+   PROFILE LAYOUT
+========================================================= */
+
+.profile-layout {
+    display: grid;
+
+    grid-template-columns:
+        minmax(240px, 28%)
+        minmax(0, 1fr);
+
+    gap: 60px;
+}
+
+
+.profile-image {
+    width: 100%;
+
+    aspect-ratio: 4 / 5;
+
+    overflow: hidden;
+
+    background: #eee;
+}
+
+
+.profile-image img {
+    display: block;
+
+    width: 100%;
+    height: 100%;
+
+    object-fit: cover;
+}
+
+
+/* =========================================================
+   PROFILE TEXT
+========================================================= */
+
+.profile-content {
+    padding-top: 2px;
+}
+
+
+.profile-name {
+    margin:
+        0
+        0
+        8px;
+
+    font-size: 34px;
+
+    line-height: 1.15;
+
+    font-weight: 600;
+
+    letter-spacing: -0.7px;
+}
+
+
+.profile-role {
+    margin-bottom: 33px;
+
+    color: #666;
+
+    font-size: 15px;
+
+    line-height: 1.5;
+}
+
+
+.profile-section {
+    margin-top: 27px;
+}
+
+
+.profile-section:first-of-type {
+    margin-top: 0;
+}
+
+
+.profile-heading {
+    margin-bottom: 11px;
+
+    font-size: 12px;
+
+    font-weight: 700;
+
+    letter-spacing: 1px;
+
+    text-transform: uppercase;
+}
+
+
+.profile-text {
+    font-size: 14px;
+
+    line-height: 1.7;
+
+    color: #333;
+}
+
+
+.profile-text p {
+    margin:
+        0
+        0
+        6px;
+}
+
+
+/* =========================================================
+   RESEARCH
+========================================================= */
+
+.research-list {
+    display: flex;
+
+    flex-wrap: wrap;
+
+    gap: 7px;
+}
+
+
+.research-tag {
+    padding:
+        6px
+        10px;
+
+    border:
+        1px solid #d6d6d6;
+
+    font-size: 12px;
+
+    line-height: 1.2;
+}
+
+
+/* =========================================================
+   CONTACT
+========================================================= */
+
+.profile-contact a {
+    color: #111;
+
+    text-decoration: none;
+
+    border-bottom:
+        1px solid #bbb;
+}
+
+
+.profile-contact a:hover {
+    border-bottom-color: #111;
+}
+
+
+/* =========================================================
+   SEE MORE
+========================================================= */
+
+.profile-more {
+    display: inline-flex;
+
+    align-items: center;
+
+    gap: 8px;
+
+    margin-top: 30px;
+
+    color: #111;
+
+    font-size: 14px;
+
+    font-weight: 500;
+
+    text-decoration: none;
+}
+
+
+.profile-more-arrow {
+    transition:
+        transform 0.2s ease;
+}
+
+
+.profile-more:hover
+.profile-more-arrow {
+    transform:
+        translateX(4px);
+}
+
+
+/* =========================================================
+   RESPONSIVE
+========================================================= */
+
+
+/* 4 columns */
+
+@media
+(max-width: 1150px) {
+
+    .people-grid {
+        grid-template-columns:
+            repeat(4, minmax(0, 1fr));
+    }
+
+}
+
+
+/* 3 columns */
+
+@media
+(max-width: 850px) {
+
+    .people-grid {
+        grid-template-columns:
+            repeat(3, minmax(0, 1fr));
+
+        column-gap: 18px;
+    }
+
+
+    .profile-layout {
+        grid-template-columns:
+            minmax(220px, 34%)
+            1fr;
+
+        gap: 38px;
+    }
+
+}
+
+
+/* 2 columns */
+
+@media
+(max-width: 600px) {
+
+    .people-page {
+        padding:
+            20px
+            6px
+            45px;
+    }
+
+
+    .people-header {
+        margin-bottom: 28px;
+    }
+
+
+    .people-title {
+        font-size: 29px;
+    }
+
+
+    .filter-button {
+        font-size: 14px;
+    }
+
+
+    .people-grid {
+        grid-template-columns:
+            repeat(2, minmax(0, 1fr));
+
+        column-gap: 12px;
+
+        row-gap: 32px;
+    }
+
+
+    .person-name {
+        font-size: 15px;
+    }
+
+
+    .person-role {
+        font-size: 12px;
+    }
+
+
+    .profile-panel {
+        margin-top: 40px;
+
+        padding-top: 46px;
+    }
+
+
+    .profile-layout {
+        display: block;
+    }
+
+
+    .profile-image {
+        width: 100%;
+        max-width: 420px;
+
+        margin:
+            0 auto
+            27px;
+    }
+
+
+    .profile-name {
+        font-size: 28px;
+    }
+
+}
+
+</style>
+
+</head>
+
+
+<body>
+
+
+<div class="people-page">
+
+
+    <!-- =====================================================
+         HEADER
+    ====================================================== -->
+
+    <div class="people-header">
+
+
+        <h1 class="people-title">
+            People
+        </h1>
+
+
+        <div
+            class="filter"
+            id="filter"
+        >
+
+
+            <button
+                class="filter-button"
+                id="filterButton"
+                type="button"
+            >
+
+                <span id="filterLabel">
+                    Current
+                </span>
+
+                <span
+                    class="filter-arrow"
+                ></span>
+
+            </button>
+
+
+            <div class="filter-menu">
+
+
+                <button
+                    class="filter-option active"
+                    data-group="current"
+                    type="button"
+                >
+                    Current
+                </button>
+
+
+                <button
+                    class="filter-option"
+                    data-group="alumni"
+                    type="button"
+                >
+                    Alumni
+                </button>
+
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+
+    <!-- =====================================================
+         GRID
+    ====================================================== -->
+
+    <div
+        class="people-grid"
+        id="peopleGrid"
+    ></div>
+
+
+
+    <!-- =====================================================
+         PROFILE DETAIL
+    ====================================================== -->
+
+    <section
+        class="profile-panel"
+        id="profilePanel"
+    >
+
+
+        <button
+            class="profile-close"
+            id="profileClose"
+            type="button"
+            aria-label="Close profile"
+        ></button>
+
+
+
+        <div class="profile-layout">
+
+
+            <div class="profile-image">
+
+                <img
+                    id="profileImage"
+                    src=""
+                    alt=""
+                >
+
+            </div>
+
+
+            <div class="profile-content">
+
+
+                <h2
+                    class="profile-name"
+                    id="profileName"
+                ></h2>
+
+
+                <div
+                    class="profile-role"
+                    id="profileRole"
+                ></div>
+
+
+
+                <!-- Research -->
+
+                <div
+                    class="profile-section"
+                    id="researchSection"
+                >
+
+                    <div class="profile-heading">
+                        Research Interests
+                    </div>
+
+                    <div
+                        class="research-list"
+                        id="profileResearch"
+                    ></div>
+
+                </div>
+
+
+
+                <!-- Education -->
+
+                <div
+                    class="profile-section"
+                    id="educationSection"
+                >
+
+                    <div class="profile-heading">
+                        Education
+                    </div>
+
+                    <div
+                        class="profile-text"
+                        id="profileEducation"
+                    ></div>
+
+                </div>
+
+
+
+                <!-- Career -->
+
+                <div
+                    class="profile-section"
+                    id="careerSection"
+                >
+
+                    <div class="profile-heading">
+                        Career
+                    </div>
+
+                    <div
+                        class="profile-text"
+                        id="profileCareer"
+                    ></div>
+
+                </div>
+
+
+
+                <!-- Contact -->
+
+                <div
+                    class="profile-section"
+                    id="contactSection"
+                >
+
+                    <div class="profile-heading">
+                        Contact
+                    </div>
+
+                    <div
+                        class="
+                            profile-text
+                            profile-contact
+                        "
+                        id="profileContact"
+                    ></div>
+
+                </div>
+
+
+
+                <!-- Website -->
+
+                <a
+                    class="profile-more"
+                    id="profileMore"
+                    href="#"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                >
+
+                    See more
+
+                    <span
+                        class="profile-more-arrow"
+                    >
+                        →
+                    </span>
+
+                </a>
+
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+</div>
+
+
+
+<script>
+
+
+/* =========================================================
+   MEMBER DATABASE
+
+   여기만 수정하면 됨.
+========================================================= */
+
+
+const people = {
+
+
+/* =========================================================
+   CURRENT
+========================================================= */
+
+current: [
+
+
+    {
+        name:
+            "Professor Name",
+
+        role:
+            "Principal Investigator",
+
+        image:
+            "https://placehold.co/800x1000?text=Professor",
+
+        research: [
+
+            "Power Electronics",
+
+            "Integrated Power Conversion",
+
+            "Power Magnetics",
+
+            "Integrated Voltage Regulators"
+
+        ],
+
+        education: [
+
+            "Ph.D. in Electrical Engineering, University Name",
+
+            "B.S. in Electrical Engineering, University Name"
+
+        ],
+
+        career: [
+
+            "Professor, Department of Electrical Engineering"
+
+        ],
+
+        email:
+            "professor@university.ac.kr",
+
+        website:
+            "https://example.com"
+    },
+
+
+
+    {
+        name:
+            "Hyeongjun Kim",
+
+        role:
+            "Ph.D. Student",
+
+        image:
+            "https://placehold.co/800x1000?text=Hyeongjun+Kim",
+
+        research: [
+
+            "Integrated Voltage Regulators",
+
+            "Coupled Inductors",
+
+            "Power Magnetics",
+
+            "Package-Integrated Magnetics"
+
+        ],
+
+        education: [
+
+            "Ph.D. Student in Electrical Engineering",
+
+            "B.S. in Electrical Engineering"
+
+        ],
+
+        career: [],
+
+        email:
+            "example@kaist.ac.kr",
+
+        website:
+            ""
+    },
+
+
+
+    {
+        name:
+            "Student Name",
+
+        role:
+            "Ph.D. Student",
+
+        image:
+            "https://placehold.co/800x1000?text=Student",
+
+        research: [
+
+            "Power Electronics",
+
+            "High-Frequency DC-DC Converters"
+
+        ],
+
+        education: [
+
+            "Ph.D. Student in Electrical Engineering"
+
+        ],
+
+        career: [],
+
+        email:
+            "student@university.ac.kr",
+
+        website:
+            ""
+    },
+
+
+
+    {
+        name:
+            "Student Name",
+
+        role:
+            "M.S. Student",
+
+        image:
+            "https://placehold.co/800x1000?text=Student",
+
+        research: [
+
+            "Integrated Magnetics",
+
+            "Power Conversion"
+
+        ],
+
+        education: [
+
+            "M.S. Student in Electrical Engineering"
+
+        ],
+
+        career: [],
+
+        email:
+            "student@university.ac.kr",
+
+        website:
+            ""
+    },
+
+
+
+    {
+        name:
+            "Student Name",
+
+        role:
+            "M.S. Student",
+
+        image:
+            "https://placehold.co/800x1000?text=Student",
+
+        research: [
+
+            "Power Devices",
+
+            "DC-DC Converters"
+
+        ],
+
+        education: [
+
+            "M.S. Student in Electrical Engineering"
+
+        ],
+
+        career: [],
+
+        email:
+            "student@university.ac.kr",
+
+        website:
+            ""
+    }
+
+],
+
+
+
+/* =========================================================
+   ALUMNI
+========================================================= */
+
+alumni: [
+
+
+    {
+        name:
+            "Alumni Name",
+
+        role:
+            "Ph.D. Alumni",
+
+        image:
+            "https://placehold.co/800x1000?text=Alumni",
+
+        research: [
+
+            "Power Electronics",
+
+            "Power Magnetics"
+
+        ],
+
+        education: [
+
+            "Ph.D. in Electrical Engineering, 2025"
+
+        ],
+
+        career: [
+
+            "Samsung Electronics"
+
+        ],
+
+        email:
+            "",
+
+        website:
+            ""
+    },
+
+
+    {
+        name:
+            "Alumni Name",
+
+        role:
+            "M.S. Alumni",
+
+        image:
+            "https://placehold.co/800x1000?text=Alumni",
+
+        research: [
+
+            "Power Management",
+
+            "Voltage Regulators"
+
+        ],
+
+        education: [
+
+            "M.S. in Electrical Engineering, 2026"
+
+        ],
+
+        career: [
+
+            "SK hynix"
+
+        ],
+
+        email:
+            "",
+
+        website:
+            ""
+    }
+
+]
+
+};
+
+
+
+/* =========================================================
+   ELEMENTS
+========================================================= */
+
+const peopleGrid =
+    document.getElementById("peopleGrid");
+
+const profilePanel =
+    document.getElementById("profilePanel");
+
+const profileImage =
+    document.getElementById("profileImage");
+
+const profileName =
+    document.getElementById("profileName");
+
+const profileRole =
+    document.getElementById("profileRole");
+
+const profileResearch =
+    document.getElementById("profileResearch");
+
+const profileEducation =
+    document.getElementById("profileEducation");
+
+const profileCareer =
+    document.getElementById("profileCareer");
+
+const profileContact =
+    document.getElementById("profileContact");
+
+const profileMore =
+    document.getElementById("profileMore");
+
+const researchSection =
+    document.getElementById("researchSection");
+
+const educationSection =
+    document.getElementById("educationSection");
+
+const careerSection =
+    document.getElementById("careerSection");
+
+const contactSection =
+    document.getElementById("contactSection");
+
+const profileClose =
+    document.getElementById("profileClose");
+
+const filter =
+    document.getElementById("filter");
+
+const filterButton =
+    document.getElementById("filterButton");
+
+const filterLabel =
+    document.getElementById("filterLabel");
+
+const filterOptions =
+    document.querySelectorAll(".filter-option");
+
+
+let selectedCard = null;
+
+
+/* =========================================================
+   PARAGRAPH LIST
+========================================================= */
+
+function createParagraphList(
+    element,
+    items
+) {
+
+    element.innerHTML = "";
+
+
+    if (
+        !items
+        ||
+        items.length === 0
+    ) {
+
+        return false;
+    }
+
+
+    items.forEach(
+        item => {
+
+            const p =
+                document.createElement("p");
+
+            p.textContent =
+                item;
+
+            element.appendChild(
+                p
+            );
+
+        }
+    );
+
+
+    return true;
+}
+
+
+
+/* =========================================================
+   GRID RENDERING
+========================================================= */
+
+function renderPeople(group) {
+
+
+    peopleGrid.innerHTML =
+        "";
+
+
+    closeProfile();
+
+
+    people[group].forEach(
+        person => {
+
+
+            const card =
+                document.createElement(
+                    "article"
+                );
+
+
+            card.className =
+                "person-card";
+
+
+            card.tabIndex =
+                0;
+
+
+            card.innerHTML = `
+
+                <div class="person-photo">
+
+                    <img
+
+                        src="${person.image}"
+
+                        alt="${person.name}"
+
+                        loading="lazy"
+
+                    >
+
+                </div>
+
+
+                <div class="person-name">
+
+                    ${person.name}
+
+                </div>
+
+
+                <div class="person-role">
+
+                    ${person.role}
+
+                </div>
+
+            `;
+
+
+
+            card.addEventListener(
+                "click",
+                () => {
+
+                    openProfile(
+                        person,
+                        card
+                    );
+
+                }
+            );
+
+
+
+            card.addEventListener(
+                "keydown",
+                event => {
+
+
+                    if (
+                        event.key === "Enter"
+                        ||
+                        event.key === " "
+                    ) {
+
+
+                        event.preventDefault();
+
+
+                        openProfile(
+                            person,
+                            card
+                        );
+
+                    }
+
+                }
+            );
+
+
+            peopleGrid.appendChild(
+                card
+            );
+
+
+        }
+    );
+
+}
+
+
+
+/* =========================================================
+   OPEN PROFILE
+========================================================= */
+
+function openProfile(
+    person,
+    card
+) {
+
+
+    /*
+       같은 사람 클릭 → 닫기
+    */
+
+    if (
+        selectedCard === card
+        &&
+        profilePanel.classList.contains("show")
+    ) {
+
+        closeProfile();
+
+        return;
+    }
+
+
+
+    /*
+       selected 표시
+    */
+
+    document
+        .querySelectorAll(
+            ".person-card"
+        )
+        .forEach(
+            item => {
+
+                item.classList.remove(
+                    "selected"
+                );
+
+            }
+        );
+
+
+    card.classList.add(
+        "selected"
+    );
+
+
+    selectedCard =
+        card;
+
+
+
+    /*
+       Basic
+    */
+
+    profileImage.src =
+        person.image;
+
+
+    profileImage.alt =
+        person.name;
+
+
+    profileName.textContent =
+        person.name;
+
+
+    profileRole.textContent =
+        person.role;
+
+
+
+    /*
+       Research
+    */
+
+    profileResearch.innerHTML =
+        "";
+
+
+    if (
+        person.research
+        &&
+        person.research.length > 0
+    ) {
+
+
+        researchSection.style.display =
+            "block";
+
+
+        person.research.forEach(
+            item => {
+
+
+                const tag =
+                    document.createElement(
+                        "span"
+                    );
+
+
+                tag.className =
+                    "research-tag";
+
+
+                tag.textContent =
+                    item;
+
+
+                profileResearch.appendChild(
+                    tag
+                );
+
+            }
+        );
+
+
+    } else {
+
+
+        researchSection.style.display =
+            "none";
+
+    }
+
+
+
+    /*
+       Education
+    */
+
+    educationSection.style.display =
+        createParagraphList(
+            profileEducation,
+            person.education
+        )
+        ? "block"
+        : "none";
+
+
+
+    /*
+       Career
+    */
+
+    careerSection.style.display =
+        createParagraphList(
+            profileCareer,
+            person.career
+        )
+        ? "block"
+        : "none";
+
+
+
+    /*
+       Contact
+    */
+
+    profileContact.innerHTML =
+        "";
+
+
+    if (person.email) {
+
+
+        contactSection.style.display =
+            "block";
+
+
+        const email =
+            document.createElement(
+                "a"
+            );
+
+
+        email.href =
+            `mailto:${person.email}`;
+
+
+        email.textContent =
+            person.email;
+
+
+        profileContact.appendChild(
+            email
+        );
+
+
+    } else {
+
+
+        contactSection.style.display =
+            "none";
+
+    }
+
+
+
+    /*
+       Website
+    */
+
+    if (person.website) {
+
+
+        profileMore.style.display =
+            "inline-flex";
+
+
+        profileMore.href =
+            person.website;
+
+
+    } else {
+
+
+        profileMore.style.display =
+            "none";
+
+    }
+
+
+
+    /*
+       Show
+    */
+
+    profilePanel.classList.add(
+        "show"
+    );
+
+
+}
+
+
+
+/* =========================================================
+   CLOSE PROFILE
+========================================================= */
+
+function closeProfile() {
+
+
+    profilePanel.classList.remove(
+        "show"
+    );
+
+
+    if (selectedCard) {
+
+        selectedCard.classList.remove(
+            "selected"
+        );
+
+    }
+
+
+    selectedCard =
+        null;
+
+}
+
+
+profileClose.addEventListener(
+    "click",
+    closeProfile
+);
+
+
+
+/* =========================================================
+   FILTER
+========================================================= */
+
+filterButton.addEventListener(
+    "click",
+    event => {
+
+
+        event.stopPropagation();
+
+
+        filter.classList.toggle(
+            "open"
+        );
+
+    }
+);
+
+
+
+filterOptions.forEach(
+    option => {
+
+
+        option.addEventListener(
+            "click",
+            function() {
+
+
+                const group =
+                    this.dataset.group;
+
+
+                filterLabel.textContent =
+                    this.textContent.trim();
+
+
+
+                filterOptions.forEach(
+                    item => {
+
+
+                        item.classList.remove(
+                            "active"
+                        );
+
+
+                    }
+                );
+
+
+                this.classList.add(
+                    "active"
+                );
+
+
+
+                renderPeople(
+                    group
+                );
+
+
+                filter.classList.remove(
+                    "open"
+                );
+
+
+            }
+        );
+
+    }
+);
+
+
+
+document.addEventListener(
+    "click",
+    event => {
+
+
+        if (
+            !filter.contains(
+                event.target
+            )
+        ) {
+
+
+            filter.classList.remove(
+                "open"
+            );
+
+
+        }
+
+    }
+);
+
+
+
+/* =========================================================
+   INITIAL
+========================================================= */
+
+renderPeople(
+    "current"
+);
+
+</script>
+
+</body>
+</html>

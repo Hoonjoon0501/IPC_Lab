@@ -39,20 +39,14 @@ body {
 
 .people-page {
     width: 100%;
+    max-width: 1600px;
 
-    /* 기존 1280px 제한 제거 */
-    max-width: none;
+    margin: 0 auto;
 
-    margin: 0;
-
-    /*
-       좌우 여백 최소화
-       0으로 해도 됨
-    */
     padding:
-        24px
-        8px
-        60px;
+        48px
+        clamp(24px, 4vw, 72px)
+        80px;
 }
 
 

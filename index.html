@@ -1,9 +1,10 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Researchers | Integrated Power Lab</title>
 
 <style>
 
@@ -15,11 +16,16 @@
     box-sizing: border-box;
 }
 
+html {
+    scroll-behavior: smooth;
+}
+
 html,
 body {
-    width: 100%;
     margin: 0;
     padding: 0;
+
+    width: 100%;
 
     background: #ffffff;
     color: #111111;
@@ -31,76 +37,92 @@ body {
         sans-serif;
 }
 
+button,
+a {
+    font-family: inherit;
+}
+
 
 /* =========================================================
-   PAGE
-   Google Sites iframe 폭을 최대한 전부 사용
+   PAGE CONTAINER
+
+   GitHub Pages를 Google Sites full-page embed할 것을 고려
 ========================================================= */
 
-.people-page {
+.people-wrap {
+
     width: 100%;
-    max-width: 1600px;
+
+    max-width: 1520px;
 
     margin: 0 auto;
 
     padding:
-        48px
-        clamp(24px, 4vw, 72px)
-        80px;
+        54px
+        clamp(28px, 5vw, 82px)
+        100px;
 }
 
 
 /* =========================================================
-   HEADER
+   PAGE TITLE
 ========================================================= */
 
-.people-header {
+.page-header {
+
     display: flex;
 
-    align-items: center;
+    align-items: flex-end;
     justify-content: space-between;
 
-    margin-bottom: 36px;
+    margin-bottom: 46px;
 }
 
 
-.people-title {
+.page-title {
+
     margin: 0;
 
-    font-size: 40px;
+    font-size: 42px;
     line-height: 1;
 
-    font-weight: 600;
+    font-weight: 650;
 
     letter-spacing: -1.2px;
 }
 
 
 /* =========================================================
-   CURRENT / ALUMNI FILTER
+   TERM / CURRENT SELECTOR
 ========================================================= */
 
-.filter {
+.people-controls {
+
     position: relative;
 }
 
 
-.filter-button {
+.term-picker {
+
+    position: relative;
+}
+
+
+.term-trigger {
+
     display: flex;
 
     align-items: center;
 
-    gap: 10px;
+    gap: 9px;
 
     padding: 4px 0;
 
-    border: none;
+    border: 0;
 
     background: transparent;
 
-    color: #111;
-
-    font-family: inherit;
+    color: #111111;
 
     font-size: 15px;
 
@@ -108,279 +130,165 @@ body {
 }
 
 
-.filter-arrow {
-    width: 7px;
-    height: 7px;
+.term-chevron {
 
-    border-right: 1.5px solid #111;
-    border-bottom: 1.5px solid #111;
-
-    transform:
-        rotate(45deg)
-        translateY(-2px);
+    font-size: 11px;
 
     transition:
         transform 0.2s ease;
 }
 
 
-.filter.open
-.filter-arrow {
-    transform:
-        rotate(225deg);
+.term-picker.open
+.term-chevron {
+
+    transform: rotate(180deg);
 }
 
 
-.filter-menu {
+.term-menu {
+
     position: absolute;
 
-    top: calc(100% + 10px);
+    top: calc(100% + 12px);
     right: 0;
 
-    min-width: 135px;
+    min-width: 155px;
 
-    background: #fff;
+    padding: 5px 0;
 
-    border: 1px solid #ddd;
+    border:
+        1px solid #dddddd;
 
-    z-index: 100;
+    background:
+        #ffffff;
+
+    box-shadow:
+        0 8px 26px
+        rgba(0,0,0,0.07);
+
+    z-index: 30;
 
     opacity: 0;
+
     visibility: hidden;
 
-    transform: translateY(-4px);
+    transform:
+        translateY(-5px);
 
     transition:
-        opacity 0.15s ease,
-        transform 0.15s ease,
-        visibility 0.15s ease;
+        opacity 0.18s ease,
+        transform 0.18s ease,
+        visibility 0.18s ease;
 }
 
 
-.filter.open
-.filter-menu {
+.term-picker.open
+.term-menu {
+
     opacity: 1;
+
     visibility: visible;
 
-    transform: translateY(0);
+    transform:
+        translateY(0);
 }
 
 
-.filter-option {
+.term-option {
+
     display: block;
 
     width: 100%;
 
     padding:
-        12px
-        15px;
+        11px
+        16px;
 
     border: 0;
 
     background: #fff;
 
-    font-family: inherit;
-
-    font-size: 14px;
+    color: #222;
 
     text-align: left;
 
-    cursor: pointer;
-}
-
-
-.filter-option:hover {
-    background: #f5f5f5;
-}
-
-
-.filter-option.active {
-    font-weight: 600;
-}
-
-
-/* =========================================================
-   PEOPLE GRID
-========================================================= */
-
-.people-grid {
-    width: 100%;
-
-    display: grid;
-
-    /*
-       큰 화면에서는 5명
-    */
-    grid-template-columns:
-        repeat(5, minmax(0, 1fr));
-
-    column-gap: 20px;
-    row-gap: 46px;
-}
-
-
-/* =========================================================
-   MEMBER CARD
-========================================================= */
-
-.person-card {
-    width: 100%;
-
-    min-width: 0;
+    font-size: 14px;
 
     cursor: pointer;
-
-    outline: none;
 }
 
 
-.person-photo {
-    position: relative;
+.term-option:hover {
 
-    width: 100%;
-
-    /*
-       DSIL 느낌의 세로형 사진
-    */
-    aspect-ratio: 4 / 5;
-
-    margin-bottom: 13px;
-
-    overflow: hidden;
-
-    background: #eeeeee;
+    background: #f4f4f4;
 }
 
 
-.person-photo img {
-    display: block;
+.term-option.active {
 
-    width: 100%;
-    height: 100%;
-
-    object-fit: cover;
-    object-position: center center;
-
-    transition:
-        transform 0.35s ease,
-        opacity 0.25s ease;
-}
-
-
-.person-card:hover
-.person-photo img {
-    transform: scale(1.025);
-
-    opacity: 0.94;
-}
-
-
-/* 선택된 멤버 */
-
-.person-card.selected
-.person-photo::after {
-    content: "";
-
-    position: absolute;
-
-    left: 0;
-    right: 0;
-    bottom: 0;
-
-    height: 3px;
-
-    background: #111;
+    font-weight: 650;
 }
 
 
 /* =========================================================
-   MEMBER TEXT
+   MEMBER DETAIL
+   DSIL처럼 GRID 위쪽에 표시
 ========================================================= */
 
-.person-name {
-    margin-bottom: 5px;
+.people-detail {
 
-    font-size: 17px;
-
-    line-height: 1.25;
-
-    font-weight: 600;
-
-    letter-spacing: -0.2px;
-}
-
-
-.person-role {
-    font-size: 13px;
-
-    line-height: 1.45;
-
-    color: #666666;
-}
-
-
-/* =========================================================
-   DETAIL PROFILE PANEL
-========================================================= */
-
-.profile-panel {
     display: none;
 
     position: relative;
 
-    width: 100%;
-
-    margin-top: 56px;
+    margin-bottom: 58px;
 
     padding:
-        46px
         0
-        20px;
+        0
+        50px;
 
-    border-top: 1px solid #ccc;
+    border-bottom:
+        1px solid #d7d7d7;
 }
 
 
-.profile-panel.show {
+.people-detail.show {
+
     display: block;
 
     animation:
-        profileAppear
-        0.3s ease;
+        detailFade
+        0.32s ease;
 }
 
 
-@keyframes profileAppear {
+@keyframes detailFade {
 
     from {
         opacity: 0;
-
-        transform: translateY(8px);
+        transform: translateY(-7px);
     }
 
     to {
         opacity: 1;
-
         transform: translateY(0);
     }
-
 }
 
 
-/* =========================================================
-   CLOSE BUTTON
-========================================================= */
+.detail-close {
 
-.profile-close {
     position: absolute;
 
-    top: 18px;
+    top: 0;
     right: 0;
 
-    width: 32px;
-    height: 32px;
+    width: 38px;
+    height: 38px;
 
-    border: none;
+    border: 0;
 
     background: transparent;
 
@@ -388,456 +296,628 @@ body {
 }
 
 
-.profile-close::before,
-.profile-close::after {
+.detail-close::before,
+.detail-close::after {
+
     content: "";
 
     position: absolute;
 
-    top: 15px;
-    left: 4px;
+    top: 18px;
+    left: 5px;
 
-    width: 24px;
+    width: 28px;
     height: 1.5px;
 
     background: #111;
 }
 
 
-.profile-close::before {
+.detail-close::before {
     transform: rotate(45deg);
 }
 
 
-.profile-close::after {
+.detail-close::after {
     transform: rotate(-45deg);
 }
 
 
 /* =========================================================
-   PROFILE LAYOUT
+   DETAIL LAYOUT
 ========================================================= */
 
-.profile-layout {
+.detail-layout {
+
     display: grid;
 
     grid-template-columns:
-        minmax(240px, 28%)
+        minmax(260px, 31%)
         minmax(0, 1fr);
 
-    gap: 60px;
+    gap:
+        clamp(42px, 6vw, 90px);
 }
 
 
-.profile-image {
+.detail-photo {
+
     width: 100%;
 
-    aspect-ratio: 4 / 5;
+    /*
+      DSIL 코드의 a4-photo naming을 참고해
+      A4 비율 적용
+    */
+
+    aspect-ratio:
+        210 / 297;
 
     overflow: hidden;
 
-    background: #eee;
+    background:
+        #eeeeee;
 }
 
 
-.profile-image img {
-    display: block;
+.detail-photo img {
 
     width: 100%;
     height: 100%;
 
+    display: block;
+
     object-fit: cover;
+
+    object-position:
+        center center;
 }
 
 
-/* =========================================================
-   PROFILE TEXT
-========================================================= */
+.detail-content {
 
-.profile-content {
-    padding-top: 2px;
+    padding:
+        7px
+        50px
+        0
+        0;
 }
 
 
-.profile-name {
+.detail-name {
+
     margin:
         0
         0
         8px;
 
-    font-size: 34px;
+    font-size:
+        clamp(30px, 3vw, 42px);
 
-    line-height: 1.15;
+    line-height:
+        1.12;
 
-    font-weight: 600;
+    font-weight:
+        650;
 
-    letter-spacing: -0.7px;
+    letter-spacing:
+        -0.8px;
 }
 
 
-.profile-role {
-    margin-bottom: 33px;
+.detail-role {
 
-    color: #666;
+    margin-bottom:
+        36px;
 
-    font-size: 15px;
+    color:
+        #666666;
 
-    line-height: 1.5;
-}
+    font-size:
+        16px;
 
-
-.profile-section {
-    margin-top: 27px;
-}
-
-
-.profile-section:first-of-type {
-    margin-top: 0;
-}
-
-
-.profile-heading {
-    margin-bottom: 11px;
-
-    font-size: 12px;
-
-    font-weight: 700;
-
-    letter-spacing: 1px;
-
-    text-transform: uppercase;
-}
-
-
-.profile-text {
-    font-size: 14px;
-
-    line-height: 1.7;
-
-    color: #333;
-}
-
-
-.profile-text p {
-    margin:
-        0
-        0
-        6px;
+    line-height:
+        1.5;
 }
 
 
 /* =========================================================
-   RESEARCH
+   DETAIL SECTIONS
 ========================================================= */
 
-.research-list {
+.detail-section {
+
+    margin-top:
+        29px;
+}
+
+
+.detail-heading {
+
+    margin-bottom:
+        11px;
+
+    font-size:
+        12px;
+
+    font-weight:
+        700;
+
+    letter-spacing:
+        1.1px;
+
+    text-transform:
+        uppercase;
+}
+
+
+.detail-body {
+
+    color:
+        #333333;
+
+    font-size:
+        14.5px;
+
+    line-height:
+        1.75;
+}
+
+
+.detail-body p {
+
+    margin:
+        0
+        0
+        7px;
+}
+
+
+.detail-body ul {
+
+    margin:
+        4px
+        0
+        0;
+
+    padding-left:
+        19px;
+}
+
+
+.detail-body li {
+
+    margin-bottom:
+        4px;
+}
+
+
+/* research */
+
+.research-area {
+
+    margin-bottom:
+        17px;
+}
+
+
+.research-area-title {
+
+    margin-bottom:
+        4px;
+
+    font-weight:
+        600;
+
+    color:
+        #1c1c1c;
+}
+
+
+/* contact */
+
+.detail-email {
+
+    color:
+        #111111;
+
+    text-decoration:
+        none;
+
+    border-bottom:
+        1px solid #bdbdbd;
+}
+
+
+.detail-email:hover {
+
+    border-bottom-color:
+        #111111;
+}
+
+
+/* external links */
+
+.member-links {
+
     display: flex;
 
     flex-wrap: wrap;
 
-    gap: 7px;
+    gap:
+        12px;
+
+    margin-top:
+        31px;
 }
 
 
-.research-tag {
-    padding:
-        6px
-        10px;
+.member-link {
 
-    border:
-        1px solid #d6d6d6;
-
-    font-size: 12px;
-
-    line-height: 1.2;
-}
-
-
-/* =========================================================
-   CONTACT
-========================================================= */
-
-.profile-contact a {
-    color: #111;
-
-    text-decoration: none;
-
-    border-bottom:
-        1px solid #bbb;
-}
-
-
-.profile-contact a:hover {
-    border-bottom-color: #111;
-}
-
-
-/* =========================================================
-   SEE MORE
-========================================================= */
-
-.profile-more {
     display: inline-flex;
 
     align-items: center;
 
-    gap: 8px;
+    gap: 6px;
 
-    margin-top: 30px;
+    color:
+        #111111;
 
-    color: #111;
+    text-decoration:
+        none;
 
-    font-size: 14px;
+    font-size:
+        14px;
 
-    font-weight: 500;
-
-    text-decoration: none;
+    font-weight:
+        500;
 }
 
 
-.profile-more-arrow {
-    transition:
-        transform 0.2s ease;
-}
+.member-link:hover {
 
-
-.profile-more:hover
-.profile-more-arrow {
-    transform:
-        translateX(4px);
+    text-decoration:
+        underline;
 }
 
 
 /* =========================================================
-   RESPONSIVE
+   GRID
 ========================================================= */
 
+.people-grid {
 
-/* 4 columns */
+    width: 100%;
+
+    display: grid;
+
+    /*
+      DSIL 느낌:
+      넓은 화면 5열
+    */
+
+    grid-template-columns:
+        repeat(5, minmax(0, 1fr));
+
+    column-gap:
+        clamp(18px, 2.2vw, 32px);
+
+    row-gap:
+        54px;
+}
+
+
+/* =========================================================
+   MEMBER CARD
+
+   border / shadow / radius 없음
+========================================================= */
+
+.member-card {
+
+    display: block;
+
+    width: 100%;
+
+    margin: 0;
+    padding: 0;
+
+    border: 0;
+
+    background:
+        transparent;
+
+    color:
+        inherit;
+
+    text-align:
+        left;
+
+    cursor:
+        pointer;
+
+    appearance:
+        none;
+}
+
+
+.member-card-photo-wrap {
+
+    position: relative;
+
+    width: 100%;
+
+    aspect-ratio:
+        210 / 297;
+
+    overflow:
+        hidden;
+
+    background:
+        #eeeeee;
+
+    margin-bottom:
+        14px;
+}
+
+
+.member-card-photo {
+
+    display: block;
+
+    width: 100%;
+    height: 100%;
+
+    object-fit:
+        cover;
+
+    object-position:
+        center center;
+
+    transition:
+        transform 0.35s ease,
+        opacity 0.3s ease;
+}
+
+
+.member-card:hover
+.member-card-photo {
+
+    transform:
+        scale(1.025);
+
+    opacity:
+        0.93;
+}
+
+
+/* Selected member */
+
+.member-card.selected
+.member-card-photo-wrap::after {
+
+    content: "";
+
+    position: absolute;
+
+    bottom: 0;
+    left: 0;
+    right: 0;
+
+    height:
+        3px;
+
+    background:
+        #111111;
+}
+
+
+/* =========================================================
+   CARD TEXT
+========================================================= */
+
+.member-card-name {
+
+    margin-bottom:
+        5px;
+
+    font-size:
+        17px;
+
+    line-height:
+        1.25;
+
+    font-weight:
+        650;
+
+    letter-spacing:
+        -0.2px;
+}
+
+
+.member-card-role {
+
+    color:
+        #6d6d6d;
+
+    font-size:
+        13px;
+
+    line-height:
+        1.45;
+}
+
+
+/* =========================================================
+   TABLET
+========================================================= */
 
 @media
-(max-width: 1150px) {
+(max-width: 1200px) {
 
     .people-grid {
+
         grid-template-columns:
-            repeat(4, minmax(0, 1fr));
+            repeat(4, minmax(0,1fr));
     }
 
 }
 
 
-/* 3 columns */
-
 @media
-(max-width: 850px) {
+(max-width: 900px) {
 
     .people-grid {
-        grid-template-columns:
-            repeat(3, minmax(0, 1fr));
 
-        column-gap: 18px;
+        grid-template-columns:
+            repeat(3, minmax(0,1fr));
     }
 
 
-    .profile-layout {
-        grid-template-columns:
-            minmax(220px, 34%)
-            1fr;
+    .detail-layout {
 
-        gap: 38px;
+        grid-template-columns:
+            minmax(230px, 34%)
+            minmax(0,1fr);
+
+        gap:
+            40px;
     }
 
 }
 
 
-/* 2 columns */
+/* =========================================================
+   MOBILE
+========================================================= */
 
 @media
-(max-width: 600px) {
+(max-width: 620px) {
 
-    .people-page {
+    .people-wrap {
+
         padding:
-            20px
-            6px
-            45px;
+            30px
+            15px
+            60px;
     }
 
 
-    .people-header {
-        margin-bottom: 28px;
+    .page-header {
+
+        margin-bottom:
+            30px;
     }
 
 
-    .people-title {
-        font-size: 29px;
-    }
+    .page-title {
 
-
-    .filter-button {
-        font-size: 14px;
+        font-size:
+            30px;
     }
 
 
     .people-grid {
+
         grid-template-columns:
-            repeat(2, minmax(0, 1fr));
+            repeat(2, minmax(0,1fr));
 
-        column-gap: 12px;
+        column-gap:
+            14px;
 
-        row-gap: 32px;
+        row-gap:
+            36px;
     }
 
 
-    .person-name {
-        font-size: 15px;
+    .member-card-name {
+
+        font-size:
+            15px;
     }
 
 
-    .person-role {
-        font-size: 12px;
+    .member-card-role {
+
+        font-size:
+            12px;
     }
 
 
-    .profile-panel {
-        margin-top: 40px;
+    .detail-layout {
 
-        padding-top: 46px;
+        display:
+            block;
     }
 
 
-    .profile-layout {
-        display: block;
-    }
+    .detail-photo {
 
-
-    .profile-image {
-        width: 100%;
-        max-width: 420px;
+        max-width:
+            430px;
 
         margin:
             0 auto
-            27px;
+            29px;
     }
 
 
-    .profile-name {
-        font-size: 28px;
+    .detail-content {
+
+        padding:
+            0;
+    }
+
+
+    .detail-name {
+
+        font-size:
+            29px;
+    }
+
+
+    .detail-close {
+
+        top:
+            -43px;
     }
 
 }
 
 </style>
-
 </head>
 
 
 <body>
 
 
-<div class="people-page">
+<main class="people-wrap">
 
 
-    <!-- =====================================================
-         HEADER
-    ====================================================== -->
-
-    <div class="people-header">
-
-
-        <h1 class="people-title">
-            People
-        </h1>
-
-
-        <div
-            class="filter"
-            id="filter"
-        >
-
-
-            <button
-                class="filter-button"
-                id="filterButton"
-                type="button"
-            >
-
-                <span id="filterLabel">
-                    Current
-                </span>
-
-                <span
-                    class="filter-arrow"
-                ></span>
-
-            </button>
-
-
-            <div class="filter-menu">
-
-
-                <button
-                    class="filter-option active"
-                    data-group="current"
-                    type="button"
-                >
-                    Current
-                </button>
-
-
-                <button
-                    class="filter-option"
-                    data-group="alumni"
-                    type="button"
-                >
-                    Alumni
-                </button>
-
-
-            </div>
-
-        </div>
-
-    </div>
-
-
-
-    <!-- =====================================================
-         GRID
-    ====================================================== -->
-
-    <div
-        class="people-grid"
-        id="peopleGrid"
-    ></div>
-
-
-
-    <!-- =====================================================
-         PROFILE DETAIL
-    ====================================================== -->
+    <!-- ===================================================
+         DETAIL
+         DSIL과 동일하게 Grid보다 위에 존재
+    ==================================================== -->
 
     <section
-        class="profile-panel"
-        id="profilePanel"
+        id="member-detail"
+        class="people-detail"
     >
 
-
         <button
-            class="profile-close"
-            id="profileClose"
             type="button"
+            class="detail-close"
+            id="detailClose"
             aria-label="Close profile"
         ></button>
 
 
+        <div class="detail-layout">
 
-        <div class="profile-layout">
 
-
-            <div class="profile-image">
+            <div class="detail-photo">
 
                 <img
-                    id="profileImage"
+                    id="detailPhoto"
                     src=""
                     alt=""
                 >
@@ -845,124 +925,106 @@ body {
             </div>
 
 
-            <div class="profile-content">
+            <div class="detail-content">
 
 
                 <h2
-                    class="profile-name"
-                    id="profileName"
+                    class="detail-name"
+                    id="detailName"
                 ></h2>
 
 
                 <div
-                    class="profile-role"
-                    id="profileRole"
+                    class="detail-role"
+                    id="detailRole"
                 ></div>
 
 
 
-                <!-- Research -->
+                <!-- RESEARCH -->
 
-                <div
-                    class="profile-section"
+                <section
+                    class="detail-section"
                     id="researchSection"
                 >
 
-                    <div class="profile-heading">
-                        Research Interests
+                    <div class="detail-heading">
+                        Research
                     </div>
 
                     <div
-                        class="research-list"
-                        id="profileResearch"
+                        class="detail-body"
+                        id="detailResearch"
                     ></div>
 
-                </div>
+                </section>
 
 
 
-                <!-- Education -->
+                <!-- EDUCATION -->
 
-                <div
-                    class="profile-section"
+                <section
+                    class="detail-section"
                     id="educationSection"
                 >
 
-                    <div class="profile-heading">
+                    <div class="detail-heading">
                         Education
                     </div>
 
                     <div
-                        class="profile-text"
-                        id="profileEducation"
+                        class="detail-body"
+                        id="detailEducation"
                     ></div>
 
-                </div>
+                </section>
 
 
 
-                <!-- Career -->
+                <!-- CAREER -->
 
-                <div
-                    class="profile-section"
+                <section
+                    class="detail-section"
                     id="careerSection"
                 >
 
-                    <div class="profile-heading">
+                    <div class="detail-heading">
                         Career
                     </div>
 
                     <div
-                        class="profile-text"
-                        id="profileCareer"
+                        class="detail-body"
+                        id="detailCareer"
                     ></div>
 
-                </div>
+                </section>
 
 
 
-                <!-- Contact -->
+                <!-- CONTACT -->
 
-                <div
-                    class="profile-section"
+                <section
+                    class="detail-section"
                     id="contactSection"
                 >
 
-                    <div class="profile-heading">
+                    <div class="detail-heading">
                         Contact
                     </div>
 
                     <div
-                        class="
-                            profile-text
-                            profile-contact
-                        "
-                        id="profileContact"
+                        class="detail-body"
+                        id="detailContact"
                     ></div>
 
-                </div>
+                </section>
 
 
 
-                <!-- Website -->
-
-                <a
-                    class="profile-more"
-                    id="profileMore"
-                    href="#"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                >
-
-                    See more
-
-                    <span
-                        class="profile-more-arrow"
-                    >
-                        →
-                    </span>
-
-                </a>
+                <div
+                    class="member-links"
+                    id="detailLinks"
+                ></div>
 
 
             </div>
@@ -972,7 +1034,93 @@ body {
     </section>
 
 
-</div>
+
+    <!-- ===================================================
+         HEADER + CURRENT SELECTOR
+    ==================================================== -->
+
+    <div class="page-header">
+
+
+        <h1 class="page-title">
+            Researchers
+        </h1>
+
+
+        <div class="people-controls">
+
+
+            <div
+                class="term-picker"
+                id="termPicker"
+            >
+
+
+                <button
+                    type="button"
+                    class="term-trigger"
+                    id="termTrigger"
+                    aria-haspopup="listbox"
+                    aria-expanded="false"
+                >
+
+                    <span id="termLabel">
+                        Current
+                    </span>
+
+                    <span
+                        class="term-chevron"
+                        aria-hidden="true"
+                    >
+                        ▾
+                    </span>
+
+                </button>
+
+
+                <div
+                    class="term-menu"
+                    id="termMenu"
+                >
+
+
+                    <button
+                        class="term-option active"
+                        data-term="current"
+                    >
+                        Current
+                    </button>
+
+
+                    <button
+                        class="term-option"
+                        data-term="alumni"
+                    >
+                        Alumni
+                    </button>
+
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+
+    <!-- ===================================================
+         MEMBER GRID
+    ==================================================== -->
+
+    <div
+        class="people-grid"
+        id="peopleGrid"
+    ></div>
+
+
+</main>
 
 
 
@@ -980,513 +1128,478 @@ body {
 
 
 /* =========================================================
-   MEMBER DATABASE
+   IPC MEMBER DATA
 
-   여기만 수정하면 됨.
+   이 부분만 수정하면 됨.
 ========================================================= */
 
 
-const people = {
+const peopleData = {
 
 
-/* =========================================================
-   CURRENT
-========================================================= */
+    /* =====================================================
+       CURRENT RESEARCHERS
+    ====================================================== */
 
-current: [
+    current: [
 
 
-    {
-        name:
-            "Professor Name",
+        {
+            id:
+                "student01",
 
-        role:
-            "Principal Investigator",
+            name:
+                "Student Name",
 
-        image:
-            "https://placehold.co/800x1000?text=Professor",
+            role:
+                "Ph.D. Student",
 
-        research: [
+            photo:
+                "images/student01.jpg",
 
-            "Power Electronics",
 
-            "Integrated Power Conversion",
+            research: [
 
-            "Power Magnetics",
+                {
+                    area:
+                        "Integrated Voltage Regulators",
 
-            "Integrated Voltage Regulators"
+                    topics: [
 
-        ],
+                        "Package-integrated magnetics",
 
-        education: [
+                        "High-frequency DC-DC converters"
 
-            "Ph.D. in Electrical Engineering, University Name",
+                    ]
+                },
 
-            "B.S. in Electrical Engineering, University Name"
+                {
+                    area:
+                        "Power Magnetics",
 
-        ],
+                    topics: [
 
-        career: [
+                        "Coupled inductors",
 
-            "Professor, Department of Electrical Engineering"
+                        "Magnetic component modeling"
 
-        ],
+                    ]
+                }
 
-        email:
-            "professor@university.ac.kr",
+            ],
 
-        website:
-            "https://example.com"
-    },
 
+            education: [
 
+                "Ph.D. / School of Electrical Engineering, KAIST (2025 – present)",
 
-    {
-        name:
-            "Hyeongjun Kim",
+                "B.S. / Electrical Engineering, University Name (2021 – 2025)"
 
-        role:
-            "Ph.D. Student",
+            ],
 
-        image:
-            "https://placehold.co/800x1000?text=Hyeongjun+Kim",
 
-        research: [
+            career: [],
 
-            "Integrated Voltage Regulators",
 
-            "Coupled Inductors",
+            email:
+                "student01@kaist.ac.kr",
 
-            "Power Magnetics",
 
-            "Package-Integrated Magnetics"
+            links: [
 
-        ],
+                /*
+                {
+                    label:
+                        "Google Scholar",
 
-        education: [
+                    url:
+                        "https://scholar.google.com/..."
+                },
 
-            "Ph.D. Student in Electrical Engineering",
+                {
+                    label:
+                        "LinkedIn",
 
-            "B.S. in Electrical Engineering"
+                    url:
+                        "https://linkedin.com/..."
+                }
+                */
 
-        ],
+            ]
 
-        career: [],
+        },
 
-        email:
-            "example@kaist.ac.kr",
 
-        website:
-            ""
-    },
 
+        {
+            id:
+                "student02",
 
+            name:
+                "Student Name",
 
-    {
-        name:
-            "Student Name",
+            role:
+                "M.S.-Ph.D. Student",
 
-        role:
-            "Ph.D. Student",
+            photo:
+                "images/student02.jpg",
 
-        image:
-            "https://placehold.co/800x1000?text=Student",
 
-        research: [
+            research: [
 
-            "Power Electronics",
+                {
+                    area:
+                        "Power Delivery",
 
-            "High-Frequency DC-DC Converters"
+                    topics: [
 
-        ],
+                        "Vertical power delivery",
 
-        education: [
+                        "Integrated power conversion"
 
-            "Ph.D. Student in Electrical Engineering"
+                    ]
+                }
 
-        ],
+            ],
 
-        career: [],
 
-        email:
-            "student@university.ac.kr",
+            education: [
 
-        website:
-            ""
-    },
+                "M.S.-Ph.D. / School of Electrical Engineering, KAIST",
 
+                "B.S. / Electrical Engineering, University Name"
 
+            ],
 
-    {
-        name:
-            "Student Name",
 
-        role:
-            "M.S. Student",
+            career: [],
 
-        image:
-            "https://placehold.co/800x1000?text=Student",
 
-        research: [
+            email:
+                "student02@kaist.ac.kr",
 
-            "Integrated Magnetics",
 
-            "Power Conversion"
+            links: []
 
-        ],
+        },
 
-        education: [
 
-            "M.S. Student in Electrical Engineering"
 
-        ],
+        {
+            id:
+                "student03",
 
-        career: [],
+            name:
+                "Student Name",
 
-        email:
-            "student@university.ac.kr",
+            role:
+                "M.S. Student",
 
-        website:
-            ""
-    },
+            photo:
+                "images/student03.jpg",
 
 
+            research: [
 
-    {
-        name:
-            "Student Name",
+                {
+                    area:
+                        "Power Electronics",
 
-        role:
-            "M.S. Student",
+                    topics: [
 
-        image:
-            "https://placehold.co/800x1000?text=Student",
+                        "High-frequency power converters",
 
-        research: [
+                        "Integrated passive components"
 
-            "Power Devices",
+                    ]
+                }
 
-            "DC-DC Converters"
+            ],
 
-        ],
 
-        education: [
+            education: [
 
-            "M.S. Student in Electrical Engineering"
+                "M.S. / School of Electrical Engineering, KAIST",
 
-        ],
+                "B.S. / Electrical Engineering, University Name"
 
-        career: [],
+            ],
 
-        email:
-            "student@university.ac.kr",
 
-        website:
-            ""
-    }
+            career: [],
 
-],
 
+            email:
+                "student03@kaist.ac.kr",
 
 
-/* =========================================================
-   ALUMNI
-========================================================= */
+            links: []
 
-alumni: [
+        }
 
+    ],
 
-    {
-        name:
-            "Alumni Name",
 
-        role:
-            "Ph.D. Alumni",
 
-        image:
-            "https://placehold.co/800x1000?text=Alumni",
+    /* =====================================================
+       ALUMNI
+    ====================================================== */
 
-        research: [
+    alumni: [
 
-            "Power Electronics",
 
-            "Power Magnetics"
+        {
+            id:
+                "alumni01",
 
-        ],
+            name:
+                "Alumni Name",
 
-        education: [
+            role:
+                "Alumni",
 
-            "Ph.D. in Electrical Engineering, 2025"
+            photo:
+                "images/alumni01.jpg",
 
-        ],
 
-        career: [
+            research: [
 
-            "Samsung Electronics"
+                {
+                    area:
+                        "Power Electronics",
 
-        ],
+                    topics: [
 
-        email:
-            "",
+                        "Integrated voltage regulators"
 
-        website:
-            ""
-    },
+                    ]
+                }
 
+            ],
 
-    {
-        name:
-            "Alumni Name",
 
-        role:
-            "M.S. Alumni",
+            education: [
 
-        image:
-            "https://placehold.co/800x1000?text=Alumni",
+                "M.S. / KAIST (2024 – 2026)"
 
-        research: [
+            ],
 
-            "Power Management",
 
-            "Voltage Regulators"
+            career: [
 
-        ],
+                "Samsung Electronics"
 
-        education: [
+            ],
 
-            "M.S. in Electrical Engineering, 2026"
 
-        ],
+            email:
+                "",
 
-        career: [
 
-            "SK hynix"
+            links: []
 
-        ],
+        }
 
-        email:
-            "",
-
-        website:
-            ""
-    }
-
-]
+    ]
 
 };
 
 
-
 /* =========================================================
-   ELEMENTS
+   ELEMENT REFERENCES
 ========================================================= */
+
 
 const peopleGrid =
-    document.getElementById("peopleGrid");
-
-const profilePanel =
-    document.getElementById("profilePanel");
-
-const profileImage =
-    document.getElementById("profileImage");
-
-const profileName =
-    document.getElementById("profileName");
-
-const profileRole =
-    document.getElementById("profileRole");
-
-const profileResearch =
-    document.getElementById("profileResearch");
-
-const profileEducation =
-    document.getElementById("profileEducation");
-
-const profileCareer =
-    document.getElementById("profileCareer");
-
-const profileContact =
-    document.getElementById("profileContact");
-
-const profileMore =
-    document.getElementById("profileMore");
-
-const researchSection =
-    document.getElementById("researchSection");
-
-const educationSection =
-    document.getElementById("educationSection");
-
-const careerSection =
-    document.getElementById("careerSection");
-
-const contactSection =
-    document.getElementById("contactSection");
-
-const profileClose =
-    document.getElementById("profileClose");
-
-const filter =
-    document.getElementById("filter");
-
-const filterButton =
-    document.getElementById("filterButton");
-
-const filterLabel =
-    document.getElementById("filterLabel");
-
-const filterOptions =
-    document.querySelectorAll(".filter-option");
-
-
-let selectedCard = null;
-
-
-/* =========================================================
-   PARAGRAPH LIST
-========================================================= */
-
-function createParagraphList(
-    element,
-    items
-) {
-
-    element.innerHTML = "";
-
-
-    if (
-        !items
-        ||
-        items.length === 0
-    ) {
-
-        return false;
-    }
-
-
-    items.forEach(
-        item => {
-
-            const p =
-                document.createElement("p");
-
-            p.textContent =
-                item;
-
-            element.appendChild(
-                p
-            );
-
-        }
+    document.getElementById(
+        "peopleGrid"
     );
 
 
-    return true;
-}
+const memberDetail =
+    document.getElementById(
+        "member-detail"
+    );
 
+
+const detailPhoto =
+    document.getElementById(
+        "detailPhoto"
+    );
+
+
+const detailName =
+    document.getElementById(
+        "detailName"
+    );
+
+
+const detailRole =
+    document.getElementById(
+        "detailRole"
+    );
+
+
+const detailResearch =
+    document.getElementById(
+        "detailResearch"
+    );
+
+
+const detailEducation =
+    document.getElementById(
+        "detailEducation"
+    );
+
+
+const detailCareer =
+    document.getElementById(
+        "detailCareer"
+    );
+
+
+const detailContact =
+    document.getElementById(
+        "detailContact"
+    );
+
+
+const detailLinks =
+    document.getElementById(
+        "detailLinks"
+    );
+
+
+const researchSection =
+    document.getElementById(
+        "researchSection"
+    );
+
+
+const educationSection =
+    document.getElementById(
+        "educationSection"
+    );
+
+
+const careerSection =
+    document.getElementById(
+        "careerSection"
+    );
+
+
+const contactSection =
+    document.getElementById(
+        "contactSection"
+    );
+
+
+const detailClose =
+    document.getElementById(
+        "detailClose"
+    );
+
+
+const termPicker =
+    document.getElementById(
+        "termPicker"
+    );
+
+
+const termTrigger =
+    document.getElementById(
+        "termTrigger"
+    );
+
+
+const termLabel =
+    document.getElementById(
+        "termLabel"
+    );
+
+
+const termOptions =
+    document.querySelectorAll(
+        ".term-option"
+    );
+
+
+let selectedCard =
+    null;
 
 
 /* =========================================================
-   GRID RENDERING
+   RENDER CARDS
 ========================================================= */
 
-function renderPeople(group) {
+
+function renderPeople(term) {
 
 
     peopleGrid.innerHTML =
         "";
 
 
-    closeProfile();
+    closeMember();
 
 
-    people[group].forEach(
-        person => {
+    peopleData[term].forEach(
+        member => {
 
 
             const card =
                 document.createElement(
-                    "article"
+                    "button"
                 );
 
 
+            card.type =
+                "button";
+
+
             card.className =
-                "person-card";
-
-
-            card.tabIndex =
-                0;
+                "member-card";
 
 
             card.innerHTML = `
 
-                <div class="person-photo">
+                <div class="member-card-photo-wrap">
 
                     <img
-
-                        src="${person.image}"
-
-                        alt="${person.name}"
-
+                        class="member-card-photo"
+                        src="${member.photo}"
+                        alt="${member.name}"
                         loading="lazy"
-
+                        decoding="async"
                     >
 
                 </div>
 
 
-                <div class="person-name">
+                <div class="member-card-name">
 
-                    ${person.name}
+                    ${member.name}
 
                 </div>
 
 
-                <div class="person-role">
+                <div class="member-card-role">
 
-                    ${person.role}
+                    ${member.role}
 
                 </div>
 
             `;
 
 
-
             card.addEventListener(
                 "click",
                 () => {
 
-                    openProfile(
-                        person,
+                    showMember(
+                        member,
                         card
                     );
-
-                }
-            );
-
-
-
-            card.addEventListener(
-                "keydown",
-                event => {
-
-
-                    if (
-                        event.key === "Enter"
-                        ||
-                        event.key === " "
-                    ) {
-
-
-                        event.preventDefault();
-
-
-                        openProfile(
-                            person,
-                            card
-                        );
-
-                    }
 
                 }
             );
@@ -1496,57 +1609,53 @@ function renderPeople(group) {
                 card
             );
 
-
         }
     );
 
 }
 
 
-
 /* =========================================================
-   OPEN PROFILE
+   SHOW MEMBER
 ========================================================= */
 
-function openProfile(
-    person,
+
+function showMember(
+    member,
     card
 ) {
 
 
     /*
-       같은 사람 클릭 → 닫기
+      같은 카드 클릭 시 닫기
     */
 
     if (
         selectedCard === card
         &&
-        profilePanel.classList.contains("show")
+        memberDetail.classList.contains(
+            "show"
+        )
     ) {
 
-        closeProfile();
+        closeMember();
 
         return;
     }
 
 
 
-    /*
-       selected 표시
-    */
+    /* Selected card */
 
     document
         .querySelectorAll(
-            ".person-card"
+            ".member-card"
         )
         .forEach(
-            item => {
-
+            item =>
                 item.classList.remove(
                     "selected"
-                );
-
-            }
+                )
         );
 
 
@@ -1560,39 +1669,38 @@ function openProfile(
 
 
 
-    /*
-       Basic
-    */
+    /* Basic */
 
-    profileImage.src =
-        person.image;
+    detailPhoto.src =
+        member.photo;
 
 
-    profileImage.alt =
-        person.name;
+    detailPhoto.alt =
+        member.name;
 
 
-    profileName.textContent =
-        person.name;
+    detailName.textContent =
+        member.name;
 
 
-    profileRole.textContent =
-        person.role;
+    detailRole.textContent =
+        member.role;
 
 
 
-    /*
-       Research
-    */
+    /* =====================================================
+       RESEARCH
+    ====================================================== */
 
-    profileResearch.innerHTML =
+
+    detailResearch.innerHTML =
         "";
 
 
     if (
-        person.research
+        member.research
         &&
-        person.research.length > 0
+        member.research.length
     ) {
 
 
@@ -1600,26 +1708,84 @@ function openProfile(
             "block";
 
 
-        person.research.forEach(
-            item => {
+        member.research.forEach(
+            research => {
 
 
-                const tag =
+                const area =
                     document.createElement(
-                        "span"
+                        "div"
                     );
 
 
-                tag.className =
-                    "research-tag";
+                area.className =
+                    "research-area";
 
 
-                tag.textContent =
-                    item;
+                const title =
+                    document.createElement(
+                        "div"
+                    );
 
 
-                profileResearch.appendChild(
-                    tag
+                title.className =
+                    "research-area-title";
+
+
+                title.textContent =
+                    research.area;
+
+
+                area.appendChild(
+                    title
+                );
+
+
+                if (
+                    research.topics
+                    &&
+                    research.topics.length
+                ) {
+
+
+                    const ul =
+                        document.createElement(
+                            "ul"
+                        );
+
+
+                    research.topics.forEach(
+                        topic => {
+
+
+                            const li =
+                                document.createElement(
+                                    "li"
+                                );
+
+
+                            li.textContent =
+                                topic;
+
+
+                            ul.appendChild(
+                                li
+                            );
+
+
+                        }
+                    );
+
+
+                    area.appendChild(
+                        ul
+                    );
+
+                }
+
+
+                detailResearch.appendChild(
+                    area
                 );
 
             }
@@ -1636,43 +1802,42 @@ function openProfile(
 
 
 
-    /*
-       Education
-    */
-
-    educationSection.style.display =
-        createParagraphList(
-            profileEducation,
-            person.education
-        )
-        ? "block"
-        : "none";
+    /* =====================================================
+       EDUCATION
+    ====================================================== */
 
 
-
-    /*
-       Career
-    */
-
-    careerSection.style.display =
-        createParagraphList(
-            profileCareer,
-            person.career
-        )
-        ? "block"
-        : "none";
+    renderTextArray(
+        member.education,
+        detailEducation,
+        educationSection
+    );
 
 
 
-    /*
-       Contact
-    */
+    /* =====================================================
+       CAREER
+    ====================================================== */
 
-    profileContact.innerHTML =
+
+    renderTextArray(
+        member.career,
+        detailCareer,
+        careerSection
+    );
+
+
+
+    /* =====================================================
+       CONTACT
+    ====================================================== */
+
+
+    detailContact.innerHTML =
         "";
 
 
-    if (person.email) {
+    if (member.email) {
 
 
         contactSection.style.display =
@@ -1685,15 +1850,19 @@ function openProfile(
             );
 
 
+        email.className =
+            "detail-email";
+
+
         email.href =
-            `mailto:${person.email}`;
+            `mailto:${member.email}`;
 
 
         email.textContent =
-            person.email;
+            member.email;
 
 
-        profileContact.appendChild(
+        detailContact.appendChild(
             email
         );
 
@@ -1708,57 +1877,202 @@ function openProfile(
 
 
 
-    /*
-       Website
-    */
-
-    if (person.website) {
+    /* =====================================================
+       LINKS
+    ====================================================== */
 
 
-        profileMore.style.display =
-            "inline-flex";
+    detailLinks.innerHTML =
+        "";
 
 
-        profileMore.href =
-            person.website;
+    if (
+        member.links
+        &&
+        member.links.length
+    ) {
+
+
+        detailLinks.style.display =
+            "flex";
+
+
+        member.links.forEach(
+            link => {
+
+
+                const a =
+                    document.createElement(
+                        "a"
+                    );
+
+
+                a.className =
+                    "member-link";
+
+
+                a.href =
+                    link.url;
+
+
+                a.target =
+                    "_blank";
+
+
+                a.rel =
+                    "noopener noreferrer";
+
+
+                a.innerHTML = `
+
+                    ${link.label}
+
+                    <span>↗</span>
+
+                `;
+
+
+                detailLinks.appendChild(
+                    a
+                );
+
+            }
+        );
 
 
     } else {
 
 
-        profileMore.style.display =
+        detailLinks.style.display =
             "none";
 
     }
 
 
 
-    /*
-       Show
-    */
+    /* SHOW */
 
-    profilePanel.classList.add(
+    memberDetail.classList.add(
         "show"
     );
 
 
+    /*
+      DSIL처럼 상세정보를
+      카드 grid 위쪽에 표시
+    */
+
+    memberDetail.scrollIntoView({
+
+        behavior:
+            "smooth",
+
+        block:
+            "start"
+
+    });
+
+
+    /*
+      URL에도 member 표시
+    */
+
+    const url =
+        new URL(
+            window.location
+        );
+
+
+    url.searchParams.set(
+        "member",
+        member.id
+    );
+
+
+    history.replaceState(
+        null,
+        "",
+        url
+    );
+
 }
 
 
-
 /* =========================================================
-   CLOSE PROFILE
+   TEXT ARRAY
 ========================================================= */
 
-function closeProfile() {
+
+function renderTextArray(
+    list,
+    target,
+    section
+) {
 
 
-    profilePanel.classList.remove(
+    target.innerHTML =
+        "";
+
+
+    if (
+        !list
+        ||
+        !list.length
+    ) {
+
+
+        section.style.display =
+            "none";
+
+
+        return;
+
+    }
+
+
+    section.style.display =
+        "block";
+
+
+    list.forEach(
+        text => {
+
+
+            const p =
+                document.createElement(
+                    "p"
+                );
+
+
+            p.textContent =
+                text;
+
+
+            target.appendChild(
+                p
+            );
+
+        }
+    );
+
+}
+
+
+/* =========================================================
+   CLOSE MEMBER
+========================================================= */
+
+
+function closeMember() {
+
+
+    memberDetail.classList.remove(
         "show"
     );
 
 
     if (selectedCard) {
+
 
         selectedCard.classList.remove(
             "selected"
@@ -1770,21 +2084,39 @@ function closeProfile() {
     selectedCard =
         null;
 
+
+    const url =
+        new URL(
+            window.location
+        );
+
+
+    url.searchParams.delete(
+        "member"
+    );
+
+
+    history.replaceState(
+        null,
+        "",
+        url
+    );
+
 }
 
 
-profileClose.addEventListener(
+detailClose.addEventListener(
     "click",
-    closeProfile
+    closeMember
 );
 
 
-
 /* =========================================================
-   FILTER
+   TERM PICKER
 ========================================================= */
 
-filterButton.addEventListener(
+
+termTrigger.addEventListener(
     "click",
     event => {
 
@@ -1792,8 +2124,16 @@ filterButton.addEventListener(
         event.stopPropagation();
 
 
-        filter.classList.toggle(
+        termPicker.classList.toggle(
             "open"
+        );
+
+
+        termTrigger.setAttribute(
+            "aria-expanded",
+            termPicker.classList.contains(
+                "open"
+            )
         );
 
     }
@@ -1801,7 +2141,7 @@ filterButton.addEventListener(
 
 
 
-filterOptions.forEach(
+termOptions.forEach(
     option => {
 
 
@@ -1810,23 +2150,21 @@ filterOptions.forEach(
             function() {
 
 
-                const group =
-                    this.dataset.group;
+                const term =
+                    this.dataset.term;
 
 
-                filterLabel.textContent =
+                termLabel.textContent =
                     this.textContent.trim();
 
 
-
-                filterOptions.forEach(
+                termOptions.forEach(
                     item => {
 
 
                         item.classList.remove(
                             "active"
                         );
-
 
                     }
                 );
@@ -1837,16 +2175,20 @@ filterOptions.forEach(
                 );
 
 
-
-                renderPeople(
-                    group
-                );
-
-
-                filter.classList.remove(
+                termPicker.classList.remove(
                     "open"
                 );
 
+
+                termTrigger.setAttribute(
+                    "aria-expanded",
+                    "false"
+                );
+
+
+                renderPeople(
+                    term
+                );
 
             }
         );
@@ -1862,16 +2204,21 @@ document.addEventListener(
 
 
         if (
-            !filter.contains(
+            !termPicker.contains(
                 event.target
             )
         ) {
 
 
-            filter.classList.remove(
+            termPicker.classList.remove(
                 "open"
             );
 
+
+            termTrigger.setAttribute(
+                "aria-expanded",
+                "false"
+            );
 
         }
 
@@ -1879,16 +2226,17 @@ document.addEventListener(
 );
 
 
-
 /* =========================================================
    INITIAL
 ========================================================= */
+
 
 renderPeople(
     "current"
 );
 
 </script>
+
 
 </body>
 </html>

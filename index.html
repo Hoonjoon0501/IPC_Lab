@@ -17,14 +17,11 @@
     box-sizing: border-box;
 }
 
-html {
-    scroll-behavior: smooth;
-}
-
 html,
 body {
     margin: 0;
     padding: 0;
+
     width: 100%;
 
     background: #ffffff;
@@ -35,6 +32,10 @@ body {
         "Helvetica Neue",
         Helvetica,
         sans-serif;
+}
+
+body.modal-open {
+    overflow: hidden;
 }
 
 button,
@@ -61,351 +62,95 @@ a {
 
 
 /* =========================================================
-   DETAIL PANEL
+   TITLE
 ========================================================= */
-
-.people-detail {
-    display: none;
-
-    position: relative;
-
-    width: 100%;
-
-    margin-bottom: 60px;
-    padding-bottom: 52px;
-
-    border-bottom: 1px solid #dddddd;
-}
-
-.people-detail.show {
-    display: block;
-
-    animation: detailAppear 0.28s ease;
-}
-
-@keyframes detailAppear {
-
-    from {
-        opacity: 0;
-        transform: translateY(-8px);
-    }
-
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-
-}
-
-
-/* =========================================================
-   DETAIL CLOSE BUTTON
-========================================================= */
-
-.detail-close {
-    position: absolute;
-
-    top: 0;
-    right: 0;
-
-    width: 38px;
-    height: 38px;
-
-    padding: 0;
-
-    border: none;
-
-    background: transparent;
-
-    cursor: pointer;
-
-    z-index: 5;
-}
-
-.detail-close::before,
-.detail-close::after {
-    content: "";
-
-    position: absolute;
-
-    top: 18px;
-    left: 5px;
-
-    width: 28px;
-    height: 1.5px;
-
-    background: #111111;
-}
-
-.detail-close::before {
-    transform: rotate(45deg);
-}
-
-.detail-close::after {
-    transform: rotate(-45deg);
-}
-
-
-/* =========================================================
-   DETAIL LAYOUT
-========================================================= */
-
-.detail-layout {
-    display: grid;
-
-    grid-template-columns:
-        minmax(250px, 30%)
-        minmax(0, 1fr);
-
-    gap: clamp(45px, 6vw, 90px);
-}
-
-
-/* =========================================================
-   DETAIL PHOTO
-========================================================= */
-
-.detail-photo-wrap {
-    position: relative;
-
-    width: 100%;
-
-    aspect-ratio: 4 / 5;
-
-    overflow: hidden;
-
-    border-radius: 14px;
-
-    background: #eeeeee;
-}
-
-.detail-photo {
-    display: block;
-
-    width: 100%;
-    height: 100%;
-
-    object-fit: cover;
-    object-position: center center;
-}
-
-.detail-photo-fallback {
-    display: none;
-
-    position: absolute;
-
-    inset: 0;
-
-    align-items: center;
-    justify-content: center;
-
-    padding: 20px;
-
-    color: #999999;
-
-    font-size: 24px;
-    font-weight: 700;
-
-    text-align: center;
-}
-
-
-/* =========================================================
-   DETAIL CONTENT
-========================================================= */
-
-.detail-content {
-    padding-top: 4px;
-    padding-right: 45px;
-}
-
-.detail-name {
-    margin: 0 0 8px;
-
-    font-size: clamp(30px, 3vw, 42px);
-
-    line-height: 1.12;
-
-    font-weight: 700;
-
-    letter-spacing: -0.8px;
-}
-
-.detail-role {
-    margin-bottom: 35px;
-
-    color: #666666;
-
-    font-size: 16px;
-
-    line-height: 1.5;
-}
-
-.detail-section {
-    margin-top: 29px;
-}
-
-.detail-heading {
-    margin-bottom: 10px;
-
-    font-size: 12px;
-
-    font-weight: 700;
-
-    letter-spacing: 1.1px;
-
-    text-transform: uppercase;
-}
-
-.detail-body {
-    color: #333333;
-
-    font-size: 15px;
-
-    line-height: 1.75;
-}
-
-.detail-email {
-    color: #111111;
-
-    text-decoration: none;
-
-    border-bottom: 1px solid #bbbbbb;
-}
-
-.detail-email:hover {
-    border-bottom-color: #111111;
-}
-
-
-/* =========================================================
-   HEADER
-========================================================= */
-
-.people-header {
-    display: flex;
-
-    align-items: center;
-    justify-content: space-between;
-
-    margin-bottom: 42px;
-}
 
 .people-title {
-    margin: 0;
+    margin:
+        0
+        0
+        58px;
 
-    font-size: 40px;
+    font-size:
+        40px;
 
-    line-height: 1;
+    line-height:
+        1;
 
-    font-weight: 700;
+    font-weight:
+        700;
 
-    letter-spacing: -1.2px;
+    letter-spacing:
+        -1.2px;
 }
 
 
 /* =========================================================
-   CURRENT / ALUMNI FILTER
+   MEMBER SECTION
 ========================================================= */
 
-.people-filter {
-    position: relative;
+.member-section {
+    width: 100%;
+
+    margin-top:
+        66px;
 }
 
-.filter-button {
+.member-section:first-of-type {
+    margin-top: 0;
+}
+
+
+/* section title */
+
+.section-header {
     display: flex;
 
     align-items: center;
 
-    gap: 8px;
-
-    padding: 5px 0;
-
-    border: 0;
-
-    background: transparent;
-
-    color: #111111;
-
-    font-size: 14px;
-
-    cursor: pointer;
+    margin-bottom:
+        30px;
 }
 
-.filter-chevron {
-    display: inline-block;
+.section-title {
+    margin: 0;
 
-    font-size: 10px;
+    flex-shrink: 0;
 
-    transition: transform 0.2s ease;
+    color:
+        #111111;
+
+    font-size:
+        22px;
+
+    line-height:
+        1.2;
+
+    font-weight:
+        700;
+
+    letter-spacing:
+        -0.4px;
 }
 
-.people-filter.open
-.filter-chevron {
-    transform: rotate(180deg);
-}
 
-.filter-menu {
-    display: none;
+/* horizontal divider */
 
-    position: absolute;
-
-    top: calc(100% + 8px);
-    right: 0;
-
-    min-width: 135px;
-
-    padding: 5px 0;
-
-    background: #ffffff;
-
-    border: 1px solid #dddddd;
-
-    border-radius: 8px;
-
-    box-shadow:
-        0 8px 26px
-        rgba(0, 0, 0, 0.10);
-
-    z-index: 50;
-}
-
-.people-filter.open
-.filter-menu {
-    display: block;
-}
-
-.filter-option {
-    display: block;
-
+.section-line {
     width: 100%;
 
-    padding: 11px 15px;
+    height: 1px;
 
-    border: 0;
+    margin-left:
+        22px;
 
-    background: #ffffff;
-
-    color: #222222;
-
-    font-size: 14px;
-
-    text-align: left;
-
-    cursor: pointer;
-}
-
-.filter-option:hover {
-    background: #f5f5f5;
-}
-
-.filter-option.active {
-    font-weight: 700;
+    background:
+        #dddddd;
 }
 
 
 /* =========================================================
-   PEOPLE GRID
+   GRID
 ========================================================= */
 
 .people-grid {
@@ -414,16 +159,16 @@ a {
     display: grid;
 
     grid-template-columns:
-        repeat(5, minmax(0, 1fr));
+        repeat(
+            5,
+            minmax(0, 1fr)
+        );
 
     column-gap:
-        clamp(20px, 2.2vw, 30px);
+        clamp(20px, 2.2vw, 31px);
 
-    row-gap: 56px;
-}
-
-.people-grid.hidden {
-    display: none;
+    row-gap:
+        44px;
 }
 
 
@@ -432,13 +177,17 @@ a {
 ========================================================= */
 
 .member-card {
-    display: block;
+    display: flex;
+
+    flex-direction: column;
 
     width: 100%;
     min-width: 0;
 
     margin: 0;
     padding: 0;
+
+    overflow: hidden;
 
     border:
         1px solid
@@ -456,22 +205,18 @@ a {
     text-align:
         left;
 
+    vertical-align:
+        top;
+
     cursor:
         pointer;
 
     appearance:
         none;
 
-    overflow:
-        hidden;
-
-    /*
-       기본 상태에서는 그림자를 거의 보이지 않게
-    */
-
     box-shadow:
         0 1px 3px
-        rgba(0, 0, 0, 0.03);
+        rgba(0, 0, 0, 0.025);
 
     transition:
         transform 0.25s ease,
@@ -485,12 +230,11 @@ a {
 ========================================================= */
 
 .member-card:hover {
-
     transform:
         translateY(-5px);
 
     border-color:
-        #cfcfcf;
+        #cccccc;
 
     box-shadow:
         0 12px 30px
@@ -499,50 +243,59 @@ a {
 
 
 /* =========================================================
-   SELECTED MEMBER
-========================================================= */
+   PHOTO
 
-.member-card.selected {
+   핵심:
+   img와 fallback을 position:absolute로
+   photo-wrap 전체에 강제로 맞춤.
 
-    border-color:
-        #aaaaaa;
-
-    box-shadow:
-        0 10px 26px
-        rgba(0, 0, 0, 0.12);
-}
-
-
-/* =========================================================
-   CARD PHOTO
+   → 위쪽 흰 공간 제거
 ========================================================= */
 
 .member-photo-wrap {
     position: relative;
 
-    width: 100%;
+    display: block;
 
-    /*
-       세로형 인물 사진
-    */
+    width: 100%;
 
     aspect-ratio:
         4 / 5;
+
+    margin: 0;
+    padding: 0;
 
     overflow: hidden;
 
     background:
         #eeeeee;
+
+    flex-shrink: 0;
 }
 
+
 .member-photo {
+    position: absolute;
+
+    inset: 0;
+
     display: block;
 
     width: 100%;
     height: 100%;
 
+    margin: 0;
+    padding: 0;
+
+    border: 0;
+
     object-fit: cover;
-    object-position: center center;
+
+    object-position:
+        center center;
+
+    transform:
+        scale(1.001);
 
     transition:
         transform 0.35s ease,
@@ -550,13 +303,12 @@ a {
 }
 
 
-/* 사진 확대 */
+/* image hover */
 
 .member-card:hover
 .member-photo {
-
     transform:
-        scale(1.035);
+        scale(1.04);
 
     opacity:
         0.97;
@@ -568,26 +320,38 @@ a {
 ========================================================= */
 
 .photo-fallback {
-    display: none;
-
     position: absolute;
 
     inset: 0;
 
+    display: none;
+
+    width: 100%;
+    height: 100%;
+
+    margin: 0;
+    padding: 18px;
+
     align-items: center;
     justify-content: center;
 
-    padding: 15px;
+    background:
+        #eeeeee;
 
-    background: #eeeeee;
+    color:
+        #999999;
 
-    color: #999999;
+    font-size:
+        17px;
 
-    font-size: 18px;
+    line-height:
+        1.3;
 
-    font-weight: 700;
+    font-weight:
+        700;
 
-    text-align: center;
+    text-align:
+        center;
 }
 
 
@@ -596,17 +360,29 @@ a {
 ========================================================= */
 
 .member-text {
+    display: flex;
+
+    flex-direction: column;
+
+    flex: 1;
+
+    width: 100%;
+
     padding:
         14px
         15px
         17px;
+
+    background:
+        #ffffff;
 }
+
 
 .member-name {
     margin:
         0
         0
-        5px;
+        7px;
 
     color:
         #111111;
@@ -624,15 +400,38 @@ a {
         -0.2px;
 }
 
-.member-role {
-    min-height:
-        18px;
+
+/* degree */
+
+.member-degree {
+    margin-bottom:
+        9px;
 
     color:
-        #666666;
+        #555555;
 
     font-size:
         13px;
+
+    line-height:
+        1.4;
+
+    font-weight:
+        500;
+}
+
+
+/* research */
+
+.member-research {
+    margin-top:
+        auto;
+
+    color:
+        #888888;
+
+    font-size:
+        12.5px;
 
     line-height:
         1.45;
@@ -640,34 +439,378 @@ a {
 
 
 /* =========================================================
-   ALUMNI EMPTY MESSAGE
+   MODAL OVERLAY
 ========================================================= */
 
-.empty-message {
-    grid-column:
-        1 / -1;
+.modal-overlay {
+    position: fixed;
+
+    inset: 0;
+
+    z-index: 9998;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
 
     padding:
-        35px
-        0;
+        35px;
 
-    color:
-        #777777;
+    background:
+        rgba(0, 0, 0, 0.48);
 
-    font-size:
-        14px;
+    opacity: 0;
+
+    visibility: hidden;
+
+    transition:
+        opacity 0.22s ease,
+        visibility 0.22s ease;
+}
+
+
+.modal-overlay.show {
+    opacity: 1;
+
+    visibility: visible;
 }
 
 
 /* =========================================================
-   RESPONSIVE
+   MODAL
+========================================================= */
+
+.profile-modal {
+    position: relative;
+
+    width:
+        min(
+            980px,
+            100%
+        );
+
+    max-height:
+        calc(100vh - 70px);
+
+    overflow-y:
+        auto;
+
+    background:
+        #ffffff;
+
+    border-radius:
+        16px;
+
+    box-shadow:
+        0 22px 70px
+        rgba(0, 0, 0, 0.28);
+
+    transform:
+        translateY(15px)
+        scale(0.985);
+
+    transition:
+        transform 0.25s ease;
+}
+
+
+.modal-overlay.show
+.profile-modal {
+    transform:
+        translateY(0)
+        scale(1);
+}
+
+
+/* =========================================================
+   CLOSE BUTTON
+========================================================= */
+
+.modal-close {
+    position: absolute;
+
+    top: 20px;
+    right: 21px;
+
+    width: 40px;
+    height: 40px;
+
+    padding: 0;
+
+    border: none;
+
+    border-radius:
+        50%;
+
+    background:
+        rgba(
+            255,
+            255,
+            255,
+            0.92
+        );
+
+    cursor:
+        pointer;
+
+    z-index:
+        10;
+}
+
+
+.modal-close:hover {
+    background:
+        #f1f1f1;
+}
+
+
+.modal-close::before,
+.modal-close::after {
+    content: "";
+
+    position: absolute;
+
+    top: 19px;
+    left: 8px;
+
+    width: 24px;
+    height: 1.5px;
+
+    background:
+        #111111;
+}
+
+
+.modal-close::before {
+    transform:
+        rotate(45deg);
+}
+
+
+.modal-close::after {
+    transform:
+        rotate(-45deg);
+}
+
+
+/* =========================================================
+   MODAL LAYOUT
+========================================================= */
+
+.modal-layout {
+    display: grid;
+
+    grid-template-columns:
+        minmax(
+            300px,
+            39%
+        )
+        minmax(
+            0,
+            1fr
+        );
+
+    min-height:
+        530px;
+}
+
+
+/* =========================================================
+   MODAL PHOTO
+========================================================= */
+
+.modal-photo-wrap {
+    position: relative;
+
+    width: 100%;
+    height: 100%;
+
+    min-height:
+        530px;
+
+    overflow:
+        hidden;
+
+    background:
+        #eeeeee;
+
+    border-radius:
+        16px
+        0
+        0
+        16px;
+}
+
+
+.modal-photo {
+    position: absolute;
+
+    inset: 0;
+
+    display: block;
+
+    width: 100%;
+    height: 100%;
+
+    object-fit:
+        cover;
+
+    object-position:
+        center center;
+}
+
+
+.modal-photo-fallback {
+    position: absolute;
+
+    inset: 0;
+
+    display: none;
+
+    align-items: center;
+    justify-content: center;
+
+    padding:
+        30px;
+
+    color:
+        #999999;
+
+    font-size:
+        26px;
+
+    font-weight:
+        700;
+
+    text-align:
+        center;
+}
+
+
+/* =========================================================
+   MODAL TEXT
+========================================================= */
+
+.modal-content {
+    padding:
+        62px
+        56px
+        54px;
+}
+
+
+.modal-name {
+    margin:
+        0
+        0
+        8px;
+
+    color:
+        #111111;
+
+    font-size:
+        34px;
+
+    line-height:
+        1.15;
+
+    font-weight:
+        700;
+
+    letter-spacing:
+        -0.7px;
+}
+
+
+.modal-degree {
+    margin-bottom:
+        39px;
+
+    color:
+        #666666;
+
+    font-size:
+        16px;
+
+    line-height:
+        1.5;
+}
+
+
+/* =========================================================
+   MODAL INFO
+========================================================= */
+
+.modal-section {
+    margin-top:
+        29px;
+}
+
+
+.modal-heading {
+    margin-bottom:
+        9px;
+
+    color:
+        #111111;
+
+    font-size:
+        12px;
+
+    line-height:
+        1.4;
+
+    font-weight:
+        700;
+
+    letter-spacing:
+        1.05px;
+
+    text-transform:
+        uppercase;
+}
+
+
+.modal-body {
+    color:
+        #333333;
+
+    font-size:
+        15px;
+
+    line-height:
+        1.7;
+}
+
+
+.modal-email {
+    color:
+        #111111;
+
+    text-decoration:
+        none;
+
+    border-bottom:
+        1px solid
+        #bbbbbb;
+}
+
+
+.modal-email:hover {
+    border-bottom-color:
+        #111111;
+}
+
+
+/* =========================================================
+   TABLET
 ========================================================= */
 
 @media
 (max-width: 1200px) {
 
     .people-grid {
-
         grid-template-columns:
             repeat(
                 4,
@@ -682,7 +825,6 @@ a {
 (max-width: 900px) {
 
     .people-grid {
-
         grid-template-columns:
             repeat(
                 3,
@@ -691,47 +833,66 @@ a {
     }
 
 
-    .detail-layout {
-
+    .modal-layout {
         grid-template-columns:
-            minmax(220px, 34%)
-            minmax(0, 1fr);
+            36%
+            64%;
+    }
 
-        gap:
-            40px;
+
+    .modal-content {
+        padding:
+            55px
+            40px
+            45px;
     }
 
 }
 
 
+/* =========================================================
+   MOBILE
+========================================================= */
+
 @media
-(max-width: 620px) {
+(max-width: 650px) {
 
     .people-wrap {
-
         padding:
-            28px
+            30px
             14px
             60px;
     }
 
 
-    .people-header {
-
-        margin-bottom:
-            30px;
-    }
-
-
     .people-title {
+        margin-bottom:
+            45px;
 
         font-size:
             30px;
     }
 
 
-    .people-grid {
+    .member-section {
+        margin-top:
+            52px;
+    }
 
+
+    .section-title {
+        font-size:
+            19px;
+    }
+
+
+    .section-line {
+        margin-left:
+            15px;
+    }
+
+
+    .people-grid {
         grid-template-columns:
             repeat(
                 2,
@@ -739,22 +900,20 @@ a {
             );
 
         column-gap:
-            14px;
+            13px;
 
         row-gap:
-            34px;
+            26px;
     }
 
 
     .member-card {
-
         border-radius:
             11px;
     }
 
 
     .member-text {
-
         padding:
             11px
             11px
@@ -763,48 +922,82 @@ a {
 
 
     .member-name {
-
         font-size:
             15px;
     }
 
 
-    .member-role {
-
+    .member-degree {
         font-size:
             12px;
     }
 
 
-    .detail-layout {
-
-        display:
-            block;
+    .member-research {
+        font-size:
+            11.5px;
     }
 
 
-    .detail-photo-wrap {
+    /*
+        Mobile modal
+    */
 
-        max-width:
-            420px;
-
-        margin:
-            0 auto
-            28px;
+    .modal-overlay {
+        padding: 0;
     }
 
 
-    .detail-content {
+    .profile-modal {
+        width: 100%;
+        height: 100%;
 
-        padding-right:
+        max-height:
+            none;
+
+        border-radius:
             0;
     }
 
 
-    .detail-close {
+    .modal-layout {
+        display: block;
+    }
 
-        top:
-            -42px;
+
+    .modal-photo-wrap {
+        width: 100%;
+
+        height:
+            55vh;
+
+        min-height:
+            400px;
+
+        border-radius:
+            0;
+    }
+
+
+    .modal-content {
+        padding:
+            35px
+            22px
+            55px;
+    }
+
+
+    .modal-name {
+        font-size:
+            29px;
+    }
+
+
+    .modal-close {
+        position: fixed;
+
+        top: 16px;
+        right: 16px;
     }
 
 }
@@ -821,102 +1014,227 @@ a {
 
 
     <!-- =====================================================
-         DETAIL
+         PAGE TITLE
     ====================================================== -->
 
-    <section
-        class="people-detail"
-        id="memberDetail"
-    >
-
-
-        <button
-            class="detail-close"
-            id="detailClose"
-            type="button"
-            aria-label="Close profile"
-        ></button>
+    <h1 class="people-title">
+        Researchers
+    </h1>
 
 
 
-        <div class="detail-layout">
+    <!-- =====================================================
+         Ph.D. STUDENTS
+    ====================================================== -->
+
+    <section class="member-section">
 
 
-            <div
-                class="detail-photo-wrap"
+        <div class="section-header">
+
+            <h2 class="section-title">
+                Ph.D. Students
+            </h2>
+
+            <div class="section-line"></div>
+
+        </div>
+
+
+
+        <div class="people-grid">
+
+
+            <!-- Doyeon Eom -->
+
+            <button
+                class="member-card"
+                type="button"
+
+                data-name="Doyeon Eom (Student Leader)"
+                data-degree="Ph.D. Student"
+                data-research="Electric Vehicles"
+                data-email="doyeon.eom@kaist.ac.kr"
+                data-photo="images/doyeon-eom.jpg"
             >
 
+                <div class="member-photo-wrap">
 
-                <img
-                    class="detail-photo"
-                    id="detailPhoto"
-                    src=""
-                    alt=""
-                >
+                    <img
+                        class="member-photo"
+                        src="images/doyeon-eom.jpg"
+                        alt="Doyeon Eom"
+                    >
 
-
-                <div
-                    class="detail-photo-fallback"
-                    id="detailPhotoFallback"
-                ></div>
-
-
-            </div>
-
-
-
-            <div class="detail-content">
-
-
-                <h2
-                    class="detail-name"
-                    id="detailName"
-                ></h2>
-
-
-                <div
-                    class="detail-role"
-                    id="detailRole"
-                ></div>
-
-
-
-                <section
-                    class="detail-section"
-                    id="detailResearchSection"
-                >
-
-                    <div class="detail-heading">
-                        Research
+                    <div class="photo-fallback">
+                        Doyeon Eom
                     </div>
 
-                    <div
-                        class="detail-body"
-                        id="detailResearch"
-                    ></div>
-
-                </section>
+                </div>
 
 
+                <div class="member-text">
 
-                <section
-                    class="detail-section"
-                    id="detailContactSection"
-                >
-
-                    <div class="detail-heading">
-                        Contact
+                    <div class="member-name">
+                        Doyeon Eom (Student Leader)
                     </div>
 
-                    <div
-                        class="detail-body"
-                        id="detailContact"
-                    ></div>
+                    <div class="member-degree">
+                        Ph.D. Student
+                    </div>
 
-                </section>
+                    <div class="member-research">
+                        Electric Vehicles
+                    </div>
+
+                </div>
+
+            </button>
 
 
-            </div>
+
+            <!-- Youngjoon Song -->
+
+            <button
+                class="member-card"
+                type="button"
+
+                data-name="Youngjoon Song"
+                data-degree="Ph.D. Student"
+                data-research="Digital Twin"
+                data-email="yjsong98@kaist.ac.kr"
+                data-photo="images/youngjoon-song.jpg"
+            >
+
+                <div class="member-photo-wrap">
+
+                    <img
+                        class="member-photo"
+                        src="images/youngjoon-song.jpg"
+                        alt="Youngjoon Song"
+                    >
+
+                    <div class="photo-fallback">
+                        Youngjoon Song
+                    </div>
+
+                </div>
+
+
+                <div class="member-text">
+
+                    <div class="member-name">
+                        Youngjoon Song
+                    </div>
+
+                    <div class="member-degree">
+                        Ph.D. Student
+                    </div>
+
+                    <div class="member-research">
+                        Digital Twin
+                    </div>
+
+                </div>
+
+            </button>
+
+
+
+            <!-- Yunsu Kang -->
+
+            <button
+                class="member-card"
+                type="button"
+
+                data-name="Yunsu Kang"
+                data-degree="Ph.D. Student"
+                data-research="Humanoid"
+                data-email="yunsu.k@kaist.ac.kr"
+                data-photo="images/yunsu-kang.jpg"
+            >
+
+                <div class="member-photo-wrap">
+
+                    <img
+                        class="member-photo"
+                        src="images/yunsu-kang.jpg"
+                        alt="Yunsu Kang"
+                    >
+
+                    <div class="photo-fallback">
+                        Yunsu Kang
+                    </div>
+
+                </div>
+
+
+                <div class="member-text">
+
+                    <div class="member-name">
+                        Yunsu Kang
+                    </div>
+
+                    <div class="member-degree">
+                        Ph.D. Student
+                    </div>
+
+                    <div class="member-research">
+                        Humanoid
+                    </div>
+
+                </div>
+
+            </button>
+
+
+
+            <!-- Hoonjoon Lee -->
+
+            <button
+                class="member-card"
+                type="button"
+
+                data-name="Hoonjoon Lee"
+                data-degree="Ph.D. Student"
+                data-research="Magnetics"
+                data-email="hoonjoon.lee@kaist.ac.kr"
+                data-photo="images/hoonjoon-lee.jpg"
+            >
+
+                <div class="member-photo-wrap">
+
+                    <img
+                        class="member-photo"
+                        src="images/hoonjoon-lee.jpg"
+                        alt="Hoonjoon Lee"
+                    >
+
+                    <div class="photo-fallback">
+                        Hoonjoon Lee
+                    </div>
+
+                </div>
+
+
+                <div class="member-text">
+
+                    <div class="member-name">
+                        Hoonjoon Lee
+                    </div>
+
+                    <div class="member-degree">
+                        Ph.D. Student
+                    </div>
+
+                    <div class="member-research">
+                        Magnetics
+                    </div>
+
+                </div>
+
+            </button>
+
 
         </div>
 
@@ -925,1337 +1243,901 @@ a {
 
 
     <!-- =====================================================
-         HEADER
+         MASTER STUDENTS
     ====================================================== -->
 
-    <div class="people-header">
+    <section class="member-section">
 
 
-        <h1 class="people-title">
-            Researchers
-        </h1>
+        <div class="section-header">
+
+            <h2 class="section-title">
+                Master Students
+            </h2>
+
+            <div class="section-line"></div>
+
+        </div>
 
 
 
-        <div
-            class="people-filter"
-            id="peopleFilter"
-        >
+        <div class="people-grid">
 
+
+            <!-- Chaeyoung Moon -->
 
             <button
-                class="filter-button"
-                id="filterButton"
+                class="member-card"
                 type="button"
+
+                data-name="Chaeyoung Moon"
+                data-degree="Master Student"
+                data-research="High Power RF System"
+                data-email="swc50101@kaist.ac.kr"
+                data-photo="images/chaeyoung-moon.jpg"
             >
 
-                <span id="filterLabel">
-                    Current
-                </span>
+                <div class="member-photo-wrap">
 
-                <span
-                    class="filter-chevron"
-                >
-                    ▾
-                </span>
+                    <img
+                        class="member-photo"
+                        src="images/chaeyoung-moon.jpg"
+                        alt="Chaeyoung Moon"
+                    >
+
+                    <div class="photo-fallback">
+                        Chaeyoung Moon
+                    </div>
+
+                </div>
+
+                <div class="member-text">
+
+                    <div class="member-name">
+                        Chaeyoung Moon
+                    </div>
+
+                    <div class="member-degree">
+                        Master Student
+                    </div>
+
+                    <div class="member-research">
+                        High Power RF System
+                    </div>
+
+                </div>
 
             </button>
 
 
 
-            <div
-                class="filter-menu"
+            <!-- Dongjin Chae -->
+
+            <button
+                class="member-card"
+                type="button"
+
+                data-name="Dongjin Chae"
+                data-degree="Master Student"
+                data-research="Data Center &amp; AI Semiconductors"
+                data-email="chaedongjin20@kaist.ac.kr"
+                data-photo="images/dongjin-chae.jpg"
             >
 
+                <div class="member-photo-wrap">
 
-                <button
-                    class="filter-option active"
-                    data-target="currentGrid"
-                    data-label="Current"
-                    type="button"
-                >
-                    Current
-                </button>
+                    <img
+                        class="member-photo"
+                        src="images/dongjin-chae.jpg"
+                        alt="Dongjin Chae"
+                    >
+
+                    <div class="photo-fallback">
+                        Dongjin Chae
+                    </div>
+
+                </div>
+
+                <div class="member-text">
+
+                    <div class="member-name">
+                        Dongjin Chae
+                    </div>
+
+                    <div class="member-degree">
+                        Master Student
+                    </div>
+
+                    <div class="member-research">
+                        Data Center &amp; AI Semiconductors
+                    </div>
+
+                </div>
+
+            </button>
 
 
-                <button
-                    class="filter-option"
-                    data-target="alumniGrid"
-                    data-label="Alumni"
-                    type="button"
-                >
-                    Alumni
-                </button>
+
+            <!-- Daehyung Lim -->
+
+            <button
+                class="member-card"
+                type="button"
+
+                data-name="Daehyung Lim"
+                data-degree="Master Student"
+                data-research="Wireless Power Transfer"
+                data-email="limdh@kaist.ac.kr"
+                data-photo="images/daehyung-lim.jpg"
+            >
+
+                <div class="member-photo-wrap">
+
+                    <img
+                        class="member-photo"
+                        src="images/daehyung-lim.jpg"
+                        alt="Daehyung Lim"
+                    >
+
+                    <div class="photo-fallback">
+                        Daehyung Lim
+                    </div>
+
+                </div>
+
+                <div class="member-text">
+
+                    <div class="member-name">
+                        Daehyung Lim
+                    </div>
+
+                    <div class="member-degree">
+                        Master Student
+                    </div>
+
+                    <div class="member-research">
+                        Wireless Power Transfer
+                    </div>
+
+                </div>
+
+            </button>
 
 
-            </div>
+
+            <!-- Hyeonseo Kim -->
+
+            <button
+                class="member-card"
+                type="button"
+
+                data-name="Hyeonseo Kim"
+                data-degree="Master Student"
+                data-research="Data Center &amp; AI Semiconductors"
+                data-email="pcpoptv@kaist.ac.kr"
+                data-photo="images/hyeonseo-kim.jpg"
+            >
+
+                <div class="member-photo-wrap">
+
+                    <img
+                        class="member-photo"
+                        src="images/hyeonseo-kim.jpg"
+                        alt="Hyeonseo Kim"
+                    >
+
+                    <div class="photo-fallback">
+                        Hyeonseo Kim
+                    </div>
+
+                </div>
+
+                <div class="member-text">
+
+                    <div class="member-name">
+                        Hyeonseo Kim
+                    </div>
+
+                    <div class="member-degree">
+                        Master Student
+                    </div>
+
+                    <div class="member-research">
+                        Data Center &amp; AI Semiconductors
+                    </div>
+
+                </div>
+
+            </button>
+
+
+
+            <!-- Chaewon Yoon -->
+
+            <button
+                class="member-card"
+                type="button"
+
+                data-name="Chaewon Yoon"
+                data-degree="Master Student"
+                data-research="Data Center &amp; AI Semiconductors"
+                data-email="success259@kaist.ac.kr"
+                data-photo="images/chaewon-yoon.jpg"
+            >
+
+                <div class="member-photo-wrap">
+
+                    <img
+                        class="member-photo"
+                        src="images/chaewon-yoon.jpg"
+                        alt="Chaewon Yoon"
+                    >
+
+                    <div class="photo-fallback">
+                        Chaewon Yoon
+                    </div>
+
+                </div>
+
+                <div class="member-text">
+
+                    <div class="member-name">
+                        Chaewon Yoon
+                    </div>
+
+                    <div class="member-degree">
+                        Master Student
+                    </div>
+
+                    <div class="member-research">
+                        Data Center &amp; AI Semiconductors
+                    </div>
+
+                </div>
+
+            </button>
+
+
+
+            <!-- Junseo Yang -->
+
+            <button
+                class="member-card"
+                type="button"
+
+                data-name="Junseo Yang"
+                data-degree="Master Student"
+                data-research="Magnetics"
+                data-email="junseo.yang@kaist.ac.kr"
+                data-photo="images/junseo-yang.jpg"
+            >
+
+                <div class="member-photo-wrap">
+
+                    <img
+                        class="member-photo"
+                        src="images/junseo-yang.jpg"
+                        alt="Junseo Yang"
+                    >
+
+                    <div class="photo-fallback">
+                        Junseo Yang
+                    </div>
+
+                </div>
+
+                <div class="member-text">
+
+                    <div class="member-name">
+                        Junseo Yang
+                    </div>
+
+                    <div class="member-degree">
+                        Master Student
+                    </div>
+
+                    <div class="member-research">
+                        Magnetics
+                    </div>
+
+                </div>
+
+            </button>
+
+
+
+            <!-- Kidae Park -->
+
+            <button
+                class="member-card"
+                type="button"
+
+                data-name="Kidae Park"
+                data-degree="Master Student (SK Hynix)"
+                data-research="Data Center &amp; AI Semiconductors"
+                data-email="kidae.park@kaist.ac.kr"
+                data-photo="images/kidae-park.jpg"
+            >
+
+                <div class="member-photo-wrap">
+
+                    <img
+                        class="member-photo"
+                        src="images/kidae-park.jpg"
+                        alt="Kidae Park"
+                    >
+
+                    <div class="photo-fallback">
+                        Kidae Park
+                    </div>
+
+                </div>
+
+                <div class="member-text">
+
+                    <div class="member-name">
+                        Kidae Park
+                    </div>
+
+                    <div class="member-degree">
+                        Master Student (SK Hynix)
+                    </div>
+
+                    <div class="member-research">
+                        Data Center &amp; AI Semiconductors
+                    </div>
+
+                </div>
+
+            </button>
+
+
+
+            <!-- Donghyun Lee -->
+
+            <button
+                class="member-card"
+                type="button"
+
+                data-name="Donghyun Lee"
+                data-degree="Master Student"
+                data-research="Data Center &amp; AI Semiconductors"
+                data-email="triplethriled@kaist.ac.kr"
+                data-photo="images/donghyun-lee.jpg"
+            >
+
+                <div class="member-photo-wrap">
+
+                    <img
+                        class="member-photo"
+                        src="images/donghyun-lee.jpg"
+                        alt="Donghyun Lee"
+                    >
+
+                    <div class="photo-fallback">
+                        Donghyun Lee
+                    </div>
+
+                </div>
+
+                <div class="member-text">
+
+                    <div class="member-name">
+                        Donghyun Lee
+                    </div>
+
+                    <div class="member-degree">
+                        Master Student
+                    </div>
+
+                    <div class="member-research">
+                        Data Center &amp; AI Semiconductors
+                    </div>
+
+                </div>
+
+            </button>
+
+
+
+            <!-- Sangeun Jeon -->
+
+            <button
+                class="member-card"
+                type="button"
+
+                data-name="Sangeun Jeon"
+                data-degree="Master Student"
+                data-research="Magnetics"
+                data-email="sejeon@kaist.ac.kr"
+                data-photo="images/sangeun-jeon.jpg"
+            >
+
+                <div class="member-photo-wrap">
+
+                    <img
+                        class="member-photo"
+                        src="images/sangeun-jeon.jpg"
+                        alt="Sangeun Jeon"
+                    >
+
+                    <div class="photo-fallback">
+                        Sangeun Jeon
+                    </div>
+
+                </div>
+
+                <div class="member-text">
+
+                    <div class="member-name">
+                        Sangeun Jeon
+                    </div>
+
+                    <div class="member-degree">
+                        Master Student
+                    </div>
+
+                    <div class="member-research">
+                        Magnetics
+                    </div>
+
+                </div>
+
+            </button>
+
 
         </div>
 
-
-    </div>
+    </section>
 
 
 
     <!-- =====================================================
-         CURRENT MEMBERS
+         UNDERGRADUATE
     ====================================================== -->
 
-    <div
-        class="people-grid"
-        id="currentGrid"
-    >
+    <section class="member-section">
 
 
+        <div class="section-header">
 
-        <!-- =================================================
-             1. DOYEON EOM
-        ================================================== -->
+            <h2 class="section-title">
+                Undergraduate
+            </h2>
 
-        <button
-            class="member-card"
-            type="button"
+            <div class="section-line"></div>
 
-            data-name="Doyeon Eom (Student Leader)"
-            data-role="Ph.D. Student"
-            data-research="Electric Vehicles"
-            data-email="doyeon.eom@kaist.ac.kr"
-            data-photo="images/doyeon-eom.jpg"
-        >
-
-            <div class="member-photo-wrap">
-
-                <img
-                    class="member-photo"
-                    src="images/doyeon-eom.jpg"
-                    alt="Doyeon Eom"
-                >
-
-                <div class="photo-fallback">
-                    Doyeon Eom
-                </div>
-
-            </div>
-
-
-            <div class="member-text">
-
-                <div class="member-name">
-                    Doyeon Eom (Student Leader)
-                </div>
-
-                <div class="member-role">
-                    Ph.D. Student
-                </div>
-
-            </div>
-
-        </button>
-
-
-
-        <!-- =================================================
-             2. YOUNGJOON SONG
-        ================================================== -->
-
-        <button
-            class="member-card"
-            type="button"
-
-            data-name="Youngjoon Song"
-            data-role="Ph.D. Student"
-            data-research="Digital Twin"
-            data-email="yjsong98@kaist.ac.kr"
-            data-photo="images/youngjoon-song.jpg"
-        >
-
-            <div class="member-photo-wrap">
-
-                <img
-                    class="member-photo"
-                    src="images/youngjoon-song.jpg"
-                    alt="Youngjoon Song"
-                >
-
-                <div class="photo-fallback">
-                    Youngjoon Song
-                </div>
-
-            </div>
-
-
-            <div class="member-text">
-
-                <div class="member-name">
-                    Youngjoon Song
-                </div>
-
-                <div class="member-role">
-                    Ph.D. Student
-                </div>
-
-            </div>
-
-        </button>
-
-
-
-        <!-- =================================================
-             3. YUNSU KANG
-        ================================================== -->
-
-        <button
-            class="member-card"
-            type="button"
-
-            data-name="Yunsu Kang"
-            data-role="MS-Ph.D. Integrated Student"
-            data-research="Humanoid"
-            data-email="yunsu.k@kaist.ac.kr"
-            data-photo="images/yunsu-kang.jpg"
-        >
-
-            <div class="member-photo-wrap">
-
-                <img
-                    class="member-photo"
-                    src="images/yunsu-kang.jpg"
-                    alt="Yunsu Kang"
-                >
-
-                <div class="photo-fallback">
-                    Yunsu Kang
-                </div>
-
-            </div>
-
-
-            <div class="member-text">
-
-                <div class="member-name">
-                    Yunsu Kang
-                </div>
-
-                <div class="member-role">
-                    MS-Ph.D. Integrated Student
-                </div>
-
-            </div>
-
-        </button>
-
-
-
-        <!-- =================================================
-             4. HOONJOON LEE
-        ================================================== -->
-
-        <button
-            class="member-card"
-            type="button"
-
-            data-name="Hoonjoon Lee"
-            data-role="MS-Ph.D. Integrated Student"
-            data-research="Magnetics"
-            data-email="hoonjoon.lee@kaist.ac.kr"
-            data-photo="images/hoonjoon-lee.jpg"
-        >
-
-            <div class="member-photo-wrap">
-
-                <img
-                    class="member-photo"
-                    src="images/hoonjoon-lee.jpg"
-                    alt="Hoonjoon Lee"
-                >
-
-                <div class="photo-fallback">
-                    Hoonjoon Lee
-                </div>
-
-            </div>
-
-
-            <div class="member-text">
-
-                <div class="member-name">
-                    Hoonjoon Lee
-                </div>
-
-                <div class="member-role">
-                    MS-Ph.D. Integrated Student
-                </div>
-
-            </div>
-
-        </button>
-
-
-
-        <!-- =================================================
-             5. CHAEYOUNG MOON
-        ================================================== -->
-
-        <button
-            class="member-card"
-            type="button"
-
-            data-name="Chaeyoung Moon"
-            data-role="Master Student"
-            data-research="High Power RF System"
-            data-email="swc50101@kaist.ac.kr"
-            data-photo="images/chaeyoung-moon.jpg"
-        >
-
-            <div class="member-photo-wrap">
-
-                <img
-                    class="member-photo"
-                    src="images/chaeyoung-moon.jpg"
-                    alt="Chaeyoung Moon"
-                >
-
-                <div class="photo-fallback">
-                    Chaeyoung Moon
-                </div>
-
-            </div>
-
-
-            <div class="member-text">
-
-                <div class="member-name">
-                    Chaeyoung Moon
-                </div>
-
-                <div class="member-role">
-                    Master Student
-                </div>
-
-            </div>
-
-        </button>
-
-
-
-        <!-- =================================================
-             6. DONGJIN CHAE
-        ================================================== -->
-
-        <button
-            class="member-card"
-            type="button"
-
-            data-name="Dongjin Chae"
-            data-role="Master Student"
-            data-research="Data Center &amp; AI Semiconductors"
-            data-email="chaedongjin20@kaist.ac.kr"
-            data-photo="images/dongjin-chae.jpg"
-        >
-
-            <div class="member-photo-wrap">
-
-                <img
-                    class="member-photo"
-                    src="images/dongjin-chae.jpg"
-                    alt="Dongjin Chae"
-                >
-
-                <div class="photo-fallback">
-                    Dongjin Chae
-                </div>
-
-            </div>
-
-
-            <div class="member-text">
-
-                <div class="member-name">
-                    Dongjin Chae
-                </div>
-
-                <div class="member-role">
-                    Master Student
-                </div>
-
-            </div>
-
-        </button>
-
-
-
-        <!-- =================================================
-             7. DAEHYUNG LIM
-        ================================================== -->
-
-        <button
-            class="member-card"
-            type="button"
-
-            data-name="Daehyung Lim"
-            data-role="Master Student"
-            data-research="Wireless Power Transfer"
-            data-email="limdh@kaist.ac.kr"
-            data-photo="images/daehyung-lim.jpg"
-        >
-
-            <div class="member-photo-wrap">
-
-                <img
-                    class="member-photo"
-                    src="images/daehyung-lim.jpg"
-                    alt="Daehyung Lim"
-                >
-
-                <div class="photo-fallback">
-                    Daehyung Lim
-                </div>
-
-            </div>
-
-
-            <div class="member-text">
-
-                <div class="member-name">
-                    Daehyung Lim
-                </div>
-
-                <div class="member-role">
-                    Master Student
-                </div>
-
-            </div>
-
-        </button>
-
-
-
-        <!-- =================================================
-             8. HYEONSEO KIM
-        ================================================== -->
-
-        <button
-            class="member-card"
-            type="button"
-
-            data-name="Hyeonseo Kim"
-            data-role="Master Student"
-            data-research="Data Center &amp; AI Semiconductors"
-            data-email="pcpoptv@kaist.ac.kr"
-            data-photo="images/hyeonseo-kim.jpg"
-        >
-
-            <div class="member-photo-wrap">
-
-                <img
-                    class="member-photo"
-                    src="images/hyeonseo-kim.jpg"
-                    alt="Hyeonseo Kim"
-                >
-
-                <div class="photo-fallback">
-                    Hyeonseo Kim
-                </div>
-
-            </div>
-
-
-            <div class="member-text">
-
-                <div class="member-name">
-                    Hyeonseo Kim
-                </div>
-
-                <div class="member-role">
-                    Master Student
-                </div>
-
-            </div>
-
-        </button>
-
-
-
-        <!-- =================================================
-             9. CHAEWON YOON
-        ================================================== -->
-
-        <button
-            class="member-card"
-            type="button"
-
-            data-name="Chaewon Yoon"
-            data-role="Master Student"
-            data-research="Data Center &amp; AI Semiconductors"
-            data-email="success259@kaist.ac.kr"
-            data-photo="images/chaewon-yoon.jpg"
-        >
-
-            <div class="member-photo-wrap">
-
-                <img
-                    class="member-photo"
-                    src="images/chaewon-yoon.jpg"
-                    alt="Chaewon Yoon"
-                >
-
-                <div class="photo-fallback">
-                    Chaewon Yoon
-                </div>
-
-            </div>
-
-
-            <div class="member-text">
-
-                <div class="member-name">
-                    Chaewon Yoon
-                </div>
-
-                <div class="member-role">
-                    Master Student
-                </div>
-
-            </div>
-
-        </button>
-
-
-
-        <!-- =================================================
-             10. JUNSEO YANG
-        ================================================== -->
-
-        <button
-            class="member-card"
-            type="button"
-
-            data-name="Junseo Yang"
-            data-role="Master Student"
-            data-research="Magnetics"
-            data-email="junseo.yang@kaist.ac.kr"
-            data-photo="images/junseo-yang.jpg"
-        >
-
-            <div class="member-photo-wrap">
-
-                <img
-                    class="member-photo"
-                    src="images/junseo-yang.jpg"
-                    alt="Junseo Yang"
-                >
-
-                <div class="photo-fallback">
-                    Junseo Yang
-                </div>
-
-            </div>
-
-
-            <div class="member-text">
-
-                <div class="member-name">
-                    Junseo Yang
-                </div>
-
-                <div class="member-role">
-                    Master Student
-                </div>
-
-            </div>
-
-        </button>
-
-
-
-        <!-- =================================================
-             11. KIDAE PARK
-        ================================================== -->
-
-        <button
-            class="member-card"
-            type="button"
-
-            data-name="Kidae Park"
-            data-role="Master Student (SK Hynix)"
-            data-research="Data Center &amp; AI Semiconductors"
-            data-email="kidae.park@kaist.ac.kr"
-            data-photo="images/kidae-park.jpg"
-        >
-
-            <div class="member-photo-wrap">
-
-                <img
-                    class="member-photo"
-                    src="images/kidae-park.jpg"
-                    alt="Kidae Park"
-                >
-
-                <div class="photo-fallback">
-                    Kidae Park
-                </div>
-
-            </div>
-
-
-            <div class="member-text">
-
-                <div class="member-name">
-                    Kidae Park
-                </div>
-
-                <div class="member-role">
-                    Master Student (SK Hynix)
-                </div>
-
-            </div>
-
-        </button>
-
-
-
-        <!-- =================================================
-             12. DONGHYUN LEE
-        ================================================== -->
-
-        <button
-            class="member-card"
-            type="button"
-
-            data-name="Donghyun Lee"
-            data-role="Master Student"
-            data-research="Data Center &amp; AI Semiconductors"
-            data-email="triplethriled@kaist.ac.kr"
-            data-photo="images/donghyun-lee.jpg"
-        >
-
-            <div class="member-photo-wrap">
-
-                <img
-                    class="member-photo"
-                    src="images/donghyun-lee.jpg"
-                    alt="Donghyun Lee"
-                >
-
-                <div class="photo-fallback">
-                    Donghyun Lee
-                </div>
-
-            </div>
-
-
-            <div class="member-text">
-
-                <div class="member-name">
-                    Donghyun Lee
-                </div>
-
-                <div class="member-role">
-                    Master Student
-                </div>
-
-            </div>
-
-        </button>
-
-
-
-        <!-- =================================================
-             13. SANGEUN JEON
-        ================================================== -->
-
-        <button
-            class="member-card"
-            type="button"
-
-            data-name="Sangeun Jeon"
-            data-role="Master Student"
-            data-research="Magnetics"
-            data-email="sejeon@kaist.ac.kr"
-            data-photo="images/sangeun-jeon.jpg"
-        >
-
-            <div class="member-photo-wrap">
-
-                <img
-                    class="member-photo"
-                    src="images/sangeun-jeon.jpg"
-                    alt="Sangeun Jeon"
-                >
-
-                <div class="photo-fallback">
-                    Sangeun Jeon
-                </div>
-
-            </div>
-
-
-            <div class="member-text">
-
-                <div class="member-name">
-                    Sangeun Jeon
-                </div>
-
-                <div class="member-role">
-                    Master Student
-                </div>
-
-            </div>
-
-        </button>
-
-
-
-        <!-- =================================================
-             14. JAEYUN LEE
-        ================================================== -->
-
-        <button
-            class="member-card"
-            type="button"
-
-            data-name="Jaeyun Lee"
-            data-role=""
-            data-research="Humanoid"
-            data-email="jylee13@kaist.ac.kr"
-            data-photo="images/jaeyun-lee.jpg"
-        >
-
-            <div class="member-photo-wrap">
-
-                <img
-                    class="member-photo"
-                    src="images/jaeyun-lee.jpg"
-                    alt="Jaeyun Lee"
-                >
-
-                <div class="photo-fallback">
-                    Jaeyun Lee
-                </div>
-
-            </div>
-
-
-            <div class="member-text">
-
-                <div class="member-name">
-                    Jaeyun Lee
-                </div>
-
-                <div class="member-role">
-                    Humanoid
-                </div>
-
-            </div>
-
-        </button>
-
-
-
-        <!-- =================================================
-             15. NAYEON KIM
-        ================================================== -->
-
-        <button
-            class="member-card"
-            type="button"
-
-            data-name="Nayeon Kim"
-            data-role=""
-            data-research="Wireless Power Transfer"
-            data-email="rlaskdus2045@kaist.ac.kr"
-            data-photo="images/nayeon-kim.jpg"
-        >
-
-            <div class="member-photo-wrap">
-
-                <img
-                    class="member-photo"
-                    src="images/nayeon-kim.jpg"
-                    alt="Nayeon Kim"
-                >
-
-                <div class="photo-fallback">
-                    Nayeon Kim
-                </div>
-
-            </div>
-
-
-            <div class="member-text">
-
-                <div class="member-name">
-                    Nayeon Kim
-                </div>
-
-                <div class="member-role">
-                    Wireless Power Transfer
-                </div>
-
-            </div>
-
-        </button>
-
-
-
-        <!-- =================================================
-             16. JUNWOO KIM
-        ================================================== -->
-
-        <button
-            class="member-card"
-            type="button"
-
-            data-name="Junwoo Kim"
-            data-role=""
-            data-research="Digital Twin"
-            data-email="woojunkim1228@kaist.ac.kr"
-            data-photo="images/junwoo-kim.jpg"
-        >
-
-            <div class="member-photo-wrap">
-
-                <img
-                    class="member-photo"
-                    src="images/junwoo-kim.jpg"
-                    alt="Junwoo Kim"
-                >
-
-                <div class="photo-fallback">
-                    Junwoo Kim
-                </div>
-
-            </div>
-
-
-            <div class="member-text">
-
-                <div class="member-name">
-                    Junwoo Kim
-                </div>
-
-                <div class="member-role">
-                    Digital Twin
-                </div>
-
-            </div>
-
-        </button>
-
-
-
-        <!-- =================================================
-             17. JINWOOK KIM
-        ================================================== -->
-
-        <button
-            class="member-card"
-            type="button"
-
-            data-name="Jinwook Kim"
-            data-role=""
-            data-research="Digital Twin"
-            data-email="kjinwook@kaist.ac.kr"
-            data-photo="images/jinwook-kim.jpg"
-        >
-
-            <div class="member-photo-wrap">
-
-                <img
-                    class="member-photo"
-                    src="images/jinwook-kim.jpg"
-                    alt="Jinwook Kim"
-                >
-
-                <div class="photo-fallback">
-                    Jinwook Kim
-                </div>
-
-            </div>
-
-
-            <div class="member-text">
-
-                <div class="member-name">
-                    Jinwook Kim
-                </div>
-
-                <div class="member-role">
-                    Digital Twin
-                </div>
-
-            </div>
-
-        </button>
-
-
-
-        <!-- =================================================
-             18. DOYUN GU
-        ================================================== -->
-
-        <button
-            class="member-card"
-            type="button"
-
-            data-name="Doyun Gu"
-            data-role=""
-            data-research="Digital Twin &amp; Humanoid"
-            data-email="doyun.gu@kaist.ac.kr"
-            data-photo="images/doyun-gu.jpg"
-        >
-
-            <div class="member-photo-wrap">
-
-                <img
-                    class="member-photo"
-                    src="images/doyun-gu.jpg"
-                    alt="Doyun Gu"
-                >
-
-                <div class="photo-fallback">
-                    Doyun Gu
-                </div>
-
-            </div>
-
-
-            <div class="member-text">
-
-                <div class="member-name">
-                    Doyun Gu
-                </div>
-
-                <div class="member-role">
-                    Digital Twin &amp; Humanoid
-                </div>
-
-            </div>
-
-        </button>
-
-
-    </div>
-
-
-
-    <!-- =====================================================
-         ALUMNI
-    ====================================================== -->
-
-    <div
-        class="people-grid hidden"
-        id="alumniGrid"
-    >
-
-        <div class="empty-message">
-            Alumni information will be updated soon.
         </div>
 
-    </div>
+
+
+        <div class="people-grid">
+
+
+            <!-- Jaeyun Lee -->
+
+            <button
+                class="member-card"
+                type="button"
+
+                data-name="Jaeyun Lee"
+                data-degree="Undergraduate"
+                data-research="Humanoid"
+                data-email="jylee13@kaist.ac.kr"
+                data-photo="images/jaeyun-lee.jpg"
+            >
+
+                <div class="member-photo-wrap">
+
+                    <img
+                        class="member-photo"
+                        src="images/jaeyun-lee.jpg"
+                        alt="Jaeyun Lee"
+                    >
+
+                    <div class="photo-fallback">
+                        Jaeyun Lee
+                    </div>
+
+                </div>
+
+                <div class="member-text">
+
+                    <div class="member-name">
+                        Jaeyun Lee
+                    </div>
+
+                    <div class="member-degree">
+                        Undergraduate
+                    </div>
+
+                    <div class="member-research">
+                        Humanoid
+                    </div>
+
+                </div>
+
+            </button>
+
+
+
+            <!-- Nayeon Kim -->
+
+            <button
+                class="member-card"
+                type="button"
+
+                data-name="Nayeon Kim"
+                data-degree="Undergraduate"
+                data-research="Wireless Power Transfer"
+                data-email="rlaskdus2045@kaist.ac.kr"
+                data-photo="images/nayeon-kim.jpg"
+            >
+
+                <div class="member-photo-wrap">
+
+                    <img
+                        class="member-photo"
+                        src="images/nayeon-kim.jpg"
+                        alt="Nayeon Kim"
+                    >
+
+                    <div class="photo-fallback">
+                        Nayeon Kim
+                    </div>
+
+                </div>
+
+                <div class="member-text">
+
+                    <div class="member-name">
+                        Nayeon Kim
+                    </div>
+
+                    <div class="member-degree">
+                        Undergraduate
+                    </div>
+
+                    <div class="member-research">
+                        Wireless Power Transfer
+                    </div>
+
+                </div>
+
+            </button>
+
+
+
+            <!-- Junwoo Kim -->
+
+            <button
+                class="member-card"
+                type="button"
+
+                data-name="Junwoo Kim"
+                data-degree="Undergraduate"
+                data-research="Digital Twin"
+                data-email="woojunkim1228@kaist.ac.kr"
+                data-photo="images/junwoo-kim.jpg"
+            >
+
+                <div class="member-photo-wrap">
+
+                    <img
+                        class="member-photo"
+                        src="images/junwoo-kim.jpg"
+                        alt="Junwoo Kim"
+                    >
+
+                    <div class="photo-fallback">
+                        Junwoo Kim
+                    </div>
+
+                </div>
+
+                <div class="member-text">
+
+                    <div class="member-name">
+                        Junwoo Kim
+                    </div>
+
+                    <div class="member-degree">
+                        Undergraduate
+                    </div>
+
+                    <div class="member-research">
+                        Digital Twin
+                    </div>
+
+                </div>
+
+            </button>
+
+
+
+            <!-- Jinwook Kim -->
+
+            <button
+                class="member-card"
+                type="button"
+
+                data-name="Jinwook Kim"
+                data-degree="Undergraduate"
+                data-research="Digital Twin"
+                data-email="kjinwook@kaist.ac.kr"
+                data-photo="images/jinwook-kim.jpg"
+            >
+
+                <div class="member-photo-wrap">
+
+                    <img
+                        class="member-photo"
+                        src="images/jinwook-kim.jpg"
+                        alt="Jinwook Kim"
+                    >
+
+                    <div class="photo-fallback">
+                        Jinwook Kim
+                    </div>
+
+                </div>
+
+                <div class="member-text">
+
+                    <div class="member-name">
+                        Jinwook Kim
+                    </div>
+
+                    <div class="member-degree">
+                        Undergraduate
+                    </div>
+
+                    <div class="member-research">
+                        Digital Twin
+                    </div>
+
+                </div>
+
+            </button>
+
+
+
+            <!-- Doyun Gu -->
+
+            <button
+                class="member-card"
+                type="button"
+
+                data-name="Doyun Gu"
+                data-degree="Undergraduate"
+                data-research="Digital Twin &amp; Humanoid"
+                data-email="doyun.gu@kaist.ac.kr"
+                data-photo="images/doyun-gu.jpg"
+            >
+
+                <div class="member-photo-wrap">
+
+                    <img
+                        class="member-photo"
+                        src="images/doyun-gu.jpg"
+                        alt="Doyun Gu"
+                    >
+
+                    <div class="photo-fallback">
+                        Doyun Gu
+                    </div>
+
+                </div>
+
+                <div class="member-text">
+
+                    <div class="member-name">
+                        Doyun Gu
+                    </div>
+
+                    <div class="member-degree">
+                        Undergraduate
+                    </div>
+
+                    <div class="member-research">
+                        Digital Twin &amp; Humanoid
+                    </div>
+
+                </div>
+
+            </button>
+
+
+        </div>
+
+    </section>
 
 
 </main>
 
 
 
+<!-- =========================================================
+     MODAL
+========================================================= -->
+
+<div
+    class="modal-overlay"
+    id="modalOverlay"
+>
+
+
+    <article
+        class="profile-modal"
+        id="profileModal"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="modalName"
+    >
+
+
+        <button
+            class="modal-close"
+            id="modalClose"
+            type="button"
+            aria-label="Close profile"
+        ></button>
+
+
+
+        <div class="modal-layout">
+
+
+            <!-- PHOTO -->
+
+            <div class="modal-photo-wrap">
+
+
+                <img
+                    class="modal-photo"
+                    id="modalPhoto"
+                    src=""
+                    alt=""
+                >
+
+
+                <div
+                    class="modal-photo-fallback"
+                    id="modalPhotoFallback"
+                ></div>
+
+
+            </div>
+
+
+
+            <!-- INFO -->
+
+            <div class="modal-content">
+
+
+                <h2
+                    class="modal-name"
+                    id="modalName"
+                ></h2>
+
+
+                <div
+                    class="modal-degree"
+                    id="modalDegree"
+                ></div>
+
+
+
+                <section class="modal-section">
+
+                    <div class="modal-heading">
+                        Research
+                    </div>
+
+                    <div
+                        class="modal-body"
+                        id="modalResearch"
+                    ></div>
+
+                </section>
+
+
+
+                <section class="modal-section">
+
+                    <div class="modal-heading">
+                        Contact
+                    </div>
+
+                    <div
+                        class="modal-body"
+                        id="modalContact"
+                    ></div>
+
+                </section>
+
+
+            </div>
+
+
+        </div>
+
+
+    </article>
+
+
+</div>
+
+
+
 <script>
 
 /* =========================================================
-   IMAGE FALLBACK
+   CARD IMAGE FALLBACK
 ========================================================= */
 
-const memberImages =
-    document.querySelectorAll(
+document
+    .querySelectorAll(
         ".member-photo"
-    );
+    )
+    .forEach(
+        function(img) {
 
 
-memberImages.forEach(
-    function(img) {
+            img.addEventListener(
+                "error",
+                function() {
 
 
-        img.addEventListener(
-            "error",
-            function() {
+                    img.style.display =
+                        "none";
 
 
-                img.style.display =
-                    "none";
+                    const fallback =
+                        img.parentElement
+                            .querySelector(
+                                ".photo-fallback"
+                            );
 
 
-                const fallback =
-                    img.parentElement
-                        .querySelector(
-                            ".photo-fallback"
-                        );
+                    if (fallback) {
 
-
-                if (fallback) {
-
-                    fallback.style.display =
-                        "flex";
-
-                }
-
-            }
-        );
-
-
-    }
-);
-
-
-
-/* =========================================================
-   DETAIL ELEMENTS
-========================================================= */
-
-const memberDetail =
-    document.getElementById(
-        "memberDetail"
-    );
-
-
-const detailName =
-    document.getElementById(
-        "detailName"
-    );
-
-
-const detailRole =
-    document.getElementById(
-        "detailRole"
-    );
-
-
-const detailResearch =
-    document.getElementById(
-        "detailResearch"
-    );
-
-
-const detailContact =
-    document.getElementById(
-        "detailContact"
-    );
-
-
-const detailPhoto =
-    document.getElementById(
-        "detailPhoto"
-    );
-
-
-const detailPhotoFallback =
-    document.getElementById(
-        "detailPhotoFallback"
-    );
-
-
-const detailClose =
-    document.getElementById(
-        "detailClose"
-    );
-
-
-let selectedCard =
-    null;
-
-
-
-/* =========================================================
-   DETAIL PHOTO FALLBACK
-========================================================= */
-
-detailPhoto.addEventListener(
-    "error",
-    function() {
-
-
-        detailPhoto.style.display =
-            "none";
-
-
-        detailPhotoFallback.style.display =
-            "flex";
-
-    }
-);
-
-
-detailPhoto.addEventListener(
-    "load",
-    function() {
-
-
-        detailPhoto.style.display =
-            "block";
-
-
-        detailPhotoFallback.style.display =
-            "none";
-
-    }
-);
-
-
-
-/* =========================================================
-   MEMBER CLICK
-========================================================= */
-
-const memberCards =
-    document.querySelectorAll(
-        ".member-card"
-    );
-
-
-memberCards.forEach(
-    function(card) {
-
-
-        card.addEventListener(
-            "click",
-            function() {
-
-
-                /*
-                   같은 카드 다시 클릭하면 닫음
-                */
-
-                if (
-                    selectedCard === card
-                    &&
-                    memberDetail.classList.contains(
-                        "show"
-                    )
-                ) {
-
-                    closeDetail();
-
-                    return;
-                }
-
-
-
-                /*
-                   기존 selected 제거
-                */
-
-                memberCards.forEach(
-                    function(item) {
-
-                        item.classList.remove(
-                            "selected"
-                        );
+                        fallback.style.display =
+                            "flex";
 
                     }
-                );
 
 
-                card.classList.add(
-                    "selected"
-                );
+                }
+            );
 
 
-                selectedCard =
-                    card;
+            img.addEventListener(
+                "load",
+                function() {
 
 
-
-                /*
-                   Dataset 읽기
-                */
-
-                const name =
-                    card.dataset.name || "";
-
-
-                const role =
-                    card.dataset.role || "";
-
-
-                const research =
-                    card.dataset.research || "";
-
-
-                const email =
-                    card.dataset.email || "";
-
-
-                const photo =
-                    card.dataset.photo || "";
-
-
-
-                /*
-                   Name
-                */
-
-                detailName.textContent =
-                    name;
-
-
-
-                /*
-                   Role
-                */
-
-                if (role) {
-
-
-                    detailRole.style.display =
+                    img.style.display =
                         "block";
 
 
-                    detailRole.textContent =
-                        role;
+                    const fallback =
+                        img.parentElement
+                            .querySelector(
+                                ".photo-fallback"
+                            );
 
 
-                } else {
+                    if (fallback) {
 
+                        fallback.style.display =
+                            "none";
 
-                    detailRole.style.display =
-                        "none";
+                    }
+
 
                 }
-
-
-
-                /*
-                   Research
-                */
-
-                detailResearch.textContent =
-                    research;
-
-
-
-                /*
-                   Contact
-                */
-
-                detailContact.innerHTML =
-                    "";
-
-
-                if (email) {
-
-
-                    const emailLink =
-                        document.createElement(
-                            "a"
-                        );
-
-
-                    emailLink.className =
-                        "detail-email";
-
-
-                    emailLink.href =
-                        "mailto:" +
-                        email;
-
-
-                    emailLink.textContent =
-                        email;
-
-
-                    detailContact.appendChild(
-                        emailLink
-                    );
-
-                }
-
-
-
-                /*
-                   Photo
-                */
-
-                detailPhoto.style.display =
-                    "block";
-
-
-                detailPhotoFallback.style.display =
-                    "none";
-
-
-                detailPhotoFallback.textContent =
-                    name;
-
-
-                detailPhoto.src =
-                    photo;
-
-
-                detailPhoto.alt =
-                    name;
-
-
-
-                /*
-                   Show
-                */
-
-                memberDetail.classList.add(
-                    "show"
-                );
-
-
-
-                /*
-                   상세정보 위치로 이동
-                */
-
-                setTimeout(
-                    function() {
-
-
-                        memberDetail.scrollIntoView({
-
-                            behavior:
-                                "smooth",
-
-                            block:
-                                "start"
-
-                        });
-
-
-                    },
-                    30
-                );
-
-
-            }
-        );
-
-
-    }
-);
-
-
-
-/* =========================================================
-   CLOSE DETAIL
-========================================================= */
-
-function closeDetail() {
-
-
-    memberDetail.classList.remove(
-        "show"
-    );
-
-
-    memberCards.forEach(
-        function(item) {
-
-
-            item.classList.remove(
-                "selected"
             );
 
 
@@ -2263,61 +2145,261 @@ function closeDetail() {
     );
 
 
-    selectedCard =
-        null;
 
-}
+/* =========================================================
+   MODAL ELEMENTS
+========================================================= */
+
+const modalOverlay =
+    document.getElementById(
+        "modalOverlay"
+    );
 
 
-detailClose.addEventListener(
-    "click",
-    closeDetail
+const modalClose =
+    document.getElementById(
+        "modalClose"
+    );
+
+
+const modalPhoto =
+    document.getElementById(
+        "modalPhoto"
+    );
+
+
+const modalPhotoFallback =
+    document.getElementById(
+        "modalPhotoFallback"
+    );
+
+
+const modalName =
+    document.getElementById(
+        "modalName"
+    );
+
+
+const modalDegree =
+    document.getElementById(
+        "modalDegree"
+    );
+
+
+const modalResearch =
+    document.getElementById(
+        "modalResearch"
+    );
+
+
+const modalContact =
+    document.getElementById(
+        "modalContact"
+    );
+
+
+
+/* =========================================================
+   MODAL IMAGE FALLBACK
+========================================================= */
+
+modalPhoto.addEventListener(
+    "error",
+    function() {
+
+
+        modalPhoto.style.display =
+            "none";
+
+
+        modalPhotoFallback.style.display =
+            "flex";
+
+
+    }
+);
+
+
+modalPhoto.addEventListener(
+    "load",
+    function() {
+
+
+        modalPhoto.style.display =
+            "block";
+
+
+        modalPhotoFallback.style.display =
+            "none";
+
+
+    }
 );
 
 
 
 /* =========================================================
-   CURRENT / ALUMNI FILTER
+   OPEN MODAL
 ========================================================= */
 
-const peopleFilter =
-    document.getElementById(
-        "peopleFilter"
+document
+    .querySelectorAll(
+        ".member-card"
+    )
+    .forEach(
+        function(card) {
+
+
+            card.addEventListener(
+                "click",
+                function() {
+
+
+                    const name =
+                        card.dataset.name || "";
+
+
+                    const degree =
+                        card.dataset.degree || "";
+
+
+                    const research =
+                        card.dataset.research || "";
+
+
+                    const email =
+                        card.dataset.email || "";
+
+
+                    const photo =
+                        card.dataset.photo || "";
+
+
+
+                    /* NAME */
+
+                    modalName.textContent =
+                        name;
+
+
+
+                    /* DEGREE */
+
+                    modalDegree.textContent =
+                        degree;
+
+
+
+                    /* RESEARCH */
+
+                    modalResearch.textContent =
+                        research;
+
+
+
+                    /* CONTACT */
+
+                    modalContact.innerHTML =
+                        "";
+
+
+                    if (email) {
+
+
+                        const emailLink =
+                            document.createElement(
+                                "a"
+                            );
+
+
+                        emailLink.className =
+                            "modal-email";
+
+
+                        emailLink.href =
+                            "mailto:" +
+                            email;
+
+
+                        emailLink.textContent =
+                            email;
+
+
+                        modalContact.appendChild(
+                            emailLink
+                        );
+
+
+                    }
+
+
+
+                    /* PHOTO */
+
+                    modalPhotoFallback.textContent =
+                        name;
+
+
+                    modalPhoto.style.display =
+                        "block";
+
+
+                    modalPhotoFallback.style.display =
+                        "none";
+
+
+                    modalPhoto.src =
+                        photo;
+
+
+                    modalPhoto.alt =
+                        name;
+
+
+
+                    /* SHOW */
+
+                    modalOverlay.classList.add(
+                        "show"
+                    );
+
+
+                    document.body.classList.add(
+                        "modal-open"
+                    );
+
+
+                }
+            );
+
+
+        }
     );
 
 
-const filterButton =
-    document.getElementById(
-        "filterButton"
+
+/* =========================================================
+   CLOSE MODAL
+========================================================= */
+
+function closeModal() {
+
+
+    modalOverlay.classList.remove(
+        "show"
     );
 
 
-const filterLabel =
-    document.getElementById(
-        "filterLabel"
+    document.body.classList.remove(
+        "modal-open"
     );
 
 
-const filterOptions =
-    document.querySelectorAll(
-        ".filter-option"
-    );
-
-
-const currentGrid =
-    document.getElementById(
-        "currentGrid"
-    );
-
-
-const alumniGrid =
-    document.getElementById(
-        "alumniGrid"
-    );
+}
 
 
 
-filterButton.addEventListener(
+modalClose.addEventListener(
     "click",
     function(event) {
 
@@ -2325,9 +2407,7 @@ filterButton.addEventListener(
         event.stopPropagation();
 
 
-        peopleFilter.classList.toggle(
-            "open"
-        );
+        closeModal();
 
 
     }
@@ -2335,111 +2415,48 @@ filterButton.addEventListener(
 
 
 
-filterOptions.forEach(
-    function(option) {
+/*
+   검은 배경 클릭 → 닫기
+*/
 
-
-        option.addEventListener(
-            "click",
-            function() {
-
-
-                const target =
-                    option.dataset.target;
-
-
-                const label =
-                    option.dataset.label;
-
-
-
-                filterOptions.forEach(
-                    function(item) {
-
-
-                        item.classList.remove(
-                            "active"
-                        );
-
-
-                    }
-                );
-
-
-                option.classList.add(
-                    "active"
-                );
-
-
-                filterLabel.textContent =
-                    label;
-
-
-
-                if (
-                    target ===
-                    "currentGrid"
-                ) {
-
-
-                    currentGrid.classList.remove(
-                        "hidden"
-                    );
-
-
-                    alumniGrid.classList.add(
-                        "hidden"
-                    );
-
-
-                } else {
-
-
-                    currentGrid.classList.add(
-                        "hidden"
-                    );
-
-
-                    alumniGrid.classList.remove(
-                        "hidden"
-                    );
-
-
-                }
-
-
-                closeDetail();
-
-
-                peopleFilter.classList.remove(
-                    "open"
-                );
-
-
-            }
-        );
-
-
-    }
-);
-
-
-
-document.addEventListener(
+modalOverlay.addEventListener(
     "click",
     function(event) {
 
 
         if (
-            !peopleFilter.contains(
-                event.target
-            )
+            event.target ===
+            modalOverlay
         ) {
 
 
-            peopleFilter.classList.remove(
-                "open"
-            );
+            closeModal();
+
+
+        }
+
+
+    }
+);
+
+
+
+/*
+   ESC → 닫기
+*/
+
+document.addEventListener(
+    "keydown",
+    function(event) {
+
+
+        if (
+            event.key ===
+            "Escape"
+        ) {
+
+
+            closeModal();
 
 
         }

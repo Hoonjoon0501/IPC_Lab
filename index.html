@@ -34,13 +34,8 @@ body {
         sans-serif;
 }
 
-body.modal-open {
-    overflow: hidden;
-}
-
-button,
 a {
-    font-family: inherit;
+    color: inherit;
 }
 
 
@@ -50,6 +45,7 @@ a {
 
 .people-wrap {
     width: 100%;
+
     max-width: 1500px;
 
     margin: 0 auto;
@@ -62,14 +58,14 @@ a {
 
 
 /* =========================================================
-   TITLE
+   PAGE TITLE
 ========================================================= */
 
 .people-title {
     margin:
         0
         0
-        58px;
+        60px;
 
     font-size:
         40px;
@@ -93,7 +89,7 @@ a {
     width: 100%;
 
     margin-top:
-        66px;
+        72px;
 }
 
 .member-section:first-of-type {
@@ -101,7 +97,9 @@ a {
 }
 
 
-/* section title */
+/* =========================================================
+   SECTION HEADER
+========================================================= */
 
 .section-header {
     display: flex;
@@ -112,13 +110,13 @@ a {
         30px;
 }
 
-.section-title {
-    margin: 0;
 
+.section-title {
     flex-shrink: 0;
 
-    color:
-        #111111;
+    margin: 0;
+
+    color: #111111;
 
     font-size:
         22px;
@@ -133,8 +131,6 @@ a {
         -0.4px;
 }
 
-
-/* horizontal divider */
 
 .section-line {
     width: 100%;
@@ -184,9 +180,6 @@ a {
     width: 100%;
     min-width: 0;
 
-    margin: 0;
-    padding: 0;
-
     overflow: hidden;
 
     border:
@@ -198,21 +191,6 @@ a {
 
     background:
         #ffffff;
-
-    color:
-        inherit;
-
-    text-align:
-        left;
-
-    vertical-align:
-        top;
-
-    cursor:
-        pointer;
-
-    appearance:
-        none;
 
     box-shadow:
         0 1px 3px
@@ -244,12 +222,6 @@ a {
 
 /* =========================================================
    PHOTO
-
-   핵심:
-   img와 fallback을 position:absolute로
-   photo-wrap 전체에 강제로 맞춤.
-
-   → 위쪽 흰 공간 제거
 ========================================================= */
 
 .member-photo-wrap {
@@ -269,8 +241,6 @@ a {
 
     background:
         #eeeeee;
-
-    flex-shrink: 0;
 }
 
 
@@ -303,8 +273,6 @@ a {
 }
 
 
-/* image hover */
-
 .member-card:hover
 .member-photo {
     transform:
@@ -329,11 +297,10 @@ a {
     width: 100%;
     height: 100%;
 
-    margin: 0;
-    padding: 18px;
-
     align-items: center;
     justify-content: center;
+
+    padding: 18px;
 
     background:
         #eeeeee;
@@ -369,14 +336,16 @@ a {
     width: 100%;
 
     padding:
-        14px
         15px
-        17px;
+        15px
+        18px;
 
     background:
         #ffffff;
 }
 
+
+/* NAME */
 
 .member-name {
     margin:
@@ -401,11 +370,11 @@ a {
 }
 
 
-/* degree */
+/* DEGREE */
 
 .member-degree {
     margin-bottom:
-        9px;
+        13px;
 
     color:
         #555555;
@@ -421,339 +390,30 @@ a {
 }
 
 
-/* research */
+/* RESEARCH */
 
 .member-research {
-    margin-top:
-        auto;
+    margin-bottom:
+        13px;
 
     color:
-        #888888;
+        #666666;
 
     font-size:
-        12.5px;
+        13px;
 
     line-height:
         1.45;
 }
 
 
-/* =========================================================
-   MODAL OVERLAY
-========================================================= */
+/* EMAIL */
 
-.modal-overlay {
-    position: fixed;
-
-    inset: 0;
-
-    z-index: 9998;
-
-    display: flex;
-
-    align-items: center;
-    justify-content: center;
-
-    padding:
-        35px;
-
-    background:
-        rgba(0, 0, 0, 0.48);
-
-    opacity: 0;
-
-    visibility: hidden;
-
-    transition:
-        opacity 0.22s ease,
-        visibility 0.22s ease;
-}
-
-
-.modal-overlay.show {
-    opacity: 1;
-
-    visibility: visible;
-}
-
-
-/* =========================================================
-   MODAL
-========================================================= */
-
-.profile-modal {
-    position: relative;
-
-    width:
-        min(
-            980px,
-            100%
-        );
-
-    max-height:
-        calc(100vh - 70px);
-
-    overflow-y:
-        auto;
-
-    background:
-        #ffffff;
-
-    border-radius:
-        16px;
-
-    box-shadow:
-        0 22px 70px
-        rgba(0, 0, 0, 0.28);
-
-    transform:
-        translateY(15px)
-        scale(0.985);
-
-    transition:
-        transform 0.25s ease;
-}
-
-
-.modal-overlay.show
-.profile-modal {
-    transform:
-        translateY(0)
-        scale(1);
-}
-
-
-/* =========================================================
-   CLOSE BUTTON
-========================================================= */
-
-.modal-close {
-    position: absolute;
-
-    top: 20px;
-    right: 21px;
-
-    width: 40px;
-    height: 40px;
-
-    padding: 0;
-
-    border: none;
-
-    border-radius:
-        50%;
-
-    background:
-        rgba(
-            255,
-            255,
-            255,
-            0.92
-        );
-
-    cursor:
-        pointer;
-
-    z-index:
-        10;
-}
-
-
-.modal-close:hover {
-    background:
-        #f1f1f1;
-}
-
-
-.modal-close::before,
-.modal-close::after {
-    content: "";
-
-    position: absolute;
-
-    top: 19px;
-    left: 8px;
-
-    width: 24px;
-    height: 1.5px;
-
-    background:
-        #111111;
-}
-
-
-.modal-close::before {
-    transform:
-        rotate(45deg);
-}
-
-
-.modal-close::after {
-    transform:
-        rotate(-45deg);
-}
-
-
-/* =========================================================
-   MODAL LAYOUT
-========================================================= */
-
-.modal-layout {
-    display: grid;
-
-    grid-template-columns:
-        minmax(
-            300px,
-            39%
-        )
-        minmax(
-            0,
-            1fr
-        );
-
-    min-height:
-        530px;
-}
-
-
-/* =========================================================
-   MODAL PHOTO
-========================================================= */
-
-.modal-photo-wrap {
-    position: relative;
-
-    width: 100%;
-    height: 100%;
-
-    min-height:
-        530px;
-
-    overflow:
-        hidden;
-
-    background:
-        #eeeeee;
-
-    border-radius:
-        16px
-        0
-        0
-        16px;
-}
-
-
-.modal-photo {
-    position: absolute;
-
-    inset: 0;
-
-    display: block;
-
-    width: 100%;
-    height: 100%;
-
-    object-fit:
-        cover;
-
-    object-position:
-        center center;
-}
-
-
-.modal-photo-fallback {
-    position: absolute;
-
-    inset: 0;
-
-    display: none;
-
-    align-items: center;
-    justify-content: center;
-
-    padding:
-        30px;
+.member-email {
+    margin-top: auto;
 
     color:
-        #999999;
-
-    font-size:
-        26px;
-
-    font-weight:
-        700;
-
-    text-align:
-        center;
-}
-
-
-/* =========================================================
-   MODAL TEXT
-========================================================= */
-
-.modal-content {
-    padding:
-        62px
-        56px
-        54px;
-}
-
-
-.modal-name {
-    margin:
-        0
-        0
-        8px;
-
-    color:
-        #111111;
-
-    font-size:
-        34px;
-
-    line-height:
-        1.15;
-
-    font-weight:
-        700;
-
-    letter-spacing:
-        -0.7px;
-}
-
-
-.modal-degree {
-    margin-bottom:
-        39px;
-
-    color:
-        #666666;
-
-    font-size:
-        16px;
-
-    line-height:
-        1.5;
-}
-
-
-/* =========================================================
-   MODAL INFO
-========================================================= */
-
-.modal-section {
-    margin-top:
-        29px;
-}
-
-
-.modal-heading {
-    margin-bottom:
-        9px;
-
-    color:
-        #111111;
+        #777777;
 
     font-size:
         12px;
@@ -761,50 +421,39 @@ a {
     line-height:
         1.4;
 
-    font-weight:
-        700;
+    text-decoration:
+        none;
 
-    letter-spacing:
-        1.05px;
+    overflow-wrap:
+        anywhere;
 
-    text-transform:
-        uppercase;
+    transition:
+        color 0.15s ease;
 }
 
 
-.modal-body {
-    color:
-        #333333;
-
-    font-size:
-        15px;
-
-    line-height:
-        1.7;
-}
-
-
-.modal-email {
+.member-email:hover {
     color:
         #111111;
 
     text-decoration:
-        none;
-
-    border-bottom:
-        1px solid
-        #bbbbbb;
+        underline;
 }
 
 
-.modal-email:hover {
-    border-bottom-color:
-        #111111;
+/* Student Leader */
+
+.student-leader {
+    color:
+        #777777;
+
+    font-weight:
+        500;
 }
 
 
 /* =========================================================
-   TABLET
+   RESPONSIVE
 ========================================================= */
 
 @media
@@ -832,27 +481,8 @@ a {
             );
     }
 
-
-    .modal-layout {
-        grid-template-columns:
-            36%
-            64%;
-    }
-
-
-    .modal-content {
-        padding:
-            55px
-            40px
-            45px;
-    }
-
 }
 
-
-/* =========================================================
-   MOBILE
-========================================================= */
 
 @media
 (max-width: 650px) {
@@ -915,7 +545,7 @@ a {
 
     .member-text {
         padding:
-            11px
+            12px
             11px
             14px;
     }
@@ -927,77 +557,16 @@ a {
     }
 
 
-    .member-degree {
+    .member-degree,
+    .member-research {
         font-size:
             12px;
     }
 
 
-    .member-research {
+    .member-email {
         font-size:
-            11.5px;
-    }
-
-
-    /*
-        Mobile modal
-    */
-
-    .modal-overlay {
-        padding: 0;
-    }
-
-
-    .profile-modal {
-        width: 100%;
-        height: 100%;
-
-        max-height:
-            none;
-
-        border-radius:
-            0;
-    }
-
-
-    .modal-layout {
-        display: block;
-    }
-
-
-    .modal-photo-wrap {
-        width: 100%;
-
-        height:
-            55vh;
-
-        min-height:
-            400px;
-
-        border-radius:
-            0;
-    }
-
-
-    .modal-content {
-        padding:
-            35px
-            22px
-            55px;
-    }
-
-
-    .modal-name {
-        font-size:
-            29px;
-    }
-
-
-    .modal-close {
-        position: fixed;
-
-        top: 16px;
-        right: 16px;
+            11px;
     }
 
 }
@@ -1014,7 +583,7 @@ a {
 
 
     <!-- =====================================================
-         PAGE TITLE
+         TITLE
     ====================================================== -->
 
     <h1 class="people-title">
@@ -1047,16 +616,7 @@ a {
 
             <!-- Doyeon Eom -->
 
-            <button
-                class="member-card"
-                type="button"
-
-                data-name="Doyeon Eom (Student Leader)"
-                data-degree="Ph.D. Student"
-                data-research="Electric Vehicles"
-                data-email="doyeon.eom@kaist.ac.kr"
-                data-photo="images/doyeon-eom.jpg"
-            >
+            <article class="member-card">
 
                 <div class="member-photo-wrap">
 
@@ -1076,35 +636,36 @@ a {
                 <div class="member-text">
 
                     <div class="member-name">
-                        Doyeon Eom (Student Leader)
+                        Doyeon Eom
                     </div>
 
                     <div class="member-degree">
                         Ph.D. Student
+                        <span class="student-leader">
+                            · Student Leader
+                        </span>
                     </div>
 
                     <div class="member-research">
                         Electric Vehicles
                     </div>
 
+                    <a
+                        class="member-email"
+                        href="mailto:doyeon.eom@kaist.ac.kr"
+                    >
+                        doyeon.eom@kaist.ac.kr
+                    </a>
+
                 </div>
 
-            </button>
+            </article>
 
 
 
             <!-- Youngjoon Song -->
 
-            <button
-                class="member-card"
-                type="button"
-
-                data-name="Youngjoon Song"
-                data-degree="Ph.D. Student"
-                data-research="Digital Twin"
-                data-email="yjsong98@kaist.ac.kr"
-                data-photo="images/youngjoon-song.jpg"
-            >
+            <article class="member-card">
 
                 <div class="member-photo-wrap">
 
@@ -1135,24 +696,22 @@ a {
                         Digital Twin
                     </div>
 
+                    <a
+                        class="member-email"
+                        href="mailto:yjsong98@kaist.ac.kr"
+                    >
+                        yjsong98@kaist.ac.kr
+                    </a>
+
                 </div>
 
-            </button>
+            </article>
 
 
 
             <!-- Yunsu Kang -->
 
-            <button
-                class="member-card"
-                type="button"
-
-                data-name="Yunsu Kang"
-                data-degree="Ph.D. Student"
-                data-research="Humanoid"
-                data-email="yunsu.k@kaist.ac.kr"
-                data-photo="images/yunsu-kang.jpg"
-            >
+            <article class="member-card">
 
                 <div class="member-photo-wrap">
 
@@ -1183,24 +742,22 @@ a {
                         Humanoid
                     </div>
 
+                    <a
+                        class="member-email"
+                        href="mailto:yunsu.k@kaist.ac.kr"
+                    >
+                        yunsu.k@kaist.ac.kr
+                    </a>
+
                 </div>
 
-            </button>
+            </article>
 
 
 
             <!-- Hoonjoon Lee -->
 
-            <button
-                class="member-card"
-                type="button"
-
-                data-name="Hoonjoon Lee"
-                data-degree="Ph.D. Student"
-                data-research="Magnetics"
-                data-email="hoonjoon.lee@kaist.ac.kr"
-                data-photo="images/hoonjoon-lee.jpg"
-            >
+            <article class="member-card">
 
                 <div class="member-photo-wrap">
 
@@ -1231,9 +788,16 @@ a {
                         Magnetics
                     </div>
 
+                    <a
+                        class="member-email"
+                        href="mailto:hoonjoon.lee@kaist.ac.kr"
+                    >
+                        hoonjoon.lee@kaist.ac.kr
+                    </a>
+
                 </div>
 
-            </button>
+            </article>
 
 
         </div>
@@ -1266,16 +830,7 @@ a {
 
             <!-- Chaeyoung Moon -->
 
-            <button
-                class="member-card"
-                type="button"
-
-                data-name="Chaeyoung Moon"
-                data-degree="Master Student"
-                data-research="High Power RF System"
-                data-email="swc50101@kaist.ac.kr"
-                data-photo="images/chaeyoung-moon.jpg"
-            >
+            <article class="member-card">
 
                 <div class="member-photo-wrap">
 
@@ -1291,6 +846,7 @@ a {
 
                 </div>
 
+
                 <div class="member-text">
 
                     <div class="member-name">
@@ -1305,24 +861,22 @@ a {
                         High Power RF System
                     </div>
 
+                    <a
+                        class="member-email"
+                        href="mailto:swc50101@kaist.ac.kr"
+                    >
+                        swc50101@kaist.ac.kr
+                    </a>
+
                 </div>
 
-            </button>
+            </article>
 
 
 
             <!-- Dongjin Chae -->
 
-            <button
-                class="member-card"
-                type="button"
-
-                data-name="Dongjin Chae"
-                data-degree="Master Student"
-                data-research="Data Center &amp; AI Semiconductors"
-                data-email="chaedongjin20@kaist.ac.kr"
-                data-photo="images/dongjin-chae.jpg"
-            >
+            <article class="member-card">
 
                 <div class="member-photo-wrap">
 
@@ -1338,6 +892,7 @@ a {
 
                 </div>
 
+
                 <div class="member-text">
 
                     <div class="member-name">
@@ -1352,24 +907,22 @@ a {
                         Data Center &amp; AI Semiconductors
                     </div>
 
+                    <a
+                        class="member-email"
+                        href="mailto:chaedongjin20@kaist.ac.kr"
+                    >
+                        chaedongjin20@kaist.ac.kr
+                    </a>
+
                 </div>
 
-            </button>
+            </article>
 
 
 
             <!-- Daehyung Lim -->
 
-            <button
-                class="member-card"
-                type="button"
-
-                data-name="Daehyung Lim"
-                data-degree="Master Student"
-                data-research="Wireless Power Transfer"
-                data-email="limdh@kaist.ac.kr"
-                data-photo="images/daehyung-lim.jpg"
-            >
+            <article class="member-card">
 
                 <div class="member-photo-wrap">
 
@@ -1385,6 +938,7 @@ a {
 
                 </div>
 
+
                 <div class="member-text">
 
                     <div class="member-name">
@@ -1399,24 +953,22 @@ a {
                         Wireless Power Transfer
                     </div>
 
+                    <a
+                        class="member-email"
+                        href="mailto:limdh@kaist.ac.kr"
+                    >
+                        limdh@kaist.ac.kr
+                    </a>
+
                 </div>
 
-            </button>
+            </article>
 
 
 
             <!-- Hyeonseo Kim -->
 
-            <button
-                class="member-card"
-                type="button"
-
-                data-name="Hyeonseo Kim"
-                data-degree="Master Student"
-                data-research="Data Center &amp; AI Semiconductors"
-                data-email="pcpoptv@kaist.ac.kr"
-                data-photo="images/hyeonseo-kim.jpg"
-            >
+            <article class="member-card">
 
                 <div class="member-photo-wrap">
 
@@ -1432,6 +984,7 @@ a {
 
                 </div>
 
+
                 <div class="member-text">
 
                     <div class="member-name">
@@ -1446,24 +999,22 @@ a {
                         Data Center &amp; AI Semiconductors
                     </div>
 
+                    <a
+                        class="member-email"
+                        href="mailto:pcpoptv@kaist.ac.kr"
+                    >
+                        pcpoptv@kaist.ac.kr
+                    </a>
+
                 </div>
 
-            </button>
+            </article>
 
 
 
             <!-- Chaewon Yoon -->
 
-            <button
-                class="member-card"
-                type="button"
-
-                data-name="Chaewon Yoon"
-                data-degree="Master Student"
-                data-research="Data Center &amp; AI Semiconductors"
-                data-email="success259@kaist.ac.kr"
-                data-photo="images/chaewon-yoon.jpg"
-            >
+            <article class="member-card">
 
                 <div class="member-photo-wrap">
 
@@ -1479,6 +1030,7 @@ a {
 
                 </div>
 
+
                 <div class="member-text">
 
                     <div class="member-name">
@@ -1493,24 +1045,22 @@ a {
                         Data Center &amp; AI Semiconductors
                     </div>
 
+                    <a
+                        class="member-email"
+                        href="mailto:success259@kaist.ac.kr"
+                    >
+                        success259@kaist.ac.kr
+                    </a>
+
                 </div>
 
-            </button>
+            </article>
 
 
 
             <!-- Junseo Yang -->
 
-            <button
-                class="member-card"
-                type="button"
-
-                data-name="Junseo Yang"
-                data-degree="Master Student"
-                data-research="Magnetics"
-                data-email="junseo.yang@kaist.ac.kr"
-                data-photo="images/junseo-yang.jpg"
-            >
+            <article class="member-card">
 
                 <div class="member-photo-wrap">
 
@@ -1526,6 +1076,7 @@ a {
 
                 </div>
 
+
                 <div class="member-text">
 
                     <div class="member-name">
@@ -1540,24 +1091,22 @@ a {
                         Magnetics
                     </div>
 
+                    <a
+                        class="member-email"
+                        href="mailto:junseo.yang@kaist.ac.kr"
+                    >
+                        junseo.yang@kaist.ac.kr
+                    </a>
+
                 </div>
 
-            </button>
+            </article>
 
 
 
             <!-- Kidae Park -->
 
-            <button
-                class="member-card"
-                type="button"
-
-                data-name="Kidae Park"
-                data-degree="Master Student (SK Hynix)"
-                data-research="Data Center &amp; AI Semiconductors"
-                data-email="kidae.park@kaist.ac.kr"
-                data-photo="images/kidae-park.jpg"
-            >
+            <article class="member-card">
 
                 <div class="member-photo-wrap">
 
@@ -1573,6 +1122,7 @@ a {
 
                 </div>
 
+
                 <div class="member-text">
 
                     <div class="member-name">
@@ -1587,24 +1137,22 @@ a {
                         Data Center &amp; AI Semiconductors
                     </div>
 
+                    <a
+                        class="member-email"
+                        href="mailto:kidae.park@kaist.ac.kr"
+                    >
+                        kidae.park@kaist.ac.kr
+                    </a>
+
                 </div>
 
-            </button>
+            </article>
 
 
 
             <!-- Donghyun Lee -->
 
-            <button
-                class="member-card"
-                type="button"
-
-                data-name="Donghyun Lee"
-                data-degree="Master Student"
-                data-research="Data Center &amp; AI Semiconductors"
-                data-email="triplethriled@kaist.ac.kr"
-                data-photo="images/donghyun-lee.jpg"
-            >
+            <article class="member-card">
 
                 <div class="member-photo-wrap">
 
@@ -1620,6 +1168,7 @@ a {
 
                 </div>
 
+
                 <div class="member-text">
 
                     <div class="member-name">
@@ -1634,24 +1183,22 @@ a {
                         Data Center &amp; AI Semiconductors
                     </div>
 
+                    <a
+                        class="member-email"
+                        href="mailto:triplethriled@kaist.ac.kr"
+                    >
+                        triplethriled@kaist.ac.kr
+                    </a>
+
                 </div>
 
-            </button>
+            </article>
 
 
 
             <!-- Sangeun Jeon -->
 
-            <button
-                class="member-card"
-                type="button"
-
-                data-name="Sangeun Jeon"
-                data-degree="Master Student"
-                data-research="Magnetics"
-                data-email="sejeon@kaist.ac.kr"
-                data-photo="images/sangeun-jeon.jpg"
-            >
+            <article class="member-card">
 
                 <div class="member-photo-wrap">
 
@@ -1667,6 +1214,7 @@ a {
 
                 </div>
 
+
                 <div class="member-text">
 
                     <div class="member-name">
@@ -1681,9 +1229,16 @@ a {
                         Magnetics
                     </div>
 
+                    <a
+                        class="member-email"
+                        href="mailto:sejeon@kaist.ac.kr"
+                    >
+                        sejeon@kaist.ac.kr
+                    </a>
+
                 </div>
 
-            </button>
+            </article>
 
 
         </div>
@@ -1716,16 +1271,7 @@ a {
 
             <!-- Jaeyun Lee -->
 
-            <button
-                class="member-card"
-                type="button"
-
-                data-name="Jaeyun Lee"
-                data-degree="Undergraduate"
-                data-research="Humanoid"
-                data-email="jylee13@kaist.ac.kr"
-                data-photo="images/jaeyun-lee.jpg"
-            >
+            <article class="member-card">
 
                 <div class="member-photo-wrap">
 
@@ -1741,6 +1287,7 @@ a {
 
                 </div>
 
+
                 <div class="member-text">
 
                     <div class="member-name">
@@ -1755,24 +1302,22 @@ a {
                         Humanoid
                     </div>
 
+                    <a
+                        class="member-email"
+                        href="mailto:jylee13@kaist.ac.kr"
+                    >
+                        jylee13@kaist.ac.kr
+                    </a>
+
                 </div>
 
-            </button>
+            </article>
 
 
 
             <!-- Nayeon Kim -->
 
-            <button
-                class="member-card"
-                type="button"
-
-                data-name="Nayeon Kim"
-                data-degree="Undergraduate"
-                data-research="Wireless Power Transfer"
-                data-email="rlaskdus2045@kaist.ac.kr"
-                data-photo="images/nayeon-kim.jpg"
-            >
+            <article class="member-card">
 
                 <div class="member-photo-wrap">
 
@@ -1788,6 +1333,7 @@ a {
 
                 </div>
 
+
                 <div class="member-text">
 
                     <div class="member-name">
@@ -1802,24 +1348,22 @@ a {
                         Wireless Power Transfer
                     </div>
 
+                    <a
+                        class="member-email"
+                        href="mailto:rlaskdus2045@kaist.ac.kr"
+                    >
+                        rlaskdus2045@kaist.ac.kr
+                    </a>
+
                 </div>
 
-            </button>
+            </article>
 
 
 
             <!-- Junwoo Kim -->
 
-            <button
-                class="member-card"
-                type="button"
-
-                data-name="Junwoo Kim"
-                data-degree="Undergraduate"
-                data-research="Digital Twin"
-                data-email="woojunkim1228@kaist.ac.kr"
-                data-photo="images/junwoo-kim.jpg"
-            >
+            <article class="member-card">
 
                 <div class="member-photo-wrap">
 
@@ -1835,6 +1379,7 @@ a {
 
                 </div>
 
+
                 <div class="member-text">
 
                     <div class="member-name">
@@ -1849,24 +1394,22 @@ a {
                         Digital Twin
                     </div>
 
+                    <a
+                        class="member-email"
+                        href="mailto:woojunkim1228@kaist.ac.kr"
+                    >
+                        woojunkim1228@kaist.ac.kr
+                    </a>
+
                 </div>
 
-            </button>
+            </article>
 
 
 
             <!-- Jinwook Kim -->
 
-            <button
-                class="member-card"
-                type="button"
-
-                data-name="Jinwook Kim"
-                data-degree="Undergraduate"
-                data-research="Digital Twin"
-                data-email="kjinwook@kaist.ac.kr"
-                data-photo="images/jinwook-kim.jpg"
-            >
+            <article class="member-card">
 
                 <div class="member-photo-wrap">
 
@@ -1882,6 +1425,7 @@ a {
 
                 </div>
 
+
                 <div class="member-text">
 
                     <div class="member-name">
@@ -1896,24 +1440,22 @@ a {
                         Digital Twin
                     </div>
 
+                    <a
+                        class="member-email"
+                        href="mailto:kjinwook@kaist.ac.kr"
+                    >
+                        kjinwook@kaist.ac.kr
+                    </a>
+
                 </div>
 
-            </button>
+            </article>
 
 
 
             <!-- Doyun Gu -->
 
-            <button
-                class="member-card"
-                type="button"
-
-                data-name="Doyun Gu"
-                data-degree="Undergraduate"
-                data-research="Digital Twin &amp; Humanoid"
-                data-email="doyun.gu@kaist.ac.kr"
-                data-photo="images/doyun-gu.jpg"
-            >
+            <article class="member-card">
 
                 <div class="member-photo-wrap">
 
@@ -1929,6 +1471,7 @@ a {
 
                 </div>
 
+
                 <div class="member-text">
 
                     <div class="member-name">
@@ -1943,9 +1486,16 @@ a {
                         Digital Twin &amp; Humanoid
                     </div>
 
+                    <a
+                        class="member-email"
+                        href="mailto:doyun.gu@kaist.ac.kr"
+                    >
+                        doyun.gu@kaist.ac.kr
+                    </a>
+
                 </div>
 
-            </button>
+            </article>
 
 
         </div>
@@ -1957,124 +1507,11 @@ a {
 
 
 
-<!-- =========================================================
-     MODAL
-========================================================= -->
-
-<div
-    class="modal-overlay"
-    id="modalOverlay"
->
-
-
-    <article
-        class="profile-modal"
-        id="profileModal"
-        role="dialog"
-        aria-modal="true"
-        aria-labelledby="modalName"
-    >
-
-
-        <button
-            class="modal-close"
-            id="modalClose"
-            type="button"
-            aria-label="Close profile"
-        ></button>
-
-
-
-        <div class="modal-layout">
-
-
-            <!-- PHOTO -->
-
-            <div class="modal-photo-wrap">
-
-
-                <img
-                    class="modal-photo"
-                    id="modalPhoto"
-                    src=""
-                    alt=""
-                >
-
-
-                <div
-                    class="modal-photo-fallback"
-                    id="modalPhotoFallback"
-                ></div>
-
-
-            </div>
-
-
-
-            <!-- INFO -->
-
-            <div class="modal-content">
-
-
-                <h2
-                    class="modal-name"
-                    id="modalName"
-                ></h2>
-
-
-                <div
-                    class="modal-degree"
-                    id="modalDegree"
-                ></div>
-
-
-
-                <section class="modal-section">
-
-                    <div class="modal-heading">
-                        Research
-                    </div>
-
-                    <div
-                        class="modal-body"
-                        id="modalResearch"
-                    ></div>
-
-                </section>
-
-
-
-                <section class="modal-section">
-
-                    <div class="modal-heading">
-                        Contact
-                    </div>
-
-                    <div
-                        class="modal-body"
-                        id="modalContact"
-                    ></div>
-
-                </section>
-
-
-            </div>
-
-
-        </div>
-
-
-    </article>
-
-
-</div>
-
-
-
 <script>
 
 /* =========================================================
-   CARD IMAGE FALLBACK
+   IMAGE FALLBACK ONLY
+   카드 클릭 기능 없음
 ========================================================= */
 
 document
@@ -2108,7 +1545,6 @@ document
 
                     }
 
-
                 }
             );
 
@@ -2136,334 +1572,12 @@ document
 
                     }
 
-
                 }
             );
 
 
         }
     );
-
-
-
-/* =========================================================
-   MODAL ELEMENTS
-========================================================= */
-
-const modalOverlay =
-    document.getElementById(
-        "modalOverlay"
-    );
-
-
-const modalClose =
-    document.getElementById(
-        "modalClose"
-    );
-
-
-const modalPhoto =
-    document.getElementById(
-        "modalPhoto"
-    );
-
-
-const modalPhotoFallback =
-    document.getElementById(
-        "modalPhotoFallback"
-    );
-
-
-const modalName =
-    document.getElementById(
-        "modalName"
-    );
-
-
-const modalDegree =
-    document.getElementById(
-        "modalDegree"
-    );
-
-
-const modalResearch =
-    document.getElementById(
-        "modalResearch"
-    );
-
-
-const modalContact =
-    document.getElementById(
-        "modalContact"
-    );
-
-
-
-/* =========================================================
-   MODAL IMAGE FALLBACK
-========================================================= */
-
-modalPhoto.addEventListener(
-    "error",
-    function() {
-
-
-        modalPhoto.style.display =
-            "none";
-
-
-        modalPhotoFallback.style.display =
-            "flex";
-
-
-    }
-);
-
-
-modalPhoto.addEventListener(
-    "load",
-    function() {
-
-
-        modalPhoto.style.display =
-            "block";
-
-
-        modalPhotoFallback.style.display =
-            "none";
-
-
-    }
-);
-
-
-
-/* =========================================================
-   OPEN MODAL
-========================================================= */
-
-document
-    .querySelectorAll(
-        ".member-card"
-    )
-    .forEach(
-        function(card) {
-
-
-            card.addEventListener(
-                "click",
-                function() {
-
-
-                    const name =
-                        card.dataset.name || "";
-
-
-                    const degree =
-                        card.dataset.degree || "";
-
-
-                    const research =
-                        card.dataset.research || "";
-
-
-                    const email =
-                        card.dataset.email || "";
-
-
-                    const photo =
-                        card.dataset.photo || "";
-
-
-
-                    /* NAME */
-
-                    modalName.textContent =
-                        name;
-
-
-
-                    /* DEGREE */
-
-                    modalDegree.textContent =
-                        degree;
-
-
-
-                    /* RESEARCH */
-
-                    modalResearch.textContent =
-                        research;
-
-
-
-                    /* CONTACT */
-
-                    modalContact.innerHTML =
-                        "";
-
-
-                    if (email) {
-
-
-                        const emailLink =
-                            document.createElement(
-                                "a"
-                            );
-
-
-                        emailLink.className =
-                            "modal-email";
-
-
-                        emailLink.href =
-                            "mailto:" +
-                            email;
-
-
-                        emailLink.textContent =
-                            email;
-
-
-                        modalContact.appendChild(
-                            emailLink
-                        );
-
-
-                    }
-
-
-
-                    /* PHOTO */
-
-                    modalPhotoFallback.textContent =
-                        name;
-
-
-                    modalPhoto.style.display =
-                        "block";
-
-
-                    modalPhotoFallback.style.display =
-                        "none";
-
-
-                    modalPhoto.src =
-                        photo;
-
-
-                    modalPhoto.alt =
-                        name;
-
-
-
-                    /* SHOW */
-
-                    modalOverlay.classList.add(
-                        "show"
-                    );
-
-
-                    document.body.classList.add(
-                        "modal-open"
-                    );
-
-
-                }
-            );
-
-
-        }
-    );
-
-
-
-/* =========================================================
-   CLOSE MODAL
-========================================================= */
-
-function closeModal() {
-
-
-    modalOverlay.classList.remove(
-        "show"
-    );
-
-
-    document.body.classList.remove(
-        "modal-open"
-    );
-
-
-}
-
-
-
-modalClose.addEventListener(
-    "click",
-    function(event) {
-
-
-        event.stopPropagation();
-
-
-        closeModal();
-
-
-    }
-);
-
-
-
-/*
-   검은 배경 클릭 → 닫기
-*/
-
-modalOverlay.addEventListener(
-    "click",
-    function(event) {
-
-
-        if (
-            event.target ===
-            modalOverlay
-        ) {
-
-
-            closeModal();
-
-
-        }
-
-
-    }
-);
-
-
-
-/*
-   ESC → 닫기
-*/
-
-document.addEventListener(
-    "keydown",
-    function(event) {
-
-
-        if (
-            event.key ===
-            "Escape"
-        ) {
-
-
-            closeModal();
-
-
-        }
-
-
-    }
-);
 
 </script>
 

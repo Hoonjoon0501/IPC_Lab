@@ -1,1 +1,1587 @@
-placeholder
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Researchers | Integrated Power Lab</title>
+
+<style>
+
+/* =========================================================
+   GLOBAL
+========================================================= */
+
+* {
+    box-sizing: border-box;
+}
+
+html,
+body {
+    margin: 0;
+    padding: 0;
+
+    width: 100%;
+
+    background: #ffffff;
+    color: #111111;
+
+    font-family:
+        Arial,
+        "Helvetica Neue",
+        Helvetica,
+        sans-serif;
+}
+
+a {
+    color: inherit;
+}
+
+
+/* =========================================================
+   PAGE
+========================================================= */
+
+.people-wrap {
+    width: 100%;
+
+    max-width: 1500px;
+
+    margin: 0 auto;
+
+    padding:
+        48px
+        clamp(28px, 5vw, 80px)
+        100px;
+}
+
+
+/* =========================================================
+   PAGE TITLE
+========================================================= */
+
+.people-title {
+    margin:
+        0
+        0
+        60px;
+
+    font-size:
+        40px;
+
+    line-height:
+        1;
+
+    font-weight:
+        700;
+
+    letter-spacing:
+        -1.2px;
+}
+
+
+/* =========================================================
+   MEMBER SECTION
+========================================================= */
+
+.member-section {
+    width: 100%;
+
+    margin-top:
+        72px;
+}
+
+.member-section:first-of-type {
+    margin-top: 0;
+}
+
+
+/* =========================================================
+   SECTION HEADER
+========================================================= */
+
+.section-header {
+    display: flex;
+
+    align-items: center;
+
+    margin-bottom:
+        30px;
+}
+
+
+.section-title {
+    flex-shrink: 0;
+
+    margin: 0;
+
+    color: #111111;
+
+    font-size:
+        22px;
+
+    line-height:
+        1.2;
+
+    font-weight:
+        700;
+
+    letter-spacing:
+        -0.4px;
+}
+
+
+.section-line {
+    width: 100%;
+
+    height: 1px;
+
+    margin-left:
+        22px;
+
+    background:
+        #dddddd;
+}
+
+
+/* =========================================================
+   GRID
+========================================================= */
+
+.people-grid {
+    width: 100%;
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(
+            5,
+            minmax(0, 1fr)
+        );
+
+    column-gap:
+        clamp(20px, 2.2vw, 31px);
+
+    row-gap:
+        44px;
+}
+
+
+/* =========================================================
+   MEMBER CARD
+========================================================= */
+
+.member-card {
+    display: flex;
+
+    flex-direction: column;
+
+    width: 100%;
+    min-width: 0;
+
+    overflow: hidden;
+
+    border:
+        1px solid
+        #dddddd;
+
+    border-radius:
+        14px;
+
+    background:
+        #ffffff;
+
+    box-shadow:
+        0 1px 3px
+        rgba(0, 0, 0, 0.025);
+
+    transition:
+        transform 0.25s ease,
+        box-shadow 0.25s ease,
+        border-color 0.25s ease;
+}
+
+
+/* =========================================================
+   CARD HOVER
+========================================================= */
+
+.member-card:hover {
+    transform:
+        translateY(-5px);
+
+    border-color:
+        #cccccc;
+
+    box-shadow:
+        0 12px 30px
+        rgba(0, 0, 0, 0.14);
+}
+
+
+/* =========================================================
+   PHOTO
+========================================================= */
+
+.member-photo-wrap {
+    position: relative;
+
+    display: block;
+
+    width: 100%;
+
+    aspect-ratio:
+        4 / 5;
+
+    margin: 0;
+    padding: 0;
+
+    overflow: hidden;
+
+    background:
+        #eeeeee;
+}
+
+
+.member-photo {
+    position: absolute;
+
+    inset: 0;
+
+    display: block;
+
+    width: 100%;
+    height: 100%;
+
+    margin: 0;
+    padding: 0;
+
+    border: 0;
+
+    object-fit: cover;
+
+    object-position:
+        center center;
+
+    transform:
+        scale(1.001);
+
+    transition:
+        transform 0.35s ease,
+        opacity 0.25s ease;
+}
+
+
+.member-card:hover
+.member-photo {
+    transform:
+        scale(1.04);
+
+    opacity:
+        0.97;
+}
+
+
+/* =========================================================
+   PHOTO FALLBACK
+========================================================= */
+
+.photo-fallback {
+    position: absolute;
+
+    inset: 0;
+
+    display: none;
+
+    width: 100%;
+    height: 100%;
+
+    align-items: center;
+    justify-content: center;
+
+    padding: 18px;
+
+    background:
+        #eeeeee;
+
+    color:
+        #999999;
+
+    font-size:
+        17px;
+
+    line-height:
+        1.3;
+
+    font-weight:
+        700;
+
+    text-align:
+        center;
+}
+
+
+/* =========================================================
+   CARD TEXT
+========================================================= */
+
+.member-text {
+    display: flex;
+
+    flex-direction: column;
+
+    flex: 1;
+
+    width: 100%;
+
+    padding:
+        15px
+        15px
+        18px;
+
+    background:
+        #ffffff;
+}
+
+
+/* NAME */
+
+.member-name {
+    margin:
+        0
+        0
+        7px;
+
+    color:
+        #111111;
+
+    font-size:
+        17px;
+
+    line-height:
+        1.3;
+
+    font-weight:
+        700;
+
+    letter-spacing:
+        -0.2px;
+}
+
+
+/* DEGREE */
+
+.member-degree {
+    margin-bottom:
+        13px;
+
+    color:
+        #555555;
+
+    font-size:
+        13px;
+
+    line-height:
+        1.4;
+
+    font-weight:
+        500;
+}
+
+
+/* RESEARCH */
+
+.member-research {
+    margin-bottom:
+        13px;
+
+    color:
+        #666666;
+
+    font-size:
+        13px;
+
+    line-height:
+        1.45;
+}
+
+
+/* EMAIL */
+
+.member-email {
+    margin-top: auto;
+
+    color:
+        #777777;
+
+    font-size:
+        12px;
+
+    line-height:
+        1.4;
+
+    text-decoration:
+        none;
+
+    overflow-wrap:
+        anywhere;
+
+    transition:
+        color 0.15s ease;
+}
+
+
+.member-email:hover {
+    color:
+        #111111;
+
+    text-decoration:
+        underline;
+}
+
+
+/* Student Leader */
+
+.student-leader {
+    color:
+        #777777;
+
+    font-weight:
+        500;
+}
+
+
+/* =========================================================
+   RESPONSIVE
+========================================================= */
+
+@media
+(max-width: 1200px) {
+
+    .people-grid {
+        grid-template-columns:
+            repeat(
+                4,
+                minmax(0, 1fr)
+            );
+    }
+
+}
+
+
+@media
+(max-width: 900px) {
+
+    .people-grid {
+        grid-template-columns:
+            repeat(
+                3,
+                minmax(0, 1fr)
+            );
+    }
+
+}
+
+
+@media
+(max-width: 650px) {
+
+    .people-wrap {
+        padding:
+            30px
+            14px
+            60px;
+    }
+
+
+    .people-title {
+        margin-bottom:
+            45px;
+
+        font-size:
+            30px;
+    }
+
+
+    .member-section {
+        margin-top:
+            52px;
+    }
+
+
+    .section-title {
+        font-size:
+            19px;
+    }
+
+
+    .section-line {
+        margin-left:
+            15px;
+    }
+
+
+    .people-grid {
+        grid-template-columns:
+            repeat(
+                2,
+                minmax(0, 1fr)
+            );
+
+        column-gap:
+            13px;
+
+        row-gap:
+            26px;
+    }
+
+
+    .member-card {
+        border-radius:
+            11px;
+    }
+
+
+    .member-text {
+        padding:
+            12px
+            11px
+            14px;
+    }
+
+
+    .member-name {
+        font-size:
+            15px;
+    }
+
+
+    .member-degree,
+    .member-research {
+        font-size:
+            12px;
+    }
+
+
+    .member-email {
+        font-size:
+            11px;
+    }
+
+}
+
+</style>
+
+</head>
+
+
+<body>
+
+
+<main class="people-wrap">
+
+
+    <!-- =====================================================
+         TITLE
+    ====================================================== -->
+
+    <h1 class="people-title">
+        Researchers
+    </h1>
+
+
+
+    <!-- =====================================================
+         Ph.D. STUDENTS
+    ====================================================== -->
+
+    <section class="member-section">
+
+
+        <div class="section-header">
+
+            <h2 class="section-title">
+                Ph.D. Students
+            </h2>
+
+            <div class="section-line"></div>
+
+        </div>
+
+
+
+        <div class="people-grid">
+
+
+            <!-- Doyeon Eom -->
+
+            <article class="member-card">
+
+                <div class="member-photo-wrap">
+
+                    <img
+                        class="member-photo"
+                        src="images/doyeon-eom.jpg"
+                        alt="Doyeon Eom"
+                    >
+
+                    <div class="photo-fallback">
+                        Doyeon Eom
+                    </div>
+
+                </div>
+
+
+                <div class="member-text">
+
+                    <div class="member-name">
+                        Doyeon Eom
+                    </div>
+
+                    <div class="member-degree">
+                        Ph.D. Student
+                        <span class="student-leader">
+                            · Student Leader
+                        </span>
+                    </div>
+
+                    <div class="member-research">
+                        Electric Vehicles
+                    </div>
+
+                    <a
+                        class="member-email"
+                        href="mailto:doyeon.eom@kaist.ac.kr"
+                    >
+                        doyeon.eom@kaist.ac.kr
+                    </a>
+
+                </div>
+
+            </article>
+
+
+
+            <!-- Youngjoon Song -->
+
+            <article class="member-card">
+
+                <div class="member-photo-wrap">
+
+                    <img
+                        class="member-photo"
+                        src="images/youngjoon-song.jpg"
+                        alt="Youngjoon Song"
+                    >
+
+                    <div class="photo-fallback">
+                        Youngjoon Song
+                    </div>
+
+                </div>
+
+
+                <div class="member-text">
+
+                    <div class="member-name">
+                        Youngjoon Song
+                    </div>
+
+                    <div class="member-degree">
+                        Ph.D. Student
+                    </div>
+
+                    <div class="member-research">
+                        Digital Twin
+                    </div>
+
+                    <a
+                        class="member-email"
+                        href="mailto:yjsong98@kaist.ac.kr"
+                    >
+                        yjsong98@kaist.ac.kr
+                    </a>
+
+                </div>
+
+            </article>
+
+
+
+            <!-- Yunsu Kang -->
+
+            <article class="member-card">
+
+                <div class="member-photo-wrap">
+
+                    <img
+                        class="member-photo"
+                        src="images/yunsu-kang.jpg"
+                        alt="Yunsu Kang"
+                    >
+
+                    <div class="photo-fallback">
+                        Yunsu Kang
+                    </div>
+
+                </div>
+
+
+                <div class="member-text">
+
+                    <div class="member-name">
+                        Yunsu Kang
+                    </div>
+
+                    <div class="member-degree">
+                        Ph.D. Student
+                    </div>
+
+                    <div class="member-research">
+                        Humanoid
+                    </div>
+
+                    <a
+                        class="member-email"
+                        href="mailto:yunsu.k@kaist.ac.kr"
+                    >
+                        yunsu.k@kaist.ac.kr
+                    </a>
+
+                </div>
+
+            </article>
+
+
+
+            <!-- Hoonjoon Lee -->
+
+            <article class="member-card">
+
+                <div class="member-photo-wrap">
+
+                    <img
+                        class="member-photo"
+                        src="images/hoonjoon-lee.jpg"
+                        alt="Hoonjoon Lee"
+                    >
+
+                    <div class="photo-fallback">
+                        Hoonjoon Lee
+                    </div>
+
+                </div>
+
+
+                <div class="member-text">
+
+                    <div class="member-name">
+                        Hoonjoon Lee
+                    </div>
+
+                    <div class="member-degree">
+                        Ph.D. Student
+                    </div>
+
+                    <div class="member-research">
+                        Magnetics
+                    </div>
+
+                    <a
+                        class="member-email"
+                        href="mailto:hoonjoon.lee@kaist.ac.kr"
+                    >
+                        hoonjoon.lee@kaist.ac.kr
+                    </a>
+
+                </div>
+
+            </article>
+
+
+        </div>
+
+    </section>
+
+
+
+    <!-- =====================================================
+         MASTER STUDENTS
+    ====================================================== -->
+
+    <section class="member-section">
+
+
+        <div class="section-header">
+
+            <h2 class="section-title">
+                Master Students
+            </h2>
+
+            <div class="section-line"></div>
+
+        </div>
+
+
+
+        <div class="people-grid">
+
+
+            <!-- Chaeyoung Moon -->
+
+            <article class="member-card">
+
+                <div class="member-photo-wrap">
+
+                    <img
+                        class="member-photo"
+                        src="images/chaeyoung-moon.jpg"
+                        alt="Chaeyoung Moon"
+                    >
+
+                    <div class="photo-fallback">
+                        Chaeyoung Moon
+                    </div>
+
+                </div>
+
+
+                <div class="member-text">
+
+                    <div class="member-name">
+                        Chaeyoung Moon
+                    </div>
+
+                    <div class="member-degree">
+                        Master Student
+                    </div>
+
+                    <div class="member-research">
+                        High Power RF System
+                    </div>
+
+                    <a
+                        class="member-email"
+                        href="mailto:swc50101@kaist.ac.kr"
+                    >
+                        swc50101@kaist.ac.kr
+                    </a>
+
+                </div>
+
+            </article>
+
+
+
+            <!-- Dongjin Chae -->
+
+            <article class="member-card">
+
+                <div class="member-photo-wrap">
+
+                    <img
+                        class="member-photo"
+                        src="images/dongjin-chae.jpg"
+                        alt="Dongjin Chae"
+                    >
+
+                    <div class="photo-fallback">
+                        Dongjin Chae
+                    </div>
+
+                </div>
+
+
+                <div class="member-text">
+
+                    <div class="member-name">
+                        Dongjin Chae
+                    </div>
+
+                    <div class="member-degree">
+                        Master Student
+                    </div>
+
+                    <div class="member-research">
+                        Data Center &amp; AI Semiconductors
+                    </div>
+
+                    <a
+                        class="member-email"
+                        href="mailto:chaedongjin20@kaist.ac.kr"
+                    >
+                        chaedongjin20@kaist.ac.kr
+                    </a>
+
+                </div>
+
+            </article>
+
+
+
+            <!-- Daehyung Lim -->
+
+            <article class="member-card">
+
+                <div class="member-photo-wrap">
+
+                    <img
+                        class="member-photo"
+                        src="images/daehyung-lim.jpg"
+                        alt="Daehyung Lim"
+                    >
+
+                    <div class="photo-fallback">
+                        Daehyung Lim
+                    </div>
+
+                </div>
+
+
+                <div class="member-text">
+
+                    <div class="member-name">
+                        Daehyung Lim
+                    </div>
+
+                    <div class="member-degree">
+                        Master Student
+                    </div>
+
+                    <div class="member-research">
+                        Wireless Power Transfer
+                    </div>
+
+                    <a
+                        class="member-email"
+                        href="mailto:limdh@kaist.ac.kr"
+                    >
+                        limdh@kaist.ac.kr
+                    </a>
+
+                </div>
+
+            </article>
+
+
+
+            <!-- Hyeonseo Kim -->
+
+            <article class="member-card">
+
+                <div class="member-photo-wrap">
+
+                    <img
+                        class="member-photo"
+                        src="images/hyeonseo-kim.jpg"
+                        alt="Hyeonseo Kim"
+                    >
+
+                    <div class="photo-fallback">
+                        Hyeonseo Kim
+                    </div>
+
+                </div>
+
+
+                <div class="member-text">
+
+                    <div class="member-name">
+                        Hyeonseo Kim
+                    </div>
+
+                    <div class="member-degree">
+                        Master Student
+                    </div>
+
+                    <div class="member-research">
+                        Data Center &amp; AI Semiconductors
+                    </div>
+
+                    <a
+                        class="member-email"
+                        href="mailto:pcpoptv@kaist.ac.kr"
+                    >
+                        pcpoptv@kaist.ac.kr
+                    </a>
+
+                </div>
+
+            </article>
+
+
+
+            <!-- Chaewon Yoon -->
+
+            <article class="member-card">
+
+                <div class="member-photo-wrap">
+
+                    <img
+                        class="member-photo"
+                        src="images/chaewon-yoon.jpg"
+                        alt="Chaewon Yoon"
+                    >
+
+                    <div class="photo-fallback">
+                        Chaewon Yoon
+                    </div>
+
+                </div>
+
+
+                <div class="member-text">
+
+                    <div class="member-name">
+                        Chaewon Yoon
+                    </div>
+
+                    <div class="member-degree">
+                        Master Student
+                    </div>
+
+                    <div class="member-research">
+                        Data Center &amp; AI Semiconductors
+                    </div>
+
+                    <a
+                        class="member-email"
+                        href="mailto:success259@kaist.ac.kr"
+                    >
+                        success259@kaist.ac.kr
+                    </a>
+
+                </div>
+
+            </article>
+
+
+
+            <!-- Junseo Yang -->
+
+            <article class="member-card">
+
+                <div class="member-photo-wrap">
+
+                    <img
+                        class="member-photo"
+                        src="images/junseo-yang.jpg"
+                        alt="Junseo Yang"
+                    >
+
+                    <div class="photo-fallback">
+                        Junseo Yang
+                    </div>
+
+                </div>
+
+
+                <div class="member-text">
+
+                    <div class="member-name">
+                        Junseo Yang
+                    </div>
+
+                    <div class="member-degree">
+                        Master Student
+                    </div>
+
+                    <div class="member-research">
+                        Magnetics
+                    </div>
+
+                    <a
+                        class="member-email"
+                        href="mailto:junseo.yang@kaist.ac.kr"
+                    >
+                        junseo.yang@kaist.ac.kr
+                    </a>
+
+                </div>
+
+            </article>
+
+
+
+            <!-- Kidae Park -->
+
+            <article class="member-card">
+
+                <div class="member-photo-wrap">
+
+                    <img
+                        class="member-photo"
+                        src="images/kidae-park.jpg"
+                        alt="Kidae Park"
+                    >
+
+                    <div class="photo-fallback">
+                        Kidae Park
+                    </div>
+
+                </div>
+
+
+                <div class="member-text">
+
+                    <div class="member-name">
+                        Kidae Park
+                    </div>
+
+                    <div class="member-degree">
+                        Master Student (SK Hynix)
+                    </div>
+
+                    <div class="member-research">
+                        Data Center &amp; AI Semiconductors
+                    </div>
+
+                    <a
+                        class="member-email"
+                        href="mailto:kidae.park@kaist.ac.kr"
+                    >
+                        kidae.park@kaist.ac.kr
+                    </a>
+
+                </div>
+
+            </article>
+
+
+
+            <!-- Donghyun Lee -->
+
+            <article class="member-card">
+
+                <div class="member-photo-wrap">
+
+                    <img
+                        class="member-photo"
+                        src="images/donghyun-lee.jpg"
+                        alt="Donghyun Lee"
+                    >
+
+                    <div class="photo-fallback">
+                        Donghyun Lee
+                    </div>
+
+                </div>
+
+
+                <div class="member-text">
+
+                    <div class="member-name">
+                        Donghyun Lee
+                    </div>
+
+                    <div class="member-degree">
+                        Master Student
+                    </div>
+
+                    <div class="member-research">
+                        Data Center &amp; AI Semiconductors
+                    </div>
+
+                    <a
+                        class="member-email"
+                        href="mailto:triplethriled@kaist.ac.kr"
+                    >
+                        triplethriled@kaist.ac.kr
+                    </a>
+
+                </div>
+
+            </article>
+
+
+
+            <!-- Sangeun Jeon -->
+
+            <article class="member-card">
+
+                <div class="member-photo-wrap">
+
+                    <img
+                        class="member-photo"
+                        src="images/sangeun-jeon.jpg"
+                        alt="Sangeun Jeon"
+                    >
+
+                    <div class="photo-fallback">
+                        Sangeun Jeon
+                    </div>
+
+                </div>
+
+
+                <div class="member-text">
+
+                    <div class="member-name">
+                        Sangeun Jeon
+                    </div>
+
+                    <div class="member-degree">
+                        Master Student
+                    </div>
+
+                    <div class="member-research">
+                        Magnetics
+                    </div>
+
+                    <a
+                        class="member-email"
+                        href="mailto:sejeon@kaist.ac.kr"
+                    >
+                        sejeon@kaist.ac.kr
+                    </a>
+
+                </div>
+
+            </article>
+
+
+        </div>
+
+    </section>
+
+
+
+    <!-- =====================================================
+         UNDERGRADUATE
+    ====================================================== -->
+
+    <section class="member-section">
+
+
+        <div class="section-header">
+
+            <h2 class="section-title">
+                Undergraduate
+            </h2>
+
+            <div class="section-line"></div>
+
+        </div>
+
+
+
+        <div class="people-grid">
+
+
+            <!-- Jaeyun Lee -->
+
+            <article class="member-card">
+
+                <div class="member-photo-wrap">
+
+                    <img
+                        class="member-photo"
+                        src="images/jaeyun-lee.jpg"
+                        alt="Jaeyun Lee"
+                    >
+
+                    <div class="photo-fallback">
+                        Jaeyun Lee
+                    </div>
+
+                </div>
+
+
+                <div class="member-text">
+
+                    <div class="member-name">
+                        Jaeyun Lee
+                    </div>
+
+                    <div class="member-degree">
+                        Undergraduate
+                    </div>
+
+                    <div class="member-research">
+                        Humanoid
+                    </div>
+
+                    <a
+                        class="member-email"
+                        href="mailto:jylee13@kaist.ac.kr"
+                    >
+                        jylee13@kaist.ac.kr
+                    </a>
+
+                </div>
+
+            </article>
+
+
+
+            <!-- Nayeon Kim -->
+
+            <article class="member-card">
+
+                <div class="member-photo-wrap">
+
+                    <img
+                        class="member-photo"
+                        src="images/nayeon-kim.jpg"
+                        alt="Nayeon Kim"
+                    >
+
+                    <div class="photo-fallback">
+                        Nayeon Kim
+                    </div>
+
+                </div>
+
+
+                <div class="member-text">
+
+                    <div class="member-name">
+                        Nayeon Kim
+                    </div>
+
+                    <div class="member-degree">
+                        Undergraduate
+                    </div>
+
+                    <div class="member-research">
+                        Wireless Power Transfer
+                    </div>
+
+                    <a
+                        class="member-email"
+                        href="mailto:rlaskdus2045@kaist.ac.kr"
+                    >
+                        rlaskdus2045@kaist.ac.kr
+                    </a>
+
+                </div>
+
+            </article>
+
+
+
+            <!-- Junwoo Kim -->
+
+            <article class="member-card">
+
+                <div class="member-photo-wrap">
+
+                    <img
+                        class="member-photo"
+                        src="images/junwoo-kim.jpg"
+                        alt="Junwoo Kim"
+                    >
+
+                    <div class="photo-fallback">
+                        Junwoo Kim
+                    </div>
+
+                </div>
+
+
+                <div class="member-text">
+
+                    <div class="member-name">
+                        Junwoo Kim
+                    </div>
+
+                    <div class="member-degree">
+                        Undergraduate
+                    </div>
+
+                    <div class="member-research">
+                        Digital Twin
+                    </div>
+
+                    <a
+                        class="member-email"
+                        href="mailto:woojunkim1228@kaist.ac.kr"
+                    >
+                        woojunkim1228@kaist.ac.kr
+                    </a>
+
+                </div>
+
+            </article>
+
+
+
+            <!-- Jinwook Kim -->
+
+            <article class="member-card">
+
+                <div class="member-photo-wrap">
+
+                    <img
+                        class="member-photo"
+                        src="images/jinwook-kim.jpg"
+                        alt="Jinwook Kim"
+                    >
+
+                    <div class="photo-fallback">
+                        Jinwook Kim
+                    </div>
+
+                </div>
+
+
+                <div class="member-text">
+
+                    <div class="member-name">
+                        Jinwook Kim
+                    </div>
+
+                    <div class="member-degree">
+                        Undergraduate
+                    </div>
+
+                    <div class="member-research">
+                        Digital Twin
+                    </div>
+
+                    <a
+                        class="member-email"
+                        href="mailto:kjinwook@kaist.ac.kr"
+                    >
+                        kjinwook@kaist.ac.kr
+                    </a>
+
+                </div>
+
+            </article>
+
+
+
+            <!-- Doyun Gu -->
+
+            <article class="member-card">
+
+                <div class="member-photo-wrap">
+
+                    <img
+                        class="member-photo"
+                        src="images/doyun-gu.jpg"
+                        alt="Doyun Gu"
+                    >
+
+                    <div class="photo-fallback">
+                        Doyun Gu
+                    </div>
+
+                </div>
+
+
+                <div class="member-text">
+
+                    <div class="member-name">
+                        Doyun Gu
+                    </div>
+
+                    <div class="member-degree">
+                        Undergraduate
+                    </div>
+
+                    <div class="member-research">
+                        Digital Twin &amp; Humanoid
+                    </div>
+
+                    <a
+                        class="member-email"
+                        href="mailto:doyun.gu@kaist.ac.kr"
+                    >
+                        doyun.gu@kaist.ac.kr
+                    </a>
+
+                </div>
+
+            </article>
+
+
+        </div>
+
+    </section>
+
+
+</main>
+
+
+
+<script>
+
+/* =========================================================
+   IMAGE FALLBACK ONLY
+   카드 클릭 기능 없음
+========================================================= */
+
+document
+    .querySelectorAll(
+        ".member-photo"
+    )
+    .forEach(
+        function(img) {
+
+
+            img.addEventListener(
+                "error",
+                function() {
+
+
+                    img.style.display =
+                        "none";
+
+
+                    const fallback =
+                        img.parentElement
+                            .querySelector(
+                                ".photo-fallback"
+                            );
+
+
+                    if (fallback) {
+
+                        fallback.style.display =
+                            "flex";
+
+                    }
+
+                }
+            );
+
+
+            img.addEventListener(
+                "load",
+                function() {
+
+
+                    img.style.display =
+                        "block";
+
+
+                    const fallback =
+                        img.parentElement
+                            .querySelector(
+                                ".photo-fallback"
+                            );
+
+
+                    if (fallback) {
+
+                        fallback.style.display =
+                            "none";
+
+                    }
+
+                }
+            );
+
+
+        }
+    );
+
+</script>
+
+
+</body>
+
+</html>

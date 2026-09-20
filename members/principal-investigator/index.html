@@ -76,26 +76,20 @@ a {
 
 .profile-card {
     display: grid;
-    grid-template-columns: 240px minmax(0, 1fr);
-    gap: 40px;
+    grid-template-columns: minmax(240px, 320px) minmax(0, 1fr);
+    gap: clamp(28px, 4vw, 58px);
     align-items: center;
-    padding: 40px;
-    border: 1px solid #e2e8f0;
-    border-radius: 20px;
-    background: #ffffff;
 }
 
 .profile-photo-wrap {
     position: relative;
     width: 100%;
-    max-width: 198px;
-    aspect-ratio: 1;
+    max-width: 300px;
+    aspect-ratio: 4 / 5;
     align-self: center;
     justify-self: center;
     overflow: hidden;
-    border: 1px solid #e2e8f0;
-    border-radius: 50%;
-    background: #ffffff;
+    background: #eeeeee;
 }
 
 .profile-photo {
@@ -105,7 +99,6 @@ a {
     width: 100%;
     height: 100%;
     border: 0;
-    border-radius: 50%;
     object-fit: cover;
     object-position: center center;
 }
@@ -116,7 +109,7 @@ a {
 }
 
 .profile-name {
-    margin: 0 0 4px;
+    margin: 0 0 8px;
     font-size: 28px;
     line-height: 1.2;
     font-weight: 700;
@@ -124,38 +117,46 @@ a {
 }
 
 .profile-role {
-    margin-bottom: 16px;
-    color: #1273ea;
-    font-size: 14px;
-    line-height: 1.7;
+    margin-bottom: 24px;
+    color: #555555;
+    font-size: 17px;
+    line-height: 1.4;
     font-weight: 600;
-    letter-spacing: 0.4px;
-    text-transform: uppercase;
 }
 
-.profile-bio {
-    margin: 0 0 18px;
-    color: #4a5568;
+.affiliation-list {
+    margin: 0 0 26px;
+    padding: 0;
+    color: #555555;
     font-size: 14px;
-    line-height: 1.7;
+    line-height: 1.65;
+    list-style: none;
 }
 
-.profile-meta {
+.contact-list {
+    display: grid;
+    grid-template-columns: max-content minmax(0, 1fr);
+    gap: 8px 18px;
+    margin: 0 0 28px;
+    font-size: 14px;
+    line-height: 1.5;
+}
+
+.contact-list dt {
+    color: #777777;
+    font-weight: 600;
+}
+
+.contact-list dd {
+    min-width: 0;
     margin: 0;
-    color: #4a5568;
-    font-size: 14px;
-    line-height: 1.7;
-}
-
-.profile-meta strong {
-    color: #333333;
+    overflow-wrap: anywhere;
 }
 
 .profile-links {
     display: flex;
     flex-wrap: wrap;
-    gap: 8px;
-    margin-top: 20px;
+    gap: 10px;
 }
 
 .profile-link {
@@ -280,12 +281,10 @@ a {
     .profile-card {
         grid-template-columns: 1fr;
         gap: 24px;
-        padding: 24px 18px;
-        border-radius: 14px;
     }
 
     .profile-photo-wrap {
-        max-width: 180px;
+        max-width: 280px;
         margin: 0 auto;
     }
 
@@ -295,6 +294,15 @@ a {
 
     .profile-name {
         font-size: 24px;
+    }
+
+    .contact-list {
+        grid-template-columns: 1fr;
+        gap: 2px;
+    }
+
+    .contact-list dd + dt {
+        margin-top: 8px;
     }
 
     .detail-row {
@@ -342,23 +350,28 @@ a {
 
                 <h3 class="profile-name">Jaeil Baek</h3>
 
-                <div class="profile-role">Assistant Professor, KAIST EE</div>
+                <div class="profile-role">Assistant Professor</div>
 
-                <p class="profile-bio">
-                    Jaeil Baek is an Assistant Professor in the School of Electrical Engineering at KAIST.
-                    Before joining KAIST, he was a Staff Power Integrity Engineer at Intel and a
-                    Postdoctoral Research Associate at Princeton University. He received his Ph.D. and M.S.
-                    in Electrical Engineering from KAIST and his B.S. from Sungkyunkwan University.
-                </p>
+                <ul class="affiliation-list">
+                    <li>School of Electrical Engineering @ KAIST</li>
+                    <li>Department of Semiconductor System Engineering (SSE)</li>
+                    <li>KAIST Space Institute</li>
+                    <li>Department of AI Systems</li>
+                </ul>
 
-                <p class="profile-meta">
-                    <strong>Affiliations:</strong>
-                    School of Electrical Engineering, Department of Semiconductor System Engineering (SSE),
-                    KAIST Space Institute, Department of AI Systems<br>
-                    <strong>Office:</strong> E3-2, Room 5224<br>
-                    <strong>Phone:</strong> <a href="tel:+82423507478">+82-42-350-7478</a><br>
-                    <strong>Email:</strong> <a href="mailto:jaeil.baek@kaist.ac.kr">jaeil.baek@kaist.ac.kr</a>
-                </p>
+                <dl class="contact-list">
+                    <dt>Office</dt>
+                    <dd>E3-2, Room 5224</dd>
+
+                    <dt>Phone</dt>
+                    <dd><a href="tel:+82423507478">+82-42-350-7478</a></dd>
+
+                    <dt>Email</dt>
+                    <dd><a href="mailto:jaeil.baek@kaist.ac.kr">jaeil.baek@kaist.ac.kr</a></dd>
+
+                    <dt>Address</dt>
+                    <dd>291 Daehak-ro, Yuseong-gu, Daejeon 34141, South Korea</dd>
+                </dl>
 
                 <div class="profile-links">
                     <a

@@ -162,6 +162,7 @@ a {
 .profile-link {
     display: inline-flex;
     align-items: center;
+    gap: 7px;
     min-height: 38px;
     padding: 9px 14px;
     border: 1px solid #cccccc;
@@ -173,6 +174,11 @@ a {
     font-weight: 600;
     text-decoration: none;
     transition: border-color 0.15s ease, background 0.15s ease;
+}
+
+.profile-link-icon {
+    font-size: 15px;
+    line-height: 1;
 }
 
 .profile-link:hover {
@@ -368,21 +374,21 @@ a {
                         href="https://drive.google.com/file/d/1FVcVnObPFWOCiHWonhRk1NZ3EvRmC93m/view?usp=sharing"
                         target="_blank"
                         rel="noopener noreferrer"
-                    >CV</a>
+                    ><span class="profile-link-icon" aria-hidden="true">📄</span>CV</a>
 
                     <a
                         class="profile-link"
                         href="https://scholar.google.com/citations?user=gkX2K-gAAAAJ&amp;hl=en&amp;oi=ao"
                         target="_blank"
                         rel="noopener noreferrer"
-                    >Google Scholar</a>
+                    ><span class="profile-link-icon" aria-hidden="true">🎓</span>Google Scholar</a>
 
                     <a
                         class="profile-link"
                         href="https://www.linkedin.com/in/jaeil-baek/"
                         target="_blank"
                         rel="noopener noreferrer"
-                    >LinkedIn</a>
+                    ><span class="profile-link-icon" aria-hidden="true">💼</span>LinkedIn</a>
                 </div>
 
             </div>

@@ -78,17 +78,16 @@ a {
     display: grid;
     grid-template-columns: minmax(240px, 320px) minmax(0, 1fr);
     gap: clamp(28px, 4vw, 58px);
-    overflow: hidden;
-    border: 1px solid #dddddd;
-    border-radius: 14px;
-    background: #ffffff;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.025);
+    align-items: center;
 }
 
 .profile-photo-wrap {
     position: relative;
     width: 100%;
+    max-width: 300px;
     aspect-ratio: 4 / 5;
+    align-self: center;
+    justify-self: center;
     overflow: hidden;
     background: #eeeeee;
 }
@@ -106,7 +105,7 @@ a {
 
 .profile-content {
     align-self: center;
-    padding: 34px clamp(28px, 4vw, 54px) 34px 0;
+    padding: 0;
 }
 
 .profile-name {
@@ -270,17 +269,16 @@ a {
 
     .profile-card {
         grid-template-columns: 1fr;
-        gap: 0;
-        border-radius: 11px;
+        gap: 24px;
     }
 
     .profile-photo-wrap {
-        max-width: 320px;
+        max-width: 280px;
         margin: 0 auto;
     }
 
     .profile-content {
-        padding: 24px 20px 26px;
+        padding: 0;
     }
 
     .profile-name {

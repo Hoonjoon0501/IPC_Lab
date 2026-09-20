@@ -1,0 +1,507 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Principal Investigator Career Profile | Integrated Power Lab</title>
+
+<style>
+
+* {
+    box-sizing: border-box;
+}
+
+html,
+body {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    background: #ffffff;
+    color: #111111;
+    font-family: Arial, "Helvetica Neue", Helvetica, sans-serif;
+}
+
+a {
+    color: inherit;
+}
+
+.page-wrap {
+    width: 100%;
+    max-width: 1500px;
+    margin: 0 auto;
+    padding: 48px clamp(28px, 5vw, 80px) 100px;
+}
+
+.page-title {
+    margin: 0 0 60px;
+    color: #0c458d;
+    font-size: 42px;
+    line-height: 1;
+    font-weight: 700;
+    letter-spacing: -1.2px;
+}
+
+.member-section {
+    width: 100%;
+    margin-top: 72px;
+}
+
+.member-section:first-of-type {
+    margin-top: 0;
+}
+
+.section-header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 30px;
+}
+
+.section-title {
+    flex-shrink: 0;
+    margin: 0;
+    color: #111111;
+    font-size: 24px;
+    line-height: 1.2;
+    font-weight: 700;
+    letter-spacing: -0.4px;
+}
+
+.section-line {
+    width: 100%;
+    height: 1px;
+    margin-left: 22px;
+    background: #dddddd;
+}
+
+.profile-card {
+    display: grid;
+    grid-template-columns: 240px minmax(0, 1fr);
+    gap: 40px;
+    align-items: center;
+    padding: 40px;
+    border: 1px solid #e2e8f0;
+    border-radius: 20px;
+    background: #ffffff;
+}
+
+.profile-photo-wrap {
+    position: relative;
+    width: 100%;
+    max-width: 198px;
+    aspect-ratio: 1;
+    align-self: center;
+    justify-self: center;
+    overflow: hidden;
+    border: 1px solid #e2e8f0;
+    border-radius: 50%;
+    background: #ffffff;
+}
+
+.profile-photo {
+    position: absolute;
+    inset: 0;
+    display: block;
+    width: 100%;
+    height: 100%;
+    border: 0;
+    border-radius: 50%;
+    object-fit: cover;
+    object-position: center center;
+}
+
+.profile-content {
+    align-self: center;
+    padding: 0;
+}
+
+.profile-name {
+    margin: 0 0 4px;
+    font-size: 30px;
+    line-height: 1.2;
+    font-weight: 700;
+    letter-spacing: -0.4px;
+}
+
+.profile-role {
+    margin-bottom: 16px;
+    color: #0c458d;
+    font-size: 16px;
+    line-height: 1.7;
+    font-weight: 600;
+    letter-spacing: 0.4px;
+    text-transform: uppercase;
+}
+
+.profile-bio {
+    margin: 0 0 18px;
+    color: #4a5568;
+    font-size: 16px;
+    line-height: 1.7;
+}
+
+.profile-meta {
+    margin: 0;
+    color: #4a5568;
+    font-size: 16px;
+    line-height: 1.7;
+}
+
+.profile-meta strong {
+    color: #333333;
+}
+
+.profile-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 20px;
+}
+
+.profile-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 18px;
+    border: 2px solid #111111;
+    border-radius: 10px;
+    color: #111111;
+    background: #ffffff;
+    font-size: 15px;
+    line-height: 1.7;
+    font-weight: 600;
+    text-decoration: none;
+    transition: color 0.15s ease, background 0.15s ease;
+}
+
+.profile-link svg {
+    width: 14px;
+    height: 14px;
+    flex: 0 0 auto;
+    stroke: currentColor;
+    stroke-width: 1.9;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    fill: none;
+}
+
+.profile-link:hover {
+    color: #ffffff;
+    background: #111111;
+}
+
+.detail-panel {
+    overflow: hidden;
+    border: 1px solid #dddddd;
+    border-radius: 14px;
+    background: #ffffff;
+}
+
+.detail-row {
+    display: grid;
+    grid-template-columns: minmax(190px, 0.8fr) minmax(0, 2.2fr) minmax(145px, auto);
+    gap: 24px;
+    padding: 20px 24px;
+    border-top: 1px solid #eeeeee;
+}
+
+.detail-row:first-child {
+    border-top: 0;
+}
+
+.detail-primary {
+    font-size: 17px;
+    line-height: 1.45;
+    font-weight: 700;
+}
+
+.detail-secondary {
+    color: #555555;
+    font-size: 16px;
+    line-height: 1.55;
+}
+
+.detail-period {
+    color: #777777;
+    font-size: 15px;
+    line-height: 1.45;
+    text-align: right;
+    white-space: nowrap;
+}
+
+.award-list {
+    margin: 0;
+    padding: 22px 28px 22px 46px;
+    border: 1px solid #dddddd;
+    border-radius: 14px;
+    background: #ffffff;
+    color: #333333;
+    font-size: 16px;
+    line-height: 1.7;
+}
+
+.award-list li + li {
+    margin-top: 7px;
+}
+
+.section-note {
+    margin: 16px 0 0;
+    color: #777777;
+    font-size: 15px;
+    line-height: 1.5;
+}
+
+.section-note a:hover {
+    color: #111111;
+}
+
+@media (max-width: 760px) {
+    .page-wrap {
+        padding: 30px 14px 60px;
+    }
+
+    .page-title {
+        margin-bottom: 45px;
+        font-size: 32px;
+    }
+
+    .member-section {
+        margin-top: 52px;
+    }
+
+    .section-title {
+        font-size: 21px;
+    }
+
+    .section-line {
+        margin-left: 15px;
+    }
+
+    .profile-card {
+        grid-template-columns: 1fr;
+        gap: 24px;
+        padding: 24px 18px;
+        border-radius: 14px;
+    }
+
+    .profile-photo-wrap {
+        max-width: 180px;
+        margin: 0 auto;
+    }
+
+    .profile-content {
+        padding: 0;
+    }
+
+    .profile-name {
+        font-size: 26px;
+    }
+
+    .detail-row {
+        grid-template-columns: 1fr;
+        gap: 6px;
+        padding: 17px 18px;
+    }
+
+    .detail-period {
+        text-align: left;
+        white-space: normal;
+    }
+}
+
+</style>
+
+</head>
+
+<body>
+
+<main class="page-wrap">
+
+    <h1 class="page-title">
+        Principal Investigator
+    </h1>
+
+    <section class="member-section">
+
+        <div class="section-header">
+            <h2 class="section-title">Professor</h2>
+            <div class="section-line"></div>
+        </div>
+
+        <article class="profile-card">
+
+            <div class="profile-photo-wrap">
+                <img
+                    class="profile-photo"
+                    src="../../images/jaeil-baek.jpg?v=800x1000"
+                    alt="Jaeil Baek"
+                >
+            </div>
+
+            <div class="profile-content">
+
+                <h3 class="profile-name">Jaeil Baek</h3>
+
+                <div class="profile-role">Assistant Professor, KAIST EE</div>
+
+                <p class="profile-bio">
+                    Jaeil Baek is an Assistant Professor in the School of Electrical Engineering at KAIST.
+                    Before joining KAIST, he was a Staff Power Integrity Engineer at Intel and a
+                    Postdoctoral Research Associate at Princeton University. He received his Ph.D. and M.S.
+                    in Electrical Engineering from KAIST and his B.S. from Sungkyunkwan University.
+                </p>
+
+                <p class="profile-meta">
+                    <strong>Affiliations:</strong>
+                    School of Electrical Engineering, Department of Semiconductor System Engineering (SSE),
+                    KAIST Space Institute, Department of AI Systems<br>
+                    <strong>Office:</strong> E3-2, Room 5224<br>
+                    <strong>Phone:</strong> <a href="tel:+82423507478">+82-42-350-7478</a><br>
+                    <strong>Email:</strong> <a href="mailto:jaeil.baek@kaist.ac.kr">jaeil.baek@kaist.ac.kr</a>
+                </p>
+
+                <div class="profile-links">
+                    <a
+                        class="profile-link"
+                        href="https://drive.google.com/file/d/1FVcVnObPFWOCiHWonhRk1NZ3EvRmC93m/view?usp=sharing"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                    >
+                        <svg viewBox="0 0 24 24" aria-hidden="true">
+                            <path d="M6 2h8l4 4v16H6z"></path>
+                            <path d="M14 2v5h5"></path>
+                            <path d="M9 12h6M9 16h6"></path>
+                        </svg>
+                        CV
+                    </a>
+
+                    <a
+                        class="profile-link"
+                        href="https://scholar.google.com/citations?user=gkX2K-gAAAAJ&amp;hl=en&amp;oi=ao"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                    >
+                        <svg viewBox="0 0 24 24" aria-hidden="true">
+                            <path d="M2 9l10-5 10 5-10 5z"></path>
+                            <path d="M6 11.5V16c3.4 2.7 8.6 2.7 12 0v-4.5"></path>
+                            <path d="M22 9v6"></path>
+                        </svg>
+                        Google Scholar
+                    </a>
+
+                    <a
+                        class="profile-link"
+                        href="https://www.linkedin.com/in/jaeil-baek/"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                    >
+                        <svg viewBox="0 0 24 24" aria-hidden="true">
+                            <rect x="3" y="3" width="18" height="18" rx="2"></rect>
+                            <path d="M7.5 10v7M7.5 7v.01M11 17v-4a3 3 0 0 1 6 0v4M11 10v7"></path>
+                        </svg>
+                        LinkedIn
+                    </a>
+                </div>
+
+            </div>
+
+        </article>
+
+    </section>
+
+    <section class="member-section">
+
+        <div class="section-header">
+            <h2 class="section-title">Appointments</h2>
+            <div class="section-line"></div>
+        </div>
+
+        <div class="detail-panel">
+
+            <div class="detail-row">
+                <div class="detail-primary">KAIST</div>
+                <div class="detail-secondary">Assistant Professor, School of Electrical Engineering</div>
+                <div class="detail-period">Oct. 2024 – Present</div>
+            </div>
+
+            <div class="detail-row">
+                <div class="detail-primary">Intel</div>
+                <div class="detail-secondary">Staff Power Integrity Engineer, ATTD Power Delivery Core Competency</div>
+                <div class="detail-period">Jun. 2022 – Sep. 2024</div>
+            </div>
+
+            <div class="detail-row">
+                <div class="detail-primary">Princeton University</div>
+                <div class="detail-secondary">Postdoctoral Research Associate, Electrical and Computer Engineering</div>
+                <div class="detail-period">Jan. 2019 – Jun. 2022</div>
+            </div>
+
+            <div class="detail-row">
+                <div class="detail-primary">KAIST</div>
+                <div class="detail-secondary">Postdoctoral Researcher, School of Electrical Engineering</div>
+                <div class="detail-period">Sep. 2018 – Dec. 2018</div>
+            </div>
+
+        </div>
+
+    </section>
+
+    <section class="member-section">
+
+        <div class="section-header">
+            <h2 class="section-title">Education</h2>
+            <div class="section-line"></div>
+        </div>
+
+        <div class="detail-panel">
+
+            <div class="detail-row">
+                <div class="detail-primary">KAIST</div>
+                <div class="detail-secondary">Ph.D. and M.S. in Electrical Engineering · Advisor: Prof. Gun-Woo Moon</div>
+                <div class="detail-period">Sep. 2013 – Aug. 2018</div>
+            </div>
+
+            <div class="detail-row">
+                <div class="detail-primary">Sungkyunkwan University</div>
+                <div class="detail-secondary">B.S. in Electronics and Electrical Engineering · Graduated first in the college (1/350)</div>
+                <div class="detail-period">Mar. 2007 – Feb. 2011</div>
+            </div>
+
+        </div>
+
+    </section>
+
+    <section class="member-section">
+
+        <div class="section-header">
+            <h2 class="section-title">Awards and Honors</h2>
+            <div class="section-line"></div>
+        </div>
+
+        <ul class="award-list">
+            <li>Samsung Oh-Hyun Kwon Endowed Professor, 2026</li>
+            <li>Outstanding Teaching Award, Spring 2025</li>
+            <li>National Research Foundation of Korea Outstanding Young Scientist Grant, 2025</li>
+            <li>IEEE Senior Member, 2024</li>
+            <li>IEEE Power Electronics Society Transactions Prize Paper Award, 1st Place, 2023</li>
+            <li>Best Paper Award, Open Compute Project Future Technologies Symposium, 2021</li>
+        </ul>
+
+        <p class="section-note">
+            Selected honors. See the
+            <a
+                href="https://drive.google.com/file/d/1FVcVnObPFWOCiHWonhRk1NZ3EvRmC93m/view?usp=sharing"
+                target="_blank"
+                rel="noopener noreferrer"
+            >full CV</a>
+            for publications, projects, patents, teaching, and service.
+        </p>
+
+    </section>
+
+</main>
+
+</body>
+
+</html>

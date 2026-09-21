@@ -1,0 +1,141 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="KAIST Integrated Power Circuit Lab — integrated power electronics, circuit, magnetics, and digital twin research.">
+  <title>IPC Lab's Vision | KAIST Integrated Power Circuit Lab</title>
+  <link rel="stylesheet" href="styles.css">
+  <script src="diagram.js" defer></script>
+</head>
+<body>
+<main class="page">
+  <section class="vision" aria-labelledby="vision-title">
+    <header class="vision-heading">
+      <p class="eyebrow ruled">KAIST INTEGRATED POWER CIRCUIT LAB</p>
+      <h1 id="vision-title"><span><b>IPC</b></span> Lab's Vision</h1>
+    </header>
+    <div class="vision-content">
+      <div class="vision-copy">
+        <p>The <strong>KAIST Integrated Power Circuit (IPC) Lab</strong> develops <strong>high-performance integrated power electronics</strong> for emerging and future applications. Our vision is to advance integrated power circuits toward <strong>higher power density, smaller form factors, and system-level integration</strong>.</p>
+      </div>
+      <section class="power-diagram-frame" aria-label="Integrated power electronics comparison">
+      <div class="power-diagram">
+        <div class="power-options">
+          <article class="power-option">
+            <header><h2>Discrete Power Electronics</h2></header>
+            <img class="component-image" src="assets/discrete-power.png" width="1254" height="1254" alt="Discrete power converter board with copper-wound inductors">
+            <ul><li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m13 2-8 11h6l-1 9 9-13h-6l1-7Z"/></svg><span>High power capability</span></li><li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m12 2 9 5v10l-9 5-9-5V7l9-5Zm0 10 9-5M12 12 3 7m9 5v10M7.5 4.5l9 5"/></svg><span>Large volume</span></li><li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m12 3 10 5-10 5L2 8l10-5ZM2 12l10 5 10-5M2 16l10 5 10-5"/></svg><span>Discrete components</span></li></ul>
+          </article>
+          <article class="power-option power-option-featured">
+            <header><h2>Integrated Power Circuits<br><span>(IPC)</span></h2></header>
+            <button class="branded-chip chip-toggle" type="button" aria-expanded="false" aria-controls="future-delivery-panel" aria-label="Toggle future power delivery diagram"><img class="component-image" src="assets/integrated-power-etched.png" width="1254" height="1254" alt="KAIST IPC integrated power electronics chip with gold pins"></button>
+            <ul><li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m13 2-8 11h6l-1 9 9-13h-6l1-7Z"/></svg><span>High power density</span></li><li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m12 2 9 5v10l-9 5-9-5V7l9-5Zm0 10 9-5M12 12 3 7m9 5v10M7.5 4.5l9 5"/></svg><span>Compact form factor</span></li><li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m12 3 10 5-10 5L2 8l10-5ZM2 12l10 5 10-5M2 16l10 5 10-5"/></svg><span>System-level integration</span></li></ul>
+          </article>
+          <article class="power-option">
+            <header><h2>Fully Integrated PMICs</h2></header>
+            <img class="component-image" src="assets/pmic.png" width="1254" height="1254" alt="Small PMIC package with fine silver leads">
+            <ul><li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m13 2-8 11h6l-1 9 9-13h-6l1-7Z"/></svg><span>Lower power capability</span></li><li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m12 2 9 5v10l-9 5-9-5V7l9-5Zm0 10 9-5M12 12 3 7m9 5v10M7.5 4.5l9 5"/></svg><span>Small volume</span></li><li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m12 3 10 5-10 5L2 8l10-5ZM2 12l10 5 10-5M2 16l10 5 10-5"/></svg><span>Fully integrated</span></li></ul>
+          </article>
+          <svg class="converge-arrow arrow-from-left" viewBox="0 0 36 50" aria-hidden="true"><path d="m5 7 17 18L5 43m12-36 17 18-17 18"/></svg>
+          <svg class="converge-arrow arrow-from-right" viewBox="0 0 36 50" aria-hidden="true"><path d="m5 7 17 18L5 43m12-36 17 18-17 18"/></svg>
+        </div>
+      </div>
+      </section>
+      <section id="future-delivery-panel" class="future-delivery-panel" aria-labelledby="delivery-heading" hidden>
+        <button class="delivery-close" type="button" aria-label="Close future power delivery diagram">×</button>
+        <p class="delivery-section-label">FUTURE POWER DELIVERY</p>
+        <h2 id="delivery-heading">Toward Fully Integrated Power Delivery</h2>
+        <div class="delivery-panel-frame">
+          <div class="delivery-panel-canvas">
+            <div class="delivery-flow">
+              <figure class="delivery-stage current-stage">
+                <div class="stack-visual">
+                  <ul class="stack-labels" aria-label="Current stack layers from top to bottom"><li>Processor</li><li>Package Substrate</li><li>Mother Board</li><li>Passive Components</li><li>Semiconductor</li></ul>
+                  <img src="assets/vertical-discrete-components.png" width="1254" height="1254" alt="Exploded stack with processor, package substrate, motherboard, passive components and semiconductor die">
+                </div>
+                <figcaption>Separate power components</figcaption>
+              </figure>
+              <div class="delivery-transition">
+                <span>Same<br>Power</span>
+                <svg viewBox="0 0 178 110" aria-hidden="true"><defs><linearGradient id="delivery-arrow-blue"><stop stop-color="#e1efff"/><stop offset="1" stop-color="#8ab9f2"/></linearGradient></defs><path d="M8 30 H98 V10 L170 55 L98 100 V80 H8 C19 65 19 45 8 30 Z"/></svg>
+                <small>Smaller Form<br>Factor</small>
+              </div>
+              <figure class="delivery-stage future-stage">
+                <div class="future-visual">
+                  <span class="processor-label">Processor</span>
+                  <img src="assets/vertical-integrated-cutaway-transparent.png" width="1254" height="1254" alt="KAIST IPC compact stack with an exposed power chip integrated beneath the processor">
+                  <p class="integration-note">Higher Integration<br>Higher Power Density</p>
+                </div>
+                <figcaption>Compact integrated power delivery</figcaption>
+              </figure>
+            </div>
+          </div>
+        </div>
+        <p class="delivery-description">Power semiconductors and passive components are integrated into a compact package beneath the processor, shortening the power delivery path and reducing the space occupied by separate components. This structure enables higher power density while maintaining the same power delivery capability.</p>
+      </section>
+    </div>
+  </section>
+
+  <section class="research" aria-labelledby="research-title">
+    <header class="research-heading">
+      <p class="eyebrow">RESEARCH</p>
+      <h2 id="research-title">Core <span>Research Areas</span></h2>
+    </header>
+    <div class="research-areas">
+      <article class="research-orb">
+        <h3>Circuit</h3>
+        <img src="assets/circuit.png" width="250" height="110" alt="Integrated power circuit chip with surrounding circuit traces">
+        <p>Circuit &amp; Topology</p>
+      </article>
+      <article class="research-orb">
+        <h3>PDN</h3>
+        <img src="assets/pdn.png" width="250" height="110" alt="Multilayer power distribution network board with glowing blue power paths">
+        <p>Power Distribution<br>Network</p>
+      </article>
+      <article class="research-orb">
+        <h3>Magnetics</h3>
+        <img src="assets/magnetics.png" width="250" height="110" alt="Compact magnetic component with a copper winding">
+        <p>High-density magnetics</p>
+      </article>
+      <article class="research-orb">
+        <h3>Digital Twin</h3>
+        <img src="assets/digital-twin.png" width="250" height="110" alt="Power electronics module beside its glowing digital twin">
+        <p>Modeling &amp;<br>Design Optimization</p>
+      </article>
+    </div>
+    <div class="application-bridge" aria-hidden="true">
+      <span class="bridge-stem"></span>
+      <span class="bridge-label">ENABLING FUTURE APPLICATIONS</span>
+      <span class="bridge-bus"></span>
+      <div class="bridge-branches"><i></i><i></i><i></i><i></i><i></i></div>
+    </div>
+    <div class="applications" id="applications" aria-label="Future applications">
+      <a class="application-card" href="applications/ai-semiconductors.html">
+        <img src="assets/ai-semiconductors-hd.png" width="1254" height="1254" alt="Illuminated server racks in a data center">
+        <div class="card-copy"><h3>AI Semiconductors</h3></div>
+      </a>
+      <a class="application-card" href="applications/electric-vehicles.html">
+        <img src="assets/electric-vehicles-hd.png" width="1254" height="1254" alt="Electric vehicle battery platform and chassis">
+        <div class="card-copy"><h3>Electric Vehicles</h3></div>
+      </a>
+      <a class="application-card" href="applications/humanoids.html">
+        <img src="assets/humanoids-hd.png" width="1254" height="1254" alt="White and black humanoid robot">
+        <div class="card-copy"><h3>Humanoids</h3></div>
+      </a>
+      <a class="application-card" href="applications/rf-systems.html">
+        <img src="assets/rf-systems.png" width="1254" height="1254" alt="RF power generator and matching network connected to a glowing violet plasma chamber">
+        <div class="card-copy"><h3>RF Systems</h3></div>
+      </a>
+      <a class="application-card" href="applications/wireless-power-transfer.html">
+        <img src="assets/wireless-power-transfer-hd.png" width="1254" height="1254" alt="Two planar coils transferring power wirelessly">
+        <div class="card-copy"><h3>Wireless Power Transfer</h3></div>
+      </a>
+    </div>
+    <footer>
+      <p class="eyebrow ruled">KAIST INTEGRATED POWER CIRCUIT LAB</p>
+    </footer>
+  </section>
+</main>
+</body>
+</html>

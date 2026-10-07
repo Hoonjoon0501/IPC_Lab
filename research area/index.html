@@ -73,6 +73,42 @@
  .research .application-bridge {margin:40px auto 24px;}
  .research .application-bridge .bridge-label {font-size:8px;letter-spacing:1.8px;}
 }
+
+/* Research fields converge into one hub, then distribute to applications. */
+.research-flow {position:relative;max-width:1120px;margin:0 auto;isolation:isolate;}
+.research-connections {position:absolute;inset:0;width:100%;height:100%;overflow:visible;pointer-events:none;z-index:0;}
+.research-connections path {fill:none;stroke:#8da9c4;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round;}
+.research-connections circle {fill:#fff;stroke:#6d91b2;stroke-width:1.6;}
+.research .research-areas,.research .applications {position:relative;z-index:1;}
+.research .application-bridge {position:relative;z-index:2;height:208px;margin:0;display:flex;align-items:center;justify-content:center;}
+.convergence-hub {position:relative;display:flex;flex-direction:column;align-items:center;gap:7px;padding:18px 32px;background:#f5f9fc;border:1px solid #bfd0e0;border-radius:10px;text-align:center;}
+.convergence-hub strong {color:#254e72;font-size:21px;line-height:1.3;font-weight:650;letter-spacing:-.3px;}
+.convergence-hub span {color:#526e88;font-size:15px;line-height:1.4;}
+.research .research-heading h2 {font-size:34px;}
+.research .research-intro {font-size:16px;line-height:1.65;}
+.research .research-orb h3 {font-size:24px;}
+.research .research-orb p {font-size:17px;line-height:1.65;}
+.research .card-copy h3 {font-size:16px;line-height:1.45;white-space:normal;}
+.vision-copy > p:first-child {font-size:18px;line-height:1.8;}
+.power-option li {font-size:13px;line-height:1.7;}
+.delivery-description {font-size:16px;line-height:1.8;}
+.delivery-section-label {font-size:11px;}
+.eyebrow {font-size:11px;}
+@media(max-width:1050px) {
+ .research .research-areas {max-width:min(720px,calc(100% - 40px));}
+ .research .applications {width:calc(100% - 40px);}
+}
+@media(max-width:560px) {
+ .research .research-heading h2 {font-size:29px;}
+ .research .research-areas {max-width:min(380px,calc(100% - 40px));}
+ .research .application-bridge {height:186px;margin:0;}
+ .convergence-hub {padding:16px 22px;}
+ .convergence-hub strong {font-size:20px;}
+ .convergence-hub span {font-size:14px;}
+ .research .card-copy {padding:14px 10px 0;}
+ .research .card-copy h3 {font-size:15px;}
+ .vision-copy > p:first-child {font-size:17px;}
+}
 </style>
 </head>
 
@@ -217,9 +253,11 @@
 
     <header class="research-heading">
       <h2 id="research-title">Core <span>Research Areas</span></h2>
-      <p class="research-intro">Circuit, PDN, magnetics, and digital twin research for efficient, compact integrated power electronics.</p>
+      <p class="research-intro">Four complementary research fields converge into integrated power solutions for future applications.</p>
     </header>
 
+    <div class="research-flow">
+      <svg class="research-connections" aria-hidden="true" focusable="false"></svg>
     <div class="research-areas">
 
       <article class="research-orb">
@@ -248,16 +286,11 @@
 
     </div>
 
-    <div class="application-bridge" aria-hidden="true">
-
-      <span class="bridge-stem"></span>
-
-      <span class="bridge-label">ENABLING FUTURE APPLICATIONS</span>
-
-      <span class="bridge-bus"></span>
-
-      <div class="bridge-branches"><i></i><i></i><i></i><i></i><i></i></div>
-
+    <div class="application-bridge">
+      <div class="convergence-hub">
+        <strong>Convergent Research</strong>
+        <span>Enabling Future Applications</span>
+      </div>
     </div>
 
     <div class="applications" id="applications" aria-label="Future applications">
@@ -304,6 +337,8 @@
 
     </div>
 
+    </div><!-- research-flow -->
+
     <footer>
 
       <p class="eyebrow ruled">KAIST INTEGRATED POWER CIRCUIT LAB</p>
@@ -314,6 +349,71 @@
 
 </main>
 
+
+<script>
+// Measure real card edges so every connector stays attached after wrapping or resizing.
+(() => {
+  const flow = document.querySelector('.research-flow');
+  const svg = flow.querySelector('.research-connections');
+  const hub = flow.querySelector('.convergence-hub');
+  const research = [...flow.querySelectorAll('.research-orb')];
+  const applications = [...flow.querySelectorAll('.application-card')];
+  const ns = 'http://www.w3.org/2000/svg';
+  let pending;
+  const draw = () => {
+    const box = flow.getBoundingClientRect();
+    if (!box.width) return;
+    svg.setAttribute('viewBox', `0 0 ${box.width} ${box.height}`);
+    svg.replaceChildren();
+    const rect = el => { const r = el.getBoundingClientRect(); return {x:r.left-box.left,y:r.top-box.top,w:r.width,h:r.height}; };
+    const h = rect(hub), cx = h.x+h.w/2;
+    const add = (tag,attrs) => {const e=document.createElementNS(ns,tag); for(const [k,v] of Object.entries(attrs)) e.setAttribute(k,v); svg.append(e);};
+    const path = d => add('path',{d});
+    const node = (x,y) => add('circle',{cx:x,cy:y,r:3});
+    const connect = (els,incoming) => {
+      const rs=els.map(rect);
+      const singleRow=rs.every(r=>Math.abs(r.y-rs[0].y)<2);
+      const hy=incoming?h.y:h.y+h.h;
+      if(singleRow) {
+        rs.forEach(r=>{
+          const x=r.x+r.w/2, y=incoming?r.y+r.h:r.y;
+          const mid=(y+hy)/2;
+          path(`M ${x} ${y} C ${x} ${mid}, ${cx} ${mid}, ${cx} ${hy}`);
+          node(x,y);
+        });
+      } else {
+        // Collect wrapped rows along outer gutters, never through a card or its text.
+        const left=Math.min(...rs.map(r=>r.x))-12;
+        const right=Math.max(...rs.map(r=>r.x+r.w))+12;
+        const joint=incoming?hy-25:hy+25;
+        const groups={left:[],right:[]};
+        rs.forEach(r=>groups[r.x+r.w/2<=box.width/2+2?'left':'right'].push(r));
+        Object.entries(groups).forEach(([side,items])=>{
+          if(!items.length)return;
+          const rail=side==='left'?left:right;
+          const ys=items.map(r=>r.y+r.h/2);
+          const far=incoming?Math.min(...ys):Math.max(...ys);
+          path(`M ${rail} ${far} V ${joint} H ${cx} V ${hy}`);
+          items.forEach(r=>{const x=side==='left'?r.x:r.x+r.w,y=r.y+r.h/2;path(`M ${x} ${y} H ${rail}`);node(x,y);});
+        });
+      }
+    };
+    connect(research,true);connect(applications,false);
+    // Downward chevron communicates the shared research-to-application direction.
+    const ay=h.y+h.h+20;
+    path(`M ${cx-4} ${ay-4} L ${cx} ${ay} L ${cx+4} ${ay-4}`);
+  };
+  const schedule=()=>{cancelAnimationFrame(pending);pending=requestAnimationFrame(draw);};
+  if('ResizeObserver' in window) {
+    const observer=new ResizeObserver(schedule);
+    [flow,hub,...research,...applications].forEach(el=>observer.observe(el));
+  }
+  window.addEventListener('resize',schedule);
+  window.addEventListener('load',schedule);
+  document.fonts?.ready.then(schedule);
+  schedule();
+})();
+</script>
 </body>
 
 </html>

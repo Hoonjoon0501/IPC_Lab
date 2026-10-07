@@ -109,6 +109,39 @@
  .research .card-copy h3 {font-size:15px;}
  .vision-copy > p:first-child {font-size:17px;}
 }
+
+/* Distinct disciplines, one strong visual center, a shared application direction. */
+.research .research-orb {--field:#497cac;position:relative;border:1px solid #e0e7ee;border-top:3px solid var(--field);border-radius:10px;padding-top:23px;box-shadow:0 5px 16px #182e4710;background:#fff;}
+.research .research-orb:nth-child(2) {--field:#408a91;}
+.research .research-orb:nth-child(3) {--field:#8279ac;}
+.research .research-orb:nth-child(4) {--field:#60798e;}
+.research .research-orb::before {display:block;content:'01';position:absolute;right:22px;top:25px;left:auto;bottom:auto;width:auto;height:auto;border:0;background:none;box-shadow:none;transform:none;color:var(--field);font-size:12px;font-weight:600;letter-spacing:1px;}
+.research .research-orb:nth-child(2)::before {content:'02';}
+.research .research-orb:nth-child(3)::before {content:'03';}
+.research .research-orb:nth-child(4)::before {content:'04';}
+.research .research-orb:hover {border-color:#ccd8e3;border-top-color:var(--field);box-shadow:0 5px 16px #182e4710;}
+.research .research-symbol {width:104px;height:76px;}
+.research .application-bridge {height:260px;}
+.convergence-hub {min-width:310px;padding:23px 34px 24px;gap:9px;background:#183550;border:1px solid #274966;border-radius:14px;box-shadow:0 12px 28px #18355020;}
+.convergence-hub strong {color:#fff;font-size:24px;font-weight:650;letter-spacing:-.5px;}
+.convergence-hub > span {color:#c8d8e7;font-size:15px;}
+.fusion-mark {display:flex;gap:6px;align-items:center;justify-content:center;margin-bottom:4px;}
+.fusion-mark i {display:block;width:8px;height:8px;background:#8db4d9;border-radius:2px;}
+.fusion-mark i:nth-child(2) {background:#85b9bb;}
+.fusion-mark i:nth-child(3) {background:#b1a9d2;}
+.fusion-mark i:nth-child(4) {background:#a4b8c9;}
+.research-connections path {stroke-width:2.2;}
+.research-connections path[data-field] {stroke:var(--line);}
+.research-connections circle {fill:#fff;stroke:var(--line,#668cae);stroke-width:2;}
+.research .application-card {border-color:#dce5ee;box-shadow:0 5px 16px #18355008;border-radius:10px;}
+.research .application-card .card-copy {border-top:1px solid #e7edf3;margin-top:0;min-height:68px;}
+.research .card-copy h3 {color:#203c55;}
+@media(max-width:560px) {
+ .research .application-bridge {height:232px;}
+ .convergence-hub {min-width:0;padding:20px 23px;}
+ .convergence-hub strong {font-size:22px;}
+ .convergence-hub > span {font-size:14px;}
+}
 </style>
 </head>
 
@@ -288,6 +321,7 @@
 
     <div class="application-bridge">
       <div class="convergence-hub">
+        <div class="fusion-mark" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
         <strong>Convergent Research</strong>
         <span>Enabling Future Applications</span>
       </div>
@@ -368,18 +402,20 @@
     const rect = el => { const r = el.getBoundingClientRect(); return {x:r.left-box.left,y:r.top-box.top,w:r.width,h:r.height}; };
     const h = rect(hub), cx = h.x+h.w/2;
     const add = (tag,attrs) => {const e=document.createElementNS(ns,tag); for(const [k,v] of Object.entries(attrs)) e.setAttribute(k,v); svg.append(e);};
-    const path = d => add('path',{d});
-    const node = (x,y) => add('circle',{cx:x,cy:y,r:3});
+    const colors=['#497cac','#408a91','#8279ac','#60798e'];
+    const path = (d,color='#668cae') => add('path',{d,'data-field':'true',style:`--line:${color}`});
+    const node = (x,y,color='#668cae') => add('circle',{cx:x,cy:y,r:3.5,style:`--line:${color}`});
     const connect = (els,incoming) => {
       const rs=els.map(rect);
       const singleRow=rs.every(r=>Math.abs(r.y-rs[0].y)<2);
       const hy=incoming?h.y:h.y+h.h;
       if(singleRow) {
-        rs.forEach(r=>{
+        rs.forEach((r,i)=>{
+          const color=incoming?colors[i]:'#668cae';
           const x=r.x+r.w/2, y=incoming?r.y+r.h:r.y;
           const mid=(y+hy)/2;
-          path(`M ${x} ${y} C ${x} ${mid}, ${cx} ${mid}, ${cx} ${hy}`);
-          node(x,y);
+          path(`M ${x} ${y} C ${x} ${mid}, ${cx} ${mid}, ${cx} ${hy}`,color);
+          node(x,y,color);
         });
       } else {
         // Collect wrapped rows along outer gutters, never through a card or its text.
@@ -394,7 +430,7 @@
           const ys=items.map(r=>r.y+r.h/2);
           const far=incoming?Math.min(...ys):Math.max(...ys);
           path(`M ${rail} ${far} V ${joint} H ${cx} V ${hy}`);
-          items.forEach(r=>{const x=side==='left'?r.x:r.x+r.w,y=r.y+r.h/2;path(`M ${x} ${y} H ${rail}`);node(x,y);});
+          items.forEach(r=>{const color=incoming?colors[rs.indexOf(r)]:'#668cae';const x=side==='left'?r.x:r.x+r.w,y=r.y+r.h/2;path(`M ${x} ${y} H ${rail}`,color);node(x,y,color);});
         });
       }
     };

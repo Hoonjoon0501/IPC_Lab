@@ -145,6 +145,11 @@
 /* A simple shared junction communicates the connection without a text box. */
 .research .application-bridge {height:132px;}
 .research .convergence-hub {display:block;width:14px;height:14px;min-width:0;padding:0;border:3px solid #617f9b;border-radius:50%;background:#fff;box-shadow:0 0 0 5px #f1f5f9;}
+/* Clean shared buses and a minimal central junction. */
+.research .application-bridge {height:112px;}
+.research .research-connections path {stroke:#8b9fb2;stroke-width:1.4;fill:none;}
+.research .research-connections circle {stroke:#8b9fb2;stroke-width:1.2;fill:#fff;}
+.research .convergence-hub {width:6px;height:6px;border:0;background:#718da5;box-shadow:none;}
 </style>
 </head>
 
@@ -401,21 +406,23 @@
     const rect = el => { const r = el.getBoundingClientRect(); return {x:r.left-box.left,y:r.top-box.top,w:r.width,h:r.height}; };
     const h = rect(hub), cx = h.x+h.w/2;
     const add = (tag,attrs) => {const e=document.createElementNS(ns,tag); for(const [k,v] of Object.entries(attrs)) e.setAttribute(k,v); svg.append(e);};
-    const colors=['#497cac','#408a91','#8279ac','#60798e'];
-    const path = (d,color='#668cae') => add('path',{d,'data-field':'true',style:`--line:${color}`});
-    const node = (x,y,color='#668cae') => add('circle',{cx:x,cy:y,r:3.5,style:`--line:${color}`});
+    
+    const path = d => add('path',{d});
+    const node = (x,y) => add('circle',{cx:x,cy:y,r:2});
     const connect = (els,incoming) => {
       const rs=els.map(rect);
       const singleRow=rs.every(r=>Math.abs(r.y-rs[0].y)<2);
       const hy=incoming?h.y:h.y+h.h;
       if(singleRow) {
-        rs.forEach((r,i)=>{
-          const color=incoming?colors[i]:'#668cae';
-          const x=r.x+r.w/2, y=incoming?r.y+r.h:r.y;
-          const mid=(y+hy)/2;
-          path(`M ${x} ${y} C ${x} ${mid}, ${cx} ${mid}, ${cx} ${hy}`,color);
-          node(x,y,color);
-        });
+        const xs=rs.map(r=>r.x+r.w/2);
+        const y=incoming?rs[0].y+rs[0].h:rs[0].y;
+        const bus=(y+hy)/2, radius=Math.min(9,Math.abs(y-bus)/2);
+        const side=incoming?-1:1, left=xs[0], right=xs[xs.length-1];
+        // One shared bus, with rounded outer corners and no overlapping curves.
+        path(`M ${left} ${y} V ${bus+side*radius} Q ${left} ${bus} ${left+radius} ${bus} H ${right-radius} Q ${right} ${bus} ${right} ${bus+side*radius} V ${y}`);
+        xs.slice(1,-1).forEach(x=>path(`M ${x} ${y} V ${bus}`));
+        path(`M ${cx} ${bus} V ${hy}`);
+        xs.forEach(x=>node(x,y));
       } else {
         // Collect wrapped rows along outer gutters, never through a card or its text.
         const left=Math.min(...rs.map(r=>r.x))-12;
@@ -428,15 +435,13 @@
           const rail=side==='left'?left:right;
           const ys=items.map(r=>r.y+r.h/2);
           const far=incoming?Math.min(...ys):Math.max(...ys);
-          path(`M ${rail} ${far} V ${joint} H ${cx} V ${hy}`);
-          items.forEach(r=>{const color=incoming?colors[rs.indexOf(r)]:'#668cae';const x=side==='left'?r.x:r.x+r.w,y=r.y+r.h/2;path(`M ${x} ${y} H ${rail}`,color);node(x,y,color);});
+          const dir=side==='left'?1:-1, radius=8, approach=incoming?-1:1;
+          path(`M ${rail} ${far} V ${joint+approach*radius} Q ${rail} ${joint} ${rail+dir*radius} ${joint} H ${cx-dir*radius} Q ${cx} ${joint} ${cx} ${joint-approach*radius} V ${hy}`);
+          items.forEach(r=>{const x=side==='left'?r.x:r.x+r.w,y=r.y+r.h/2;path(`M ${x} ${y} H ${rail}`);node(x,y);});
         });
       }
     };
     connect(research,true);connect(applications,false);
-    // Downward chevron communicates the shared research-to-application direction.
-    const ay=h.y+h.h+20;
-    path(`M ${cx-4} ${ay-4} L ${cx} ${ay} L ${cx+4} ${ay-4}`);
   };
   const schedule=()=>{cancelAnimationFrame(pending);pending=requestAnimationFrame(draw);};
   if('ResizeObserver' in window) {

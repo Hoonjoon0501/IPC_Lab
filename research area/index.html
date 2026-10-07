@@ -150,6 +150,10 @@
 .research .research-connections path {stroke:#8b9fb2;stroke-width:1.4;fill:none;}
 .research .research-connections circle {stroke:#8b9fb2;stroke-width:1.2;fill:#fff;}
 .research .convergence-hub {width:6px;height:6px;border:0;background:#718da5;box-shadow:none;}
+/* One understated shared spine: no endpoint circles or central ornament. */
+.research .application-bridge {height:96px;}
+.research .convergence-hub {width:0;height:0;border:0;background:none;box-shadow:none;}
+.research .research-connections path {stroke:#a0adba;stroke-width:1.2;}
 </style>
 </head>
 
@@ -408,7 +412,7 @@
     const add = (tag,attrs) => {const e=document.createElementNS(ns,tag); for(const [k,v] of Object.entries(attrs)) e.setAttribute(k,v); svg.append(e);};
     
     const path = d => add('path',{d});
-    const node = (x,y) => add('circle',{cx:x,cy:y,r:2});
+    const node = () => {};
     const connect = (els,incoming) => {
       const rs=els.map(rect);
       const singleRow=rs.every(r=>Math.abs(r.y-rs[0].y)<2);
@@ -441,7 +445,19 @@
         });
       }
     };
-    connect(research,true);connect(applications,false);
+    const upper=research.map(rect), lower=applications.map(rect);
+    const oneRow=rs=>rs.every(r=>Math.abs(r.y-rs[0].y)<2);
+    if(oneRow(upper)&&oneRow(lower)) {
+      // A single shared spine connects all four disciplines to all five applications.
+      const upperY=upper[0].y+upper[0].h, lowerY=lower[0].y;
+      const busY=(upperY+lowerY)/2;
+      const xs=lower.map(r=>r.x+r.w/2), left=xs[0], right=xs[xs.length-1], radius=8;
+      path(`M ${left} ${lowerY} V ${busY+radius} Q ${left} ${busY} ${left+radius} ${busY} H ${right-radius} Q ${right} ${busY} ${right} ${busY+radius} V ${lowerY}`);
+      upper.forEach(r=>{const x=r.x+r.w/2;path(`M ${x} ${upperY} V ${busY}`);});
+      xs.slice(1,-1).forEach(x=>path(`M ${x} ${busY} V ${lowerY}`));
+    } else {
+      connect(research,true);connect(applications,false);
+    }
   };
   const schedule=()=>{cancelAnimationFrame(pending);pending=requestAnimationFrame(draw);};
   if('ResizeObserver' in window) {

@@ -273,3 +273,8 @@ footer .ruled::before, footer .ruled::after { width: 106px; }
   .research-areas { grid-template-columns: 255px; gap: 28px; }
   .research-orb:not(:last-child)::after { display: block; width: 2px; height: 30px; top: 100%; left: 50%; }
 }
+/* Clarify relative size and center comparison captions. */
+.vision-heading h1 b, .power-option-featured h2 { color: #003d9b; }
+.power-option:first-child > .component-image { padding: 0; transform: scale(1.7); }
+.power-option:nth-child(3) > .component-image { transform: scale(.88); }
+.power-option ul { width: max-content; max-width: 100%; margin-inline: auto; }

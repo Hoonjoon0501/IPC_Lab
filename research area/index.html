@@ -142,6 +142,9 @@
  .convergence-hub strong {font-size:22px;}
  .convergence-hub > span {font-size:14px;}
 }
+/* A simple shared junction communicates the connection without a text box. */
+.research .application-bridge {height:132px;}
+.research .convergence-hub {display:block;width:14px;height:14px;min-width:0;padding:0;border:3px solid #617f9b;border-radius:50%;background:#fff;box-shadow:0 0 0 5px #f1f5f9;}
 </style>
 </head>
 
@@ -286,7 +289,7 @@
 
     <header class="research-heading">
       <h2 id="research-title">Core <span>Research Areas</span></h2>
-      <p class="research-intro">Four complementary research fields converge into integrated power solutions for future applications.</p>
+      <p class="research-intro">Circuit, PDN, magnetics, and digital twins for advanced power electronics and future applications.</p>
     </header>
 
     <div class="research-flow">
@@ -319,12 +322,8 @@
 
     </div>
 
-    <div class="application-bridge">
-      <div class="convergence-hub">
-        <div class="fusion-mark" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
-        <strong>Convergent Research</strong>
-        <span>Enabling Future Applications</span>
-      </div>
+    <div class="application-bridge" aria-hidden="true">
+      <div class="convergence-hub"></div>
     </div>
 
     <div class="applications" id="applications" aria-label="Future applications">

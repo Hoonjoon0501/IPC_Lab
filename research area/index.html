@@ -414,7 +414,7 @@
 
 
 <script>
-// Geometry follows the reference: four broad fields, one waist, then a shared fan.
+// Reference geometry: exactly four continuous fields cross through a broad shared waist.
 (() => {
   const flow = document.querySelector('.research-flow');
   const svg = flow.querySelector('.research-connections');
@@ -433,39 +433,51 @@
       parent.append(el); return el;
     };
     const defs = add('defs', {});
-    // Subpixel feathering only. The visible contours come from the filled paths.
-    const feather = add('filter', {id:'field-edge-feather',x:'-5%',y:'-5%',width:'110%',height:'110%', 'color-interpolation-filters':'sRGB'}, defs);
-    add('feGaussianBlur', {stdDeviation:'.65'}, feather);
-    const colors = ['#7db6f2','#64cad8','#a792ec','#88acd7'];
-    const gradient = (id, color, incoming) => {
-      const g = add('linearGradient', {id,gradientUnits:'userSpaceOnUse',x1:0,x2:0,y1:top+height*(incoming?-.46:.34),y2:top+height*(incoming?.63:1.42)},defs);
-      const stops = incoming ? [[0,0],[.25,.22],[.58,.58],[.79,.42],[1,.16]] : [[0,.34],[.26,.53],[.63,.30],[1,0]];
-      stops.forEach(([offset, opacity]) => add('stop', {offset,'stop-color':color,'stop-opacity':opacity},g));
-      return `url(#${id})`;
-    };
-    // A single compositing group caps total overlap alpha at 20%.
-    // Each visible field is normally 5–12%; there is no separate center glow.
-    const fields = add('g', {class:'translucent-fields',opacity:'.2'});
-    const xy = (x,y) => `${(x*width).toFixed(2)} ${(top+y*height).toFixed(2)}`;
-    const path = (d, fill, kind) => add('path', {class:`flow-field ${kind}`,d,style:`fill:${fill};stroke:none`,filter:'url(#field-edge-feather)'},fields);
-    // Upper lobes use broad elliptical sweeps, matching the reference's shallow bowl
-    // under each card. All arrive at the same narrow region near x=50%, y=37%.
-    const upper = [
-      `M ${xy(-.015,-.46)} L ${xy(.285,-.46)} C ${xy(.31,.13)} ${xy(.432,.27)} ${xy(.512,.37)} C ${xy(.382,.56)} ${xy(.113,.25)} ${xy(-.015,-.46)} Z`,
-      `M ${xy(.225,-.46)} L ${xy(.51,-.46)} C ${xy(.519,.025)} ${xy(.518,.255)} ${xy(.509,.372)} C ${xy(.43,.555)} ${xy(.273,.64)} ${xy(.225,-.46)} Z`,
-      `M ${xy(.49,-.46)} L ${xy(.775,-.46)} C ${xy(.727,.64)} ${xy(.57,.555)} ${xy(.491,.372)} C ${xy(.482,.255)} ${xy(.481,.025)} ${xy(.49,-.46)} Z`,
-      `M ${xy(.715,-.46)} L ${xy(1.015,-.46)} C ${xy(.887,.25)} ${xy(.618,.56)} ${xy(.488,.37)} C ${xy(.568,.27)} ${xy(.69,.13)} ${xy(.715,-.46)} Z`
-    ];
-    upper.forEach((d,i)=>path(d,gradient('research-field-in-'+i,colors[i],true),'field-in'));
-    // Overlapping fans cover the applications as a whole; no endpoints are attached
-    // to an individual application, even when the cards wrap onto multiple rows.
-    const fans = [
-      `M ${xy(.506,.364)} C ${xy(.29,.26)} ${xy(.08,.36)} ${xy(-.035,1.42)} L ${xy(.72,1.42)} C ${xy(.68,.87)} ${xy(.605,.49)} ${xy(.506,.364)} Z`,
-      `M ${xy(.51,.375)} C ${xy(.385,.44)} ${xy(.23,.49)} ${xy(.11,1.42)} L ${xy(.84,1.42)} C ${xy(.765,.83)} ${xy(.615,.45)} ${xy(.51,.375)} Z`,
-      `M ${xy(.49,.375)} C ${xy(.385,.45)} ${xy(.235,.83)} ${xy(.16,1.42)} L ${xy(.89,1.42)} C ${xy(.77,.49)} ${xy(.615,.44)} ${xy(.49,.375)} Z`,
-      `M ${xy(.494,.364)} C ${xy(.395,.49)} ${xy(.32,.87)} ${xy(.28,1.42)} L ${xy(1.035,1.42)} C ${xy(.92,.36)} ${xy(.71,.26)} ${xy(.494,.364)} Z`
-    ];
-    fans.forEach((d,i)=>path(d,gradient('research-field-out-'+i,colors[i],false),'field-out'));
+    const colors = ['#4F92D2','#2B9FA3','#886FC6','#5D7A98'];
+    const cx = width / 2;
+    // A real shared waist, not a point. Desktop width stays within 120–180px.
+    const waist = Math.min(180, Math.max(120, width * .135), width * .4);
+    const mid = .48;
+    const xy = (x,y) => `${x.toFixed(2)} ${(top+y*height).toFixed(2)}`;
+    const fields = add('g', {class:'translucent-fields',opacity:'.16','data-waist-width':waist});
+    const rects = [...flow.querySelectorAll('.research-orb')].map(el=>el.getBoundingClientRect());
+    const singleRow = rects.every(r=>Math.abs(r.top-rects[0].top)<2);
+    // The lower footprints intentionally overlap several applications, never 1:1.
+    const feet = [[.45,1.025],[.24,.85],[.15,.76],[-.025,.55]];
+    colors.forEach((color,i) => {
+      const left = singleRow ? rects[i].left-box.left : width*i/4;
+      const right = singleRow ? rects[i].right-box.left : width*(i+1)/4;
+      const waistEdges = [[-.5,.22],[-.32,.43],[-.43,.32],[-.22,.5]][i];
+      const wl = cx+waist*waistEdges[0], wr = cx+waist*waistEdges[1];
+      const [fl,fr] = feet[i].map(x=>x*width);
+      // One continuous filled field from its source card, through the soft waist,
+      // into a broad lower lobe. Four complete geometries, no detached upper/lower pieces.
+      const d = `M ${xy(left,-.38)} L ${xy(right,-.38)}
+        C ${xy(right,.58)} ${xy(wr,mid-.12)} ${xy(wr,mid)}
+        C ${xy(wr,mid+.12)} ${xy(fr,.60)} ${xy(fr,1.43)}
+        L ${xy(fl,1.43)}
+        C ${xy(fl,.60)} ${xy(wl,mid+.12)} ${xy(wl,mid)}
+        C ${xy(wl,mid-.12)} ${xy(left,.58)} ${xy(left,-.38)} Z`;
+      const gradient = add('linearGradient',{id:'continuous-field-color-'+i,gradientUnits:'userSpaceOnUse',x1:0,x2:0,y1:top-.38*height,y2:top+1.43*height},defs);
+      // Group alpha .16: each field is 6–8% near its source, 8–10% in its body;
+      // all four overlapping at the waist yield 14.7% rather than an opaque center.
+      [[0,0],[.21,.45],[.36,.6],[.475,.47],[.66,.52],[.82,.34],[1,0]].forEach(([offset,opacity])=>
+        add('stop',{offset,'stop-color':color,'stop-opacity':opacity},gradient));
+      const feather = Math.min(28,width*.06);
+      const mask = add('mask',{id:'continuous-field-edge-'+i,maskUnits:'userSpaceOnUse',x:-feather,y:top-height*.5,width:width+feather*2,height:height*2.1,'mask-type':'luminance'},defs);
+      add('path',{d,style:'fill:white;stroke:none'},mask);
+      // Inward alpha feathering over 28px, built from nested mask strokes.
+      // No blur filter: the field interiors and broad curves remain defined.
+      const steps=28;
+      let previousAlpha=1;
+      for(let n=0;n<steps;n++) {
+        const alpha=Math.pow((steps-n-1)/steps,.1);
+        const attenuation=1-alpha/previousAlpha;
+        add('path',{d,style:`fill:none;stroke:black;stroke-width:${2*feather*(steps-n)/steps};stroke-opacity:${attenuation};stroke-linejoin:round`},mask);
+        previousAlpha=alpha;
+      }
+      add('path',{class:'flow-field',d,style:`fill:url(#continuous-field-color-${i});stroke:none`,mask:`url(#continuous-field-edge-${i})`},fields);
+    });
   };
   const schedule=()=>{cancelAnimationFrame(pending);pending=requestAnimationFrame(draw);};
   if ('ResizeObserver' in window) {

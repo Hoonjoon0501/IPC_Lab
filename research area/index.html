@@ -154,6 +154,19 @@
 .research .application-bridge {height:96px;}
 .research .convergence-hub {width:0;height:0;border:0;background:none;box-shadow:none;}
 .research .research-connections path {stroke:#a0adba;stroke-width:1.2;}
+
+/* Pastel ribbons link research to applications without a separate label or line. */
+.research .application-bridge { height:132px; }
+.research .research-connections { overflow:visible; filter:blur(5px); }
+.research .research-connections .flow-ribbon { stroke:none; }
+.research .research-orb { --field:#518fd0; background:rgba(255,255,255,.97); }
+.research .research-orb:nth-child(2) { --field:#2aa4aa; }
+.research .research-orb:nth-child(3) { --field:#9073cc; }
+.research .research-orb:nth-child(4) { --field:#627f9a; }
+.research .research-orb::before { font-size:14px; }
+.research .research-intro { font-size:17px; line-height:1.65; }
+@media (max-width:1050px) { .research .application-bridge { height:116px; } }
+@media (max-width:560px) { .research .application-bridge { height:92px; } }
 </style>
 </head>
 
@@ -393,11 +406,11 @@
 
 
 <script>
-// Measure real card edges so every connector stays attached after wrapping or resizing.
+// Soft ribbons meet between the two groups; dimensions follow the rendered cards.
 (() => {
   const flow = document.querySelector('.research-flow');
   const svg = flow.querySelector('.research-connections');
-  const hub = flow.querySelector('.convergence-hub');
+  const bridge = flow.querySelector('.application-bridge');
   const research = [...flow.querySelectorAll('.research-orb')];
   const applications = [...flow.querySelectorAll('.application-card')];
   const ns = 'http://www.w3.org/2000/svg';
@@ -405,64 +418,51 @@
   const draw = () => {
     const box = flow.getBoundingClientRect();
     if (!box.width) return;
+    const rect = el => { const r = el.getBoundingClientRect(); return {x:r.left-box.left,y:r.top-box.top,w:r.width,h:r.height}; };
+    const gap = rect(bridge), cx = box.width / 2;
+    const top = gap.y, bottom = gap.y + gap.h, center = top + gap.h * .42;
     svg.setAttribute('viewBox', `0 0 ${box.width} ${box.height}`);
     svg.replaceChildren();
-    const rect = el => { const r = el.getBoundingClientRect(); return {x:r.left-box.left,y:r.top-box.top,w:r.width,h:r.height}; };
-    const h = rect(hub), cx = h.x+h.w/2;
-    const add = (tag,attrs) => {const e=document.createElementNS(ns,tag); for(const [k,v] of Object.entries(attrs)) e.setAttribute(k,v); svg.append(e);};
-    
-    const path = d => add('path',{d});
-    const node = () => {};
-    const connect = (els,incoming) => {
-      const rs=els.map(rect);
-      const singleRow=rs.every(r=>Math.abs(r.y-rs[0].y)<2);
-      const hy=incoming?h.y:h.y+h.h;
-      if(singleRow) {
-        const xs=rs.map(r=>r.x+r.w/2);
-        const y=incoming?rs[0].y+rs[0].h:rs[0].y;
-        const bus=(y+hy)/2, radius=Math.min(9,Math.abs(y-bus)/2);
-        const side=incoming?-1:1, left=xs[0], right=xs[xs.length-1];
-        // One shared bus, with rounded outer corners and no overlapping curves.
-        path(`M ${left} ${y} V ${bus+side*radius} Q ${left} ${bus} ${left+radius} ${bus} H ${right-radius} Q ${right} ${bus} ${right} ${bus+side*radius} V ${y}`);
-        xs.slice(1,-1).forEach(x=>path(`M ${x} ${y} V ${bus}`));
-        path(`M ${cx} ${bus} V ${hy}`);
-        xs.forEach(x=>node(x,y));
-      } else {
-        // Collect wrapped rows along outer gutters, never through a card or its text.
-        const left=Math.min(...rs.map(r=>r.x))-12;
-        const right=Math.max(...rs.map(r=>r.x+r.w))+12;
-        const joint=incoming?hy-25:hy+25;
-        const groups={left:[],right:[]};
-        rs.forEach(r=>groups[r.x+r.w/2<=box.width/2+2?'left':'right'].push(r));
-        Object.entries(groups).forEach(([side,items])=>{
-          if(!items.length)return;
-          const rail=side==='left'?left:right;
-          const ys=items.map(r=>r.y+r.h/2);
-          const far=incoming?Math.min(...ys):Math.max(...ys);
-          const dir=side==='left'?1:-1, radius=8, approach=incoming?-1:1;
-          path(`M ${rail} ${far} V ${joint+approach*radius} Q ${rail} ${joint} ${rail+dir*radius} ${joint} H ${cx-dir*radius} Q ${cx} ${joint} ${cx} ${joint-approach*radius} V ${hy}`);
-          items.forEach(r=>{const x=side==='left'?r.x:r.x+r.w,y=r.y+r.h/2;path(`M ${x} ${y} H ${rail}`);node(x,y);});
-        });
-      }
+    const add = (tag, attrs, parent = svg) => {
+      const el = document.createElementNS(ns, tag);
+      for (const [key, value] of Object.entries(attrs)) el.setAttribute(key, value);
+      parent.append(el); return el;
     };
-    const upper=research.map(rect), lower=applications.map(rect);
-    const oneRow=rs=>rs.every(r=>Math.abs(r.y-rs[0].y)<2);
-    if(oneRow(upper)&&oneRow(lower)) {
-      // A single shared spine connects all four disciplines to all five applications.
-      const upperY=upper[0].y+upper[0].h, lowerY=lower[0].y;
-      const busY=(upperY+lowerY)/2;
-      const xs=lower.map(r=>r.x+r.w/2), left=xs[0], right=xs[xs.length-1], radius=8;
-      path(`M ${left} ${lowerY} V ${busY+radius} Q ${left} ${busY} ${left+radius} ${busY} H ${right-radius} Q ${right} ${busY} ${right} ${busY+radius} V ${lowerY}`);
-      upper.forEach(r=>{const x=r.x+r.w/2;path(`M ${x} ${upperY} V ${busY}`);});
-      xs.slice(1,-1).forEach(x=>path(`M ${x} ${busY} V ${lowerY}`));
-    } else {
-      connect(research,true);connect(applications,false);
-    }
+    const defs = add('defs', {});
+    const colors = ['#86bdf4', '#77dce1', '#b7a4f0', '#a0bff0'];
+    const gradient = (id, color, y1, y2) => {
+      const g = add('linearGradient', {id, gradientUnits:'userSpaceOnUse', x1:0, y1, x2:0, y2}, defs);
+      [[0,0],[.24,.14],[.66,.27],[1,.09]].forEach(([offset, opacity]) =>
+        add('stop', {offset, 'stop-color':color, 'stop-opacity':opacity}, g));
+      return `url(#${id})`;
+    };
+    const halo = add('radialGradient', {id:'research-flow-halo'}, defs);
+    [[0,.16],[.48,.08],[1,0]].forEach(([offset,opacity])=>add('stop',{offset,'stop-color':'#a7b8ef','stop-opacity':opacity},halo));
+    add('ellipse', {cx, cy:center, rx:box.width*.43, ry:gap.h*.91, fill:'url(#research-flow-halo)'});
+    // With wrapped grids the background connects the two groups in their shared gap.
+    // Keeping it out of individual rows protects text contrast and touch targets.
+    const spans = (elements, count) => {
+      const rs = elements.map(rect);
+      if (rs.every(r => Math.abs(r.y-rs[0].y)<2)) return rs;
+      const width = box.width/count;
+      return Array.from({length:count}, (_, i) => ({x:i*width+8,w:width-16}));
+    };
+    spans(research,4).forEach((r,i) => {
+      const left=r.x-6, right=r.x+r.w+6, start=top-44;
+      const d=`M ${left} ${start} L ${right} ${start} C ${right} ${center+14} ${cx+72} ${center+24} ${cx} ${center} C ${cx-72} ${center+24} ${left} ${center+14} ${left} ${start} Z`;
+      add('path', {class:'flow-ribbon',d,style:`fill:${gradient('research-in-'+i,colors[i],start,center+12)};stroke:none`});
+    });
+    spans(applications,5).forEach((r,i) => {
+      const left=r.x-6, right=r.x+r.w+6, end=bottom+38;
+      const d=`M ${cx} ${center} C ${cx-72} ${center-18} ${left} ${center+12} ${left} ${end} L ${right} ${end} C ${right} ${center+12} ${cx+72} ${center-18} ${cx} ${center} Z`;
+      const color=['#99ccf4','#8bdbe3','#9fbbf3','#b9aaf0','#a6c8f1'][i];
+      add('path', {class:'flow-ribbon',d,style:`fill:${gradient('research-out-'+i,color,end,center-8)};stroke:none`});
+    });
   };
   const schedule=()=>{cancelAnimationFrame(pending);pending=requestAnimationFrame(draw);};
-  if('ResizeObserver' in window) {
+  if ('ResizeObserver' in window) {
     const observer=new ResizeObserver(schedule);
-    [flow,hub,...research,...applications].forEach(el=>observer.observe(el));
+    [flow,bridge,...research,...applications].forEach(el=>observer.observe(el));
   }
   window.addEventListener('resize',schedule);
   window.addEventListener('load',schedule);

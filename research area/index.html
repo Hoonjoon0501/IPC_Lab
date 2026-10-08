@@ -157,7 +157,7 @@
 
 /* Pastel ribbons link research to applications without a separate label or line. */
 .research .application-bridge { height:132px; }
-.research .research-connections { overflow:visible; filter:blur(5px); }
+.research .research-connections { overflow:visible; filter:none; }
 .research .research-connections .flow-ribbon { stroke:none; }
 .research .research-orb { --field:#518fd0; background:rgba(255,255,255,.97); }
 .research .research-orb:nth-child(2) { --field:#2aa4aa; }
@@ -414,22 +414,18 @@
 
 
 <script>
-// Soft ribbons meet between the two groups; dimensions follow the rendered cards.
+// Geometry follows the reference: four broad fields, one waist, then a shared fan.
 (() => {
   const flow = document.querySelector('.research-flow');
   const svg = flow.querySelector('.research-connections');
   const bridge = flow.querySelector('.application-bridge');
-  const research = [...flow.querySelectorAll('.research-orb')];
-  const applications = [...flow.querySelectorAll('.application-card')];
   const ns = 'http://www.w3.org/2000/svg';
   let pending;
   const draw = () => {
-    const box = flow.getBoundingClientRect();
-    if (!box.width) return;
-    const rect = el => { const r = el.getBoundingClientRect(); return {x:r.left-box.left,y:r.top-box.top,w:r.width,h:r.height}; };
-    const gap = rect(bridge), cx = box.width / 2;
-    const top = gap.y, bottom = gap.y + gap.h, center = top + gap.h * .42;
-    svg.setAttribute('viewBox', `0 0 ${box.width} ${box.height}`);
+    const box = flow.getBoundingClientRect(), gap = bridge.getBoundingClientRect();
+    if (!box.width || !gap.height) return;
+    const width = box.width, top = gap.top-box.top, height = gap.height;
+    svg.setAttribute('viewBox', `0 0 ${width} ${box.height}`);
     svg.replaceChildren();
     const add = (tag, attrs, parent = svg) => {
       const el = document.createElementNS(ns, tag);
@@ -437,40 +433,44 @@
       parent.append(el); return el;
     };
     const defs = add('defs', {});
-    const colors = ['#86bdf4', '#77dce1', '#b7a4f0', '#a0bff0'];
-    const gradient = (id, color, y1, y2) => {
-      const g = add('linearGradient', {id, gradientUnits:'userSpaceOnUse', x1:0, y1, x2:0, y2}, defs);
-      [[0,0],[.24,.14],[.66,.27],[1,.09]].forEach(([offset, opacity]) =>
-        add('stop', {offset, 'stop-color':color, 'stop-opacity':opacity}, g));
+    // Subpixel feathering only. The visible contours come from the filled paths.
+    const feather = add('filter', {id:'field-edge-feather',x:'-5%',y:'-5%',width:'110%',height:'110%', 'color-interpolation-filters':'sRGB'}, defs);
+    add('feGaussianBlur', {stdDeviation:'.65'}, feather);
+    const colors = ['#7db6f2','#64cad8','#a792ec','#88acd7'];
+    const gradient = (id, color, incoming) => {
+      const g = add('linearGradient', {id,gradientUnits:'userSpaceOnUse',x1:0,x2:0,y1:top+height*(incoming?-.46:.34),y2:top+height*(incoming?.63:1.42)},defs);
+      const stops = incoming ? [[0,0],[.25,.22],[.58,.58],[.79,.42],[1,.16]] : [[0,.34],[.26,.53],[.63,.30],[1,0]];
+      stops.forEach(([offset, opacity]) => add('stop', {offset,'stop-color':color,'stop-opacity':opacity},g));
       return `url(#${id})`;
     };
-    const halo = add('radialGradient', {id:'research-flow-halo'}, defs);
-    [[0,.16],[.48,.08],[1,0]].forEach(([offset,opacity])=>add('stop',{offset,'stop-color':'#a7b8ef','stop-opacity':opacity},halo));
-    add('ellipse', {cx, cy:center, rx:box.width*.43, ry:gap.h*.91, fill:'url(#research-flow-halo)'});
-    // With wrapped grids the background connects the two groups in their shared gap.
-    // Keeping it out of individual rows protects text contrast and touch targets.
-    const spans = (elements, count) => {
-      const rs = elements.map(rect);
-      if (rs.every(r => Math.abs(r.y-rs[0].y)<2)) return rs;
-      const width = box.width/count;
-      return Array.from({length:count}, (_, i) => ({x:i*width+8,w:width-16}));
-    };
-    spans(research,4).forEach((r,i) => {
-      const left=r.x-6, right=r.x+r.w+6, start=top-44;
-      const d=`M ${left} ${start} L ${right} ${start} C ${right} ${center+14} ${cx+72} ${center+24} ${cx} ${center} C ${cx-72} ${center+24} ${left} ${center+14} ${left} ${start} Z`;
-      add('path', {class:'flow-ribbon',d,style:`fill:${gradient('research-in-'+i,colors[i],start,center+12)};stroke:none`});
-    });
-    spans(applications,5).forEach((r,i) => {
-      const left=r.x-6, right=r.x+r.w+6, end=bottom+38;
-      const d=`M ${cx} ${center} C ${cx-72} ${center-18} ${left} ${center+12} ${left} ${end} L ${right} ${end} C ${right} ${center+12} ${cx+72} ${center-18} ${cx} ${center} Z`;
-      const color=['#99ccf4','#8bdbe3','#9fbbf3','#b9aaf0','#a6c8f1'][i];
-      add('path', {class:'flow-ribbon',d,style:`fill:${gradient('research-out-'+i,color,end,center-8)};stroke:none`});
-    });
+    // A single compositing group caps total overlap alpha at 20%.
+    // Each visible field is normally 5–12%; there is no separate center glow.
+    const fields = add('g', {class:'translucent-fields',opacity:'.2'});
+    const xy = (x,y) => `${(x*width).toFixed(2)} ${(top+y*height).toFixed(2)}`;
+    const path = (d, fill, kind) => add('path', {class:`flow-field ${kind}`,d,style:`fill:${fill};stroke:none`,filter:'url(#field-edge-feather)'},fields);
+    // Upper lobes use broad elliptical sweeps, matching the reference's shallow bowl
+    // under each card. All arrive at the same narrow region near x=50%, y=37%.
+    const upper = [
+      `M ${xy(-.015,-.46)} L ${xy(.285,-.46)} C ${xy(.31,.13)} ${xy(.432,.27)} ${xy(.512,.37)} C ${xy(.382,.56)} ${xy(.113,.25)} ${xy(-.015,-.46)} Z`,
+      `M ${xy(.225,-.46)} L ${xy(.51,-.46)} C ${xy(.519,.025)} ${xy(.518,.255)} ${xy(.509,.372)} C ${xy(.43,.555)} ${xy(.273,.64)} ${xy(.225,-.46)} Z`,
+      `M ${xy(.49,-.46)} L ${xy(.775,-.46)} C ${xy(.727,.64)} ${xy(.57,.555)} ${xy(.491,.372)} C ${xy(.482,.255)} ${xy(.481,.025)} ${xy(.49,-.46)} Z`,
+      `M ${xy(.715,-.46)} L ${xy(1.015,-.46)} C ${xy(.887,.25)} ${xy(.618,.56)} ${xy(.488,.37)} C ${xy(.568,.27)} ${xy(.69,.13)} ${xy(.715,-.46)} Z`
+    ];
+    upper.forEach((d,i)=>path(d,gradient('research-field-in-'+i,colors[i],true),'field-in'));
+    // Overlapping fans cover the applications as a whole; no endpoints are attached
+    // to an individual application, even when the cards wrap onto multiple rows.
+    const fans = [
+      `M ${xy(.506,.364)} C ${xy(.29,.26)} ${xy(.08,.36)} ${xy(-.035,1.42)} L ${xy(.72,1.42)} C ${xy(.68,.87)} ${xy(.605,.49)} ${xy(.506,.364)} Z`,
+      `M ${xy(.51,.375)} C ${xy(.385,.44)} ${xy(.23,.49)} ${xy(.11,1.42)} L ${xy(.84,1.42)} C ${xy(.765,.83)} ${xy(.615,.45)} ${xy(.51,.375)} Z`,
+      `M ${xy(.49,.375)} C ${xy(.385,.45)} ${xy(.235,.83)} ${xy(.16,1.42)} L ${xy(.89,1.42)} C ${xy(.77,.49)} ${xy(.615,.44)} ${xy(.49,.375)} Z`,
+      `M ${xy(.494,.364)} C ${xy(.395,.49)} ${xy(.32,.87)} ${xy(.28,1.42)} L ${xy(1.035,1.42)} C ${xy(.92,.36)} ${xy(.71,.26)} ${xy(.494,.364)} Z`
+    ];
+    fans.forEach((d,i)=>path(d,gradient('research-field-out-'+i,colors[i],false),'field-out'));
   };
   const schedule=()=>{cancelAnimationFrame(pending);pending=requestAnimationFrame(draw);};
   if ('ResizeObserver' in window) {
     const observer=new ResizeObserver(schedule);
-    [flow,bridge,...research,...applications].forEach(el=>observer.observe(el));
+    [flow,bridge].forEach(el=>observer.observe(el));
   }
   window.addEventListener('resize',schedule);
   window.addEventListener('load',schedule);

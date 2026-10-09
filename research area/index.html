@@ -438,20 +438,20 @@
     svg.cleanupResearchConnections?.();
     const NS = "http://www.w3.org/2000/svg";
     const uid = `research-fields-${Math.random().toString(36).slice(2, 10)}`;
-    const colors = ["#7DBAF2", "#73D8D8", "#A99AF0", "#91B0CC"];
-    const fillOpacity = 0.11;
-    const feather = 4;
+    const colors = ["#6FB5F3", "#63D3D2", "#9B86EE", "#86A7C7"];
+    const opacities = [0.11, 0.12, 0.12, 0.10];
+    const feather = 3.5;
     const overlapRanges = [
       [-0.52, 0.18], [-0.36, 0.38],
       [-0.38, 0.36], [-0.18, 0.52]
     ];
     const feet = [
-      [0.26, 1.02], [0.10, 0.92],
-      [0.08, 0.90], [-0.02, 0.74]
+      [0.22, 1.04], [0.06, 0.96],
+      [0.04, 0.94], [-0.04, 0.78]
     ];
     const stops = [
-      [0.00, 0.00], [0.15, 0.35], [0.30, 0.75],
-      [0.50, 1.00], [0.70, 0.72], [0.88, 0.25], [1.00, 0.00]
+      [0.00, 0.00], [0.10, 0.38], [0.22, 0.72],
+      [0.42, 1.00], [0.62, 0.82], [0.82, 0.36], [1.00, 0.00]
     ];
     let frame = 0;
     let observer;
@@ -469,7 +469,7 @@
     function makeBoundary(start, middle, end) {
       const firstHeight = middle.y - start.y;
       const secondHeight = end.y - middle.y;
-      const startSlope = ((middle.x - start.x) / firstHeight) * 0.55;
+      const startSlope = ((middle.x - start.x) / firstHeight) * 0.45;
       const middleSlope = ((end.x - start.x) / (end.y - start.y)) * 0.65;
       const endSlope = ((end.x - middle.x) / secondHeight) * 0.55;
       return [
@@ -496,10 +496,14 @@
       const height = gap.height;
       const top = gap.top - bounds.top;
       const cx = width / 2;
-      const sharedWidth = Math.min(420, width * 0.38);
+      const sharedWidth = Math.min(520, width * 0.48);
       const startY = -0.14;
       const middleY = 0.50;
       const endY = 1.14;
+      // Keep each source color visible immediately below its card without changing layout.
+      const sourceColorZone = Math.min(35, height * 0.30);
+      const gradientStart = top - sourceColorZone;
+      const gradientEnd = top + endY * height;
       const rects = cards.map(card => card.getBoundingClientRect());
       const singleRow = rects.every(rect => Math.abs(rect.top - rects[0].top) < 2);
       const point = p => `${p.x.toFixed(2)} ${(top + p.y * height).toFixed(2)}`;
@@ -518,7 +522,7 @@
           ? { left: rects[index].left - bounds.left, width: rects[index].width }
           : { left: width * index / 4, width: width / 4 };
         const sourceCenter = card.left + card.width / 2;
-        const sourceHalfWidth = card.width * 0.42;
+        const sourceHalfWidth = card.width * 0.46;
         const sourceLeft = sourceCenter - sourceHalfWidth;
         const sourceRight = sourceCenter + sourceHalfWidth;
         const overlapLeft = cx + sharedWidth * overlapRanges[index][0];
@@ -549,17 +553,17 @@
         const maskId = `${uid}-edge-${index}`;
         const gradient = add("linearGradient", {
           id: gradientId, gradientUnits: "userSpaceOnUse", x1: 0, x2: 0,
-          y1: top + startY * height, y2: top + endY * height,
+          y1: gradientStart, y2: gradientEnd,
           "color-interpolation": "sRGB"
         }, defs);
         stops.forEach(([offset, opacity]) => {
           add("stop", { offset, "stop-color": color, "stop-opacity": opacity }, gradient);
         });
-        // The mask preserves the interior and feathers only the inner 4px edge.
+        // Preserve the interior; feather only the inner 3.5px edge.
         const mask = add("mask", {
           id: maskId, maskUnits: "userSpaceOnUse", maskContentUnits: "userSpaceOnUse",
-          x: -feather, y: top + startY * height - feather,
-          width: width + feather * 2,
+          x: -width * 0.04 - feather, y: top + startY * height - feather,
+          width: width * 1.08 + feather * 2,
           height: (endY - startY) * height + feather * 2,
           style: "mask-type:luminance"
         }, defs);
@@ -579,8 +583,8 @@
           previousAlpha = alpha;
         }
         add("path", {
-          class: "flow-field", d, "fill-opacity": fillOpacity, mask: `url(#${maskId})`,
-          style: [`fill:url(#${gradientId})`, `fill-opacity:${fillOpacity}`, "opacity:1",
+          class: "flow-field", d, "fill-opacity": opacities[index], mask: `url(#${maskId})`,
+          style: [`fill:url(#${gradientId})`, `fill-opacity:${opacities[index]}`, "opacity:1",
             "stroke:none", "filter:none", "mix-blend-mode:normal"].join(";")
         }, fields);
       });

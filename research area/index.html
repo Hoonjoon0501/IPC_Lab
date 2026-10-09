@@ -175,6 +175,17 @@
  .research .research-orb { grid-template-rows:165px auto 1fr; }
  .research .research-orb .research-art { height:165px; }
 }
+
+/* Color compositing only: existing geometry and spacing remain unchanged. */
+.research-flow > .research-connections {
+  opacity: 1; filter: none; mix-blend-mode: normal; color-interpolation: sRGB;
+}
+.research-flow .research-connections .translucent-fields {
+  opacity: 1; filter: none; mix-blend-mode: normal;
+}
+.research-flow .research-connections .flow-field {
+  stroke: none; filter: none; mix-blend-mode: normal;
+}
 </style>
 </head>
 
@@ -433,13 +444,13 @@
       parent.append(el); return el;
     };
     const defs = add('defs', {});
-    const colors = ['#4F92D2','#2B9FA3','#886FC6','#5D7A98'];
+    const colors = ['#7DBAF2','#73D8D8','#A99AF0','#91B0CC'];
     const cx = width / 2;
     // A real shared waist, not a point. Desktop width stays within 120–180px.
     const waist = Math.min(180, Math.max(120, width * .135), width * .4);
     const mid = .48;
     const xy = (x,y) => `${x.toFixed(2)} ${(top+y*height).toFixed(2)}`;
-    const fields = add('g', {class:'translucent-fields',opacity:'.16','data-waist-width':waist});
+    const fields = add('g', {class:'translucent-fields','data-waist-width':waist,style:'opacity:1;filter:none;mix-blend-mode:normal'});
     const rects = [...flow.querySelectorAll('.research-orb')].map(el=>el.getBoundingClientRect());
     const singleRow = rects.every(r=>Math.abs(r.top-rects[0].top)<2);
     // The lower footprints intentionally overlap several applications, never 1:1.
@@ -459,9 +470,9 @@
         C ${xy(fl,.60)} ${xy(wl,mid+.12)} ${xy(wl,mid)}
         C ${xy(wl,mid-.12)} ${xy(left,.58)} ${xy(left,-.38)} Z`;
       const gradient = add('linearGradient',{id:'continuous-field-color-'+i,gradientUnits:'userSpaceOnUse',x1:0,x2:0,y1:top-.38*height,y2:top+1.43*height},defs);
-      // Group alpha .16: each field is 6–8% near its source, 8–10% in its body;
-      // all four overlapping at the waist yield 14.7% rather than an opaque center.
-      [[0,0],[.21,.45],[.36,.6],[.475,.47],[.66,.52],[.82,.34],[1,0]].forEach(([offset,opacity])=>
+      // Each path composites independently at 16% opacity.
+      // Gradient opacity peaks at 1; the mask only feathers the edges.
+      [[0,0],[.15,.55],[.30,.82],[.50,1],[.68,.78],[.85,.38],[1,0]].forEach(([offset,opacity])=>
         add('stop',{offset,'stop-color':color,'stop-opacity':opacity},gradient));
       const feather = Math.min(28,width*.06);
       const mask = add('mask',{id:'continuous-field-edge-'+i,maskUnits:'userSpaceOnUse',x:-feather,y:top-height*.5,width:width+feather*2,height:height*2.1,'mask-type':'luminance'},defs);
@@ -476,7 +487,7 @@
         add('path',{d,style:`fill:none;stroke:black;stroke-width:${2*feather*(steps-n)/steps};stroke-opacity:${attenuation};stroke-linejoin:round`},mask);
         previousAlpha=alpha;
       }
-      add('path',{class:'flow-field',d,style:`fill:url(#continuous-field-color-${i});stroke:none`,mask:`url(#continuous-field-edge-${i})`},fields);
+      add('path',{class:'flow-field',d,opacity:'.16',style:`fill:url(#continuous-field-color-${i});opacity:.16;stroke:none;filter:none;mix-blend-mode:normal`,mask:`url(#continuous-field-edge-${i})`},fields);
     });
   };
   const schedule=()=>{cancelAnimationFrame(pending);pending=requestAnimationFrame(draw);};

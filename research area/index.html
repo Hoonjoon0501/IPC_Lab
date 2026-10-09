@@ -176,15 +176,17 @@
  .research .research-orb .research-art { height:165px; }
 }
 
-/* Color compositing only: existing geometry and spacing remain unchanged. */
+/* Connection graphic only; preserve all existing layout dimensions. */
+.research-flow { position:relative; isolation:isolate; }
 .research-flow > .research-connections {
-  opacity: 1; filter: none; mix-blend-mode: normal; color-interpolation: sRGB;
+  position:absolute; inset:0; width:100%; height:100%; z-index:0;
+  overflow:visible; pointer-events:none; opacity:1; filter:none;
+  mix-blend-mode:normal; color-interpolation:sRGB;
 }
-.research-flow .research-connections .translucent-fields {
-  opacity: 1; filter: none; mix-blend-mode: normal;
-}
+.research-flow > .research-areas,
+.research-flow > .applications { position:relative; z-index:1; }
 .research-flow .research-connections .flow-field {
-  stroke: none; filter: none; mix-blend-mode: normal;
+  stroke:none; filter:none; mix-blend-mode:normal;
 }
 </style>
 </head>
@@ -425,80 +427,157 @@
 
 
 <script>
-// Reference geometry: exactly four continuous fields cross through a broad shared waist.
 (() => {
-  const flow = document.querySelector('.research-flow');
-  const svg = flow.querySelector('.research-connections');
-  const bridge = flow.querySelector('.application-bridge');
-  const ns = 'http://www.w3.org/2000/svg';
-  let pending;
-  const draw = () => {
-    const box = flow.getBoundingClientRect(), gap = bridge.getBoundingClientRect();
-    if (!box.width || !gap.height) return;
-    const width = box.width, top = gap.top-box.top, height = gap.height;
-    svg.setAttribute('viewBox', `0 0 ${width} ${box.height}`);
-    svg.replaceChildren();
-    const add = (tag, attrs, parent = svg) => {
-      const el = document.createElementNS(ns, tag);
-      for (const [key, value] of Object.entries(attrs)) el.setAttribute(key, value);
-      parent.append(el); return el;
-    };
-    const defs = add('defs', {});
-    const colors = ['#7DBAF2','#73D8D8','#A99AF0','#91B0CC'];
-    const cx = width / 2;
-    // A real shared waist, not a point. Desktop width stays within 120–180px.
-    const waist = Math.min(180, Math.max(120, width * .135), width * .4);
-    const mid = .48;
-    const xy = (x,y) => `${x.toFixed(2)} ${(top+y*height).toFixed(2)}`;
-    const fields = add('g', {class:'translucent-fields','data-waist-width':waist,style:'opacity:1;filter:none;mix-blend-mode:normal'});
-    const rects = [...flow.querySelectorAll('.research-orb')].map(el=>el.getBoundingClientRect());
-    const singleRow = rects.every(r=>Math.abs(r.top-rects[0].top)<2);
-    // The lower footprints intentionally overlap several applications, never 1:1.
-    const feet = [[.45,1.025],[.24,.85],[.15,.76],[-.025,.55]];
-    colors.forEach((color,i) => {
-      const left = singleRow ? rects[i].left-box.left : width*i/4;
-      const right = singleRow ? rects[i].right-box.left : width*(i+1)/4;
-      const waistEdges = [[-.5,.22],[-.32,.43],[-.43,.32],[-.22,.5]][i];
-      const wl = cx+waist*waistEdges[0], wr = cx+waist*waistEdges[1];
-      const [fl,fr] = feet[i].map(x=>x*width);
-      // One continuous filled field from its source card, through the soft waist,
-      // into a broad lower lobe. Four complete geometries, no detached upper/lower pieces.
-      const d = `M ${xy(left,-.38)} L ${xy(right,-.38)}
-        C ${xy(right,.58)} ${xy(wr,mid-.12)} ${xy(wr,mid)}
-        C ${xy(wr,mid+.12)} ${xy(fr,.60)} ${xy(fr,1.43)}
-        L ${xy(fl,1.43)}
-        C ${xy(fl,.60)} ${xy(wl,mid+.12)} ${xy(wl,mid)}
-        C ${xy(wl,mid-.12)} ${xy(left,.58)} ${xy(left,-.38)} Z`;
-      const gradient = add('linearGradient',{id:'continuous-field-color-'+i,gradientUnits:'userSpaceOnUse',x1:0,x2:0,y1:top-.38*height,y2:top+1.43*height},defs);
-      // Each path composites independently at 16% opacity.
-      // Gradient opacity peaks at 1; the mask only feathers the edges.
-      [[0,0],[.15,.55],[.30,.82],[.50,1],[.68,.78],[.85,.38],[1,0]].forEach(([offset,opacity])=>
-        add('stop',{offset,'stop-color':color,'stop-opacity':opacity},gradient));
-      const feather = Math.min(28,width*.06);
-      const mask = add('mask',{id:'continuous-field-edge-'+i,maskUnits:'userSpaceOnUse',x:-feather,y:top-height*.5,width:width+feather*2,height:height*2.1,'mask-type':'luminance'},defs);
-      add('path',{d,style:'fill:white;stroke:none'},mask);
-      // Inward alpha feathering over 28px, built from nested mask strokes.
-      // No blur filter: the field interiors and broad curves remain defined.
-      const steps=28;
-      let previousAlpha=1;
-      for(let n=0;n<steps;n++) {
-        const alpha=Math.pow((steps-n-1)/steps,.1);
-        const attenuation=1-alpha/previousAlpha;
-        add('path',{d,style:`fill:none;stroke:black;stroke-width:${2*feather*(steps-n)/steps};stroke-opacity:${attenuation};stroke-linejoin:round`},mask);
-        previousAlpha=alpha;
+  function initResearchConnections() {
+    const flow = document.querySelector(".research-flow");
+    if (!flow) return;
+    const svg = flow.querySelector(".research-connections");
+    const bridge = flow.querySelector(".application-bridge");
+    const cards = [...flow.querySelectorAll(".research-orb")];
+    if (!svg || !bridge || cards.length !== 4) return;
+    svg.cleanupResearchConnections?.();
+    const NS = "http://www.w3.org/2000/svg";
+    const uid = `research-flow-${Math.random().toString(36).slice(2, 10)}`;
+    const colors = ["#7DBAF2", "#73D8D8", "#A99AF0", "#91B0CC"];
+    const pathOpacity = 0.17;
+    const sourceRatio = 0.74;
+    const feather = 5;
+    const waistRanges = [
+      [-0.50, 0.18], [-0.32, 0.38],
+      [-0.38, 0.32], [-0.18, 0.50]
+    ];
+    const feet = [
+      [0.30, 1.02], [0.12, 0.90],
+      [0.10, 0.88], [-0.02, 0.70]
+    ];
+    const stops = [
+      [0.00, 0.00], [0.15, 0.55], [0.30, 0.82],
+      [0.50, 1.00], [0.68, 0.78], [0.85, 0.38], [1.00, 0.00]
+    ];
+    let frame = 0;
+    let observer;
+    let disposed = false;
+    function add(tag, attributes, parent = svg) {
+      const element = document.createElementNS(NS, tag);
+      for (const [name, value] of Object.entries(attributes)) {
+        element.setAttribute(name, String(value));
       }
-      add('path',{class:'flow-field',d,opacity:'.16',style:`fill:url(#continuous-field-color-${i});opacity:.16;stroke:none;filter:none;mix-blend-mode:normal`,mask:`url(#continuous-field-edge-${i})`},fields);
-    });
-  };
-  const schedule=()=>{cancelAnimationFrame(pending);pending=requestAnimationFrame(draw);};
-  if ('ResizeObserver' in window) {
-    const observer=new ResizeObserver(schedule);
-    [flow,bridge].forEach(el=>observer.observe(el));
+      parent.appendChild(element);
+      return element;
+    }
+    function draw() {
+      if (disposed) return;
+      const bounds = flow.getBoundingClientRect();
+      const gap = bridge.getBoundingClientRect();
+      if (!bounds.width || !bounds.height || !gap.height) return;
+      const width = bounds.width;
+      const top = gap.top - bounds.top;
+      const height = gap.height;
+      const cx = width / 2;
+      // Overall span of the four overlapping fields, never a single point.
+      const sharedWidth = Math.min(300, width * 0.27);
+      const mid = 0.50;
+      const startY = -0.14;
+      const endY = 1.14;
+      const rects = cards.map(card => card.getBoundingClientRect());
+      const singleRow = rects.every(rect => Math.abs(rect.top - rects[0].top) < 2);
+      const xy = (x, y) => `${x.toFixed(2)} ${(top + y * height).toFixed(2)}`;
+      svg.setAttribute("viewBox", `0 0 ${width} ${bounds.height}`);
+      svg.setAttribute("aria-hidden", "true");
+      svg.setAttribute("focusable", "false");
+      svg.setAttribute("color-interpolation", "sRGB");
+      svg.replaceChildren();
+      const defs = add("defs", {});
+      // No group opacity: the four paths composite independently.
+      const fields = add("g", { class: "translucent-fields" });
+      colors.forEach((color, index) => {
+        const cardLeft = singleRow
+          ? rects[index].left - bounds.left : width * index / 4;
+        const cardWidth = singleRow ? rects[index].width : width / 4;
+        const sourceCenter = cardLeft + cardWidth / 2;
+        const sourceWidth = cardWidth * sourceRatio;
+        const left = sourceCenter - sourceWidth / 2;
+        const right = sourceCenter + sourceWidth / 2;
+        const wl = cx + sharedWidth * waistRanges[index][0];
+        const wr = cx + sharedWidth * waistRanges[index][1];
+        const fl = width * feet[index][0];
+        const fr = width * feet[index][1];
+        const d = `
+          M ${xy(left, startY)}
+          L ${xy(right, startY)}
+          C ${xy(right, 0.14)} ${xy(wr, 0.28)} ${xy(wr, mid)}
+          C ${xy(wr, 0.72)} ${xy(fr, 0.80)} ${xy(fr, endY)}
+          L ${xy(fl, endY)}
+          C ${xy(fl, 0.80)} ${xy(wl, 0.72)} ${xy(wl, mid)}
+          C ${xy(wl, 0.28)} ${xy(left, 0.14)} ${xy(left, startY)}
+          Z
+        `;
+        const gradientId = `${uid}-color-${index}`;
+        const maskId = `${uid}-edge-${index}`;
+        const gradient = add("linearGradient", {
+          id: gradientId, gradientUnits: "userSpaceOnUse", x1: 0, x2: 0,
+          y1: top + startY * height, y2: top + endY * height,
+          "color-interpolation": "sRGB"
+        }, defs);
+        stops.forEach(([offset, opacity]) => {
+          add("stop", { offset, "stop-color": color, "stop-opacity": opacity }, gradient);
+        });
+        // The interior is fully opaque in the mask; only a 5px edge is feathered.
+        const mask = add("mask", {
+          id: maskId, maskUnits: "userSpaceOnUse", maskContentUnits: "userSpaceOnUse",
+          x: -feather, y: top + startY * height - feather,
+          width: width + feather * 2,
+          height: (endY - startY) * height + feather * 2,
+          style: "mask-type:luminance"
+        }, defs);
+        add("path", { d, style: "fill:white;stroke:none;opacity:1" }, mask);
+        const steps = 12;
+        let previousAlpha = 1;
+        for (let step = 0; step < steps; step++) {
+          const alpha = (steps - step - 1) / steps;
+          const attenuation = 1 - alpha / previousAlpha;
+          const strokeWidth = 2 * feather * (steps - step) / steps;
+          add("path", {
+            d,
+            style: ["fill:none", "stroke:black", `stroke-width:${strokeWidth}`,
+              `stroke-opacity:${attenuation}`, "stroke-linejoin:round",
+              "stroke-linecap:round", "opacity:1"].join(";")
+          }, mask);
+          previousAlpha = alpha;
+        }
+        add("path", {
+          class: "flow-field", d, opacity: pathOpacity, mask: `url(#${maskId})`,
+          style: [`fill:url(#${gradientId})`, `opacity:${pathOpacity}`,
+            "stroke:none", "filter:none", "mix-blend-mode:normal"].join(";")
+        }, fields);
+      });
+    }
+    function schedule() {
+      if (disposed) return;
+      cancelAnimationFrame(frame);
+      frame = requestAnimationFrame(draw);
+    }
+    if ("ResizeObserver" in window) {
+      observer = new ResizeObserver(schedule);
+      [flow, bridge, ...cards].forEach(element => observer.observe(element));
+    }
+    window.addEventListener("resize", schedule);
+    window.addEventListener("load", schedule);
+    document.fonts?.ready.then(schedule);
+    svg.cleanupResearchConnections = () => {
+      disposed = true;
+      cancelAnimationFrame(frame);
+      observer?.disconnect();
+      window.removeEventListener("resize", schedule);
+      window.removeEventListener("load", schedule);
+    };
+    schedule();
   }
-  window.addEventListener('resize',schedule);
-  window.addEventListener('load',schedule);
-  document.fonts?.ready.then(schedule);
-  schedule();
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", initResearchConnections, { once: true });
+  } else {
+    initResearchConnections();
+  }
 })();
 </script>
 </body>

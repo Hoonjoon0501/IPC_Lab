@@ -437,22 +437,21 @@
     if (!svg || !bridge || cards.length !== 4) return;
     svg.cleanupResearchConnections?.();
     const NS = "http://www.w3.org/2000/svg";
-    const uid = `research-flow-${Math.random().toString(36).slice(2, 10)}`;
+    const uid = `research-fields-${Math.random().toString(36).slice(2, 10)}`;
     const colors = ["#7DBAF2", "#73D8D8", "#A99AF0", "#91B0CC"];
-    const pathOpacity = 0.17;
-    const sourceRatio = 0.74;
-    const feather = 5;
-    const waistRanges = [
-      [-0.50, 0.18], [-0.32, 0.38],
-      [-0.38, 0.32], [-0.18, 0.50]
+    const fillOpacity = 0.11;
+    const feather = 4;
+    const overlapRanges = [
+      [-0.52, 0.18], [-0.36, 0.38],
+      [-0.38, 0.36], [-0.18, 0.52]
     ];
     const feet = [
-      [0.30, 1.02], [0.12, 0.90],
-      [0.10, 0.88], [-0.02, 0.70]
+      [0.26, 1.02], [0.10, 0.92],
+      [0.08, 0.90], [-0.02, 0.74]
     ];
     const stops = [
-      [0.00, 0.00], [0.15, 0.55], [0.30, 0.82],
-      [0.50, 1.00], [0.68, 0.78], [0.85, 0.38], [1.00, 0.00]
+      [0.00, 0.00], [0.15, 0.35], [0.30, 0.75],
+      [0.50, 1.00], [0.70, 0.72], [0.88, 0.25], [1.00, 0.00]
     ];
     let frame = 0;
     let observer;
@@ -465,54 +464,88 @@
       parent.appendChild(element);
       return element;
     }
+    // Continuous boundary tangents carry each broad field through the center.
+    // No vertical tangent constraint that pinches the center into a narrow waist.
+    function makeBoundary(start, middle, end) {
+      const firstHeight = middle.y - start.y;
+      const secondHeight = end.y - middle.y;
+      const startSlope = ((middle.x - start.x) / firstHeight) * 0.55;
+      const middleSlope = ((end.x - start.x) / (end.y - start.y)) * 0.65;
+      const endSlope = ((end.x - middle.x) / secondHeight) * 0.55;
+      return [
+        {
+          start,
+          c1: { x: start.x + startSlope * firstHeight / 3, y: start.y + firstHeight / 3 },
+          c2: { x: middle.x - middleSlope * firstHeight / 3, y: middle.y - firstHeight / 3 },
+          end: middle
+        },
+        {
+          start: middle,
+          c1: { x: middle.x + middleSlope * secondHeight / 3, y: middle.y + secondHeight / 3 },
+          c2: { x: end.x - endSlope * secondHeight / 3, y: end.y - secondHeight / 3 },
+          end
+        }
+      ];
+    }
     function draw() {
       if (disposed) return;
       const bounds = flow.getBoundingClientRect();
       const gap = bridge.getBoundingClientRect();
       if (!bounds.width || !bounds.height || !gap.height) return;
       const width = bounds.width;
-      const top = gap.top - bounds.top;
       const height = gap.height;
+      const top = gap.top - bounds.top;
       const cx = width / 2;
-      // Overall span of the four overlapping fields, never a single point.
-      const sharedWidth = Math.min(300, width * 0.27);
-      const mid = 0.50;
+      const sharedWidth = Math.min(420, width * 0.38);
       const startY = -0.14;
+      const middleY = 0.50;
       const endY = 1.14;
       const rects = cards.map(card => card.getBoundingClientRect());
       const singleRow = rects.every(rect => Math.abs(rect.top - rects[0].top) < 2);
-      const xy = (x, y) => `${x.toFixed(2)} ${(top + y * height).toFixed(2)}`;
+      const point = p => `${p.x.toFixed(2)} ${(top + p.y * height).toFixed(2)}`;
+      const forward = segment => `C ${point(segment.c1)} ${point(segment.c2)} ${point(segment.end)}`;
+      const backward = segment => `C ${point(segment.c2)} ${point(segment.c1)} ${point(segment.start)}`;
       svg.setAttribute("viewBox", `0 0 ${width} ${bounds.height}`);
       svg.setAttribute("aria-hidden", "true");
       svg.setAttribute("focusable", "false");
       svg.setAttribute("color-interpolation", "sRGB");
       svg.replaceChildren();
       const defs = add("defs", {});
-      // No group opacity: the four paths composite independently.
+      // No group opacity; fill alpha composites independently on each field.
       const fields = add("g", { class: "translucent-fields" });
       colors.forEach((color, index) => {
-        const cardLeft = singleRow
-          ? rects[index].left - bounds.left : width * index / 4;
-        const cardWidth = singleRow ? rects[index].width : width / 4;
-        const sourceCenter = cardLeft + cardWidth / 2;
-        const sourceWidth = cardWidth * sourceRatio;
-        const left = sourceCenter - sourceWidth / 2;
-        const right = sourceCenter + sourceWidth / 2;
-        const wl = cx + sharedWidth * waistRanges[index][0];
-        const wr = cx + sharedWidth * waistRanges[index][1];
-        const fl = width * feet[index][0];
-        const fr = width * feet[index][1];
+        const card = singleRow
+          ? { left: rects[index].left - bounds.left, width: rects[index].width }
+          : { left: width * index / 4, width: width / 4 };
+        const sourceCenter = card.left + card.width / 2;
+        const sourceHalfWidth = card.width * 0.42;
+        const sourceLeft = sourceCenter - sourceHalfWidth;
+        const sourceRight = sourceCenter + sourceHalfWidth;
+        const overlapLeft = cx + sharedWidth * overlapRanges[index][0];
+        const overlapRight = cx + sharedWidth * overlapRanges[index][1];
+        const footLeft = width * feet[index][0];
+        const footRight = width * feet[index][1];
+        const leftBoundary = makeBoundary(
+          { x: sourceLeft, y: startY },
+          { x: overlapLeft, y: middleY },
+          { x: footLeft, y: endY }
+        );
+        const rightBoundary = makeBoundary(
+          { x: sourceRight, y: startY },
+          { x: overlapRight, y: middleY },
+          { x: footRight, y: endY }
+        );
         const d = `
-          M ${xy(left, startY)}
-          L ${xy(right, startY)}
-          C ${xy(right, 0.14)} ${xy(wr, 0.28)} ${xy(wr, mid)}
-          C ${xy(wr, 0.72)} ${xy(fr, 0.80)} ${xy(fr, endY)}
-          L ${xy(fl, endY)}
-          C ${xy(fl, 0.80)} ${xy(wl, 0.72)} ${xy(wl, mid)}
-          C ${xy(wl, 0.28)} ${xy(left, 0.14)} ${xy(left, startY)}
+          M ${point(leftBoundary[0].start)}
+          L ${point(rightBoundary[0].start)}
+          ${forward(rightBoundary[0])}
+          ${forward(rightBoundary[1])}
+          L ${point(leftBoundary[1].end)}
+          ${backward(leftBoundary[1])}
+          ${backward(leftBoundary[0])}
           Z
         `;
-        const gradientId = `${uid}-color-${index}`;
+        const gradientId = `${uid}-gradient-${index}`;
         const maskId = `${uid}-edge-${index}`;
         const gradient = add("linearGradient", {
           id: gradientId, gradientUnits: "userSpaceOnUse", x1: 0, x2: 0,
@@ -522,7 +555,7 @@
         stops.forEach(([offset, opacity]) => {
           add("stop", { offset, "stop-color": color, "stop-opacity": opacity }, gradient);
         });
-        // The interior is fully opaque in the mask; only a 5px edge is feathered.
+        // The mask preserves the interior and feathers only the inner 4px edge.
         const mask = add("mask", {
           id: maskId, maskUnits: "userSpaceOnUse", maskContentUnits: "userSpaceOnUse",
           x: -feather, y: top + startY * height - feather,
@@ -540,14 +573,14 @@
           add("path", {
             d,
             style: ["fill:none", "stroke:black", `stroke-width:${strokeWidth}`,
-              `stroke-opacity:${attenuation}`, "stroke-linejoin:round",
-              "stroke-linecap:round", "opacity:1"].join(";")
+              `stroke-opacity:${attenuation}`, "stroke-linecap:round",
+              "stroke-linejoin:round", "opacity:1"].join(";")
           }, mask);
           previousAlpha = alpha;
         }
         add("path", {
-          class: "flow-field", d, opacity: pathOpacity, mask: `url(#${maskId})`,
-          style: [`fill:url(#${gradientId})`, `opacity:${pathOpacity}`,
+          class: "flow-field", d, "fill-opacity": fillOpacity, mask: `url(#${maskId})`,
+          style: [`fill:url(#${gradientId})`, `fill-opacity:${fillOpacity}`, "opacity:1",
             "stroke:none", "filter:none", "mix-blend-mode:normal"].join(";")
         }, fields);
       });

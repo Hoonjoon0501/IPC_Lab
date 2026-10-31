@@ -152,7 +152,7 @@ window.GALLERY_ALBUMS = [
   {
     "id": "2026-ai-datacenter-workshop",
     "year": 2026,
-    "title": "2026년 4월 제 1회 AI 데이터 센터 연구회",
+    "title": "2026년 제 1회 AI 데이터 센터 연구회",
     "photos": [
       {
         "src": "photos/2026/2026-ai-datacenter-workshop/01.webp",

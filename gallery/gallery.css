@@ -16,7 +16,6 @@ button { font: inherit; cursor: pointer; }
 .gallery-wrap { width: 100%; max-width: 1500px; margin: 0 auto; padding: 48px clamp(28px, 5vw, 80px) 100px; }
 .page-header { margin-bottom: 42px; }
 .page-header h1 { margin: 0 0 18px; color: var(--navy); font-size: 42px; line-height: 1.1; font-weight: 700; letter-spacing: -1.2px; }
-.page-header p { margin: 0; color: var(--muted); font-size: 17px; line-height: 1.6; }
 .breadcrumbs { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 10px; margin-bottom: 28px; min-height: 22px; font-size: 14px; line-height: 1.6; }
 .breadcrumbs a { text-decoration: none; color: var(--muted); }
 .breadcrumbs a:hover { color: var(--navy); text-decoration: underline; }
@@ -75,7 +74,6 @@ body:has(.photo-viewer[open]) { overflow: hidden; }
   .gallery-wrap { padding: 30px 18px 60px; }
   .page-header { margin-bottom: 30px; }
   .page-header h1 { font-size: 32px; }
-  .page-header p { font-size: 15px; }
   .breadcrumbs { font-size: 13px; }
   .section-header { gap: 12px; flex-wrap: wrap; }
   .section-header h2 { font-size: 21px; }

@@ -75,12 +75,13 @@
     grid.replaceChildren();
     grid.dataset.view = view;
     breadcrumbs.replaceChildren();
+    breadcrumbs.hidden = !selectedYear;
     yearNav.replaceChildren();
     yearNav.hidden = !selectedYear;
     description.hidden = !selectedEvent?.description;
     description.textContent = selectedEvent?.description || '';
-    crumb('Gallery', selectedYear ? './' : null);
     if (selectedYear) {
+      crumb('Gallery', './');
       crumb(String(selectedYear), selectedEvent ? route(selectedYear) : null);
       for (const year of years) {
         const item = link(String(year), route(year));

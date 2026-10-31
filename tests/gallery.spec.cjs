@@ -29,6 +29,8 @@ const { chromium } = require('playwright');
     await page.goto(base);
     assert.equal(await page.locator('.year-card').count(), new Set(albums.map(a => a.year)).size);
     assert.equal(await page.locator('#archive-count, .photo-count, .photo-number').count(), 0);
+    assert.equal(await page.locator('.page-header p').count(), 0);
+    assert(await page.locator('#breadcrumbs').isHidden());
     await page.screenshot({ path: process.env.GALLERY_SCREENSHOT || path.join(root, '../gallery-years.png'), fullPage: true });
     await page.locator('.year-card').first().click();
     const firstYear = Math.max(...albums.map(a => a.year));

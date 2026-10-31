@@ -15,6 +15,7 @@ button { font: inherit; cursor: pointer; }
 :focus-visible { outline: 3px solid #437bb8; outline-offset: 5px; }
 .gallery-wrap { width: 100%; max-width: 1500px; margin: 0 auto; padding: 48px clamp(28px, 5vw, 80px) 100px; }
 .page-header { margin-bottom: 42px; }
+.year-divider { height: 1px; margin: 0 0 30px; border: 0; background: #dddddd; }
 .page-header h1 { margin: 0 0 18px; color: var(--navy); font-size: 42px; line-height: 1.1; font-weight: 700; letter-spacing: -1.2px; }
 .breadcrumbs { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 10px; margin-bottom: 28px; min-height: 22px; font-size: 14px; line-height: 1.6; }
 .breadcrumbs a { text-decoration: none; color: var(--muted); }

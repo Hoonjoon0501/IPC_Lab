@@ -80,6 +80,7 @@
     backNav.replaceChildren();
     backNav.hidden = !selectedYear;
     heading.parentElement.hidden = !selectedYear;
+    document.querySelector('#year-divider').hidden = Boolean(selectedYear);
     description.hidden = !selectedEvent?.description;
     description.textContent = selectedEvent?.description || '';
     if (selectedYear) {

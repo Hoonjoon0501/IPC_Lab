@@ -5,9 +5,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="description" content="IPC Lab photo archive. Browse by year, explore lab events, and view each event's photo collection.">
   <title>Gallery | Integrated Power Circuit Lab</title>
-  <link rel="stylesheet" href="gallery.css?v=photo-tiles">
+  <link rel="stylesheet" href="gallery.css?v=year-divider">
   <script src="data.js" defer></script>
-  <script src="gallery.js?v=photo-tiles" defer></script>
+  <script src="gallery.js?v=year-divider" defer></script>
 </head>
 <body>
   <main class="gallery-wrap">
@@ -17,6 +17,7 @@
 
     <nav id="breadcrumbs" class="breadcrumbs" aria-label="Breadcrumb"></nav>
     <nav id="back-nav" class="back-nav" aria-label="Back" hidden></nav>
+    <hr id="year-divider" class="year-divider" aria-hidden="true">
     <section id="archive" aria-labelledby="archive-title">
       <div class="section-header" hidden>
         <h2 id="archive-title" tabindex="-1"></h2>

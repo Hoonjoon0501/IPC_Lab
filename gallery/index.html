@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="IPC Lab photo archive. Browse by year, explore lab events, and view each event's photo collection.">
+  <title>Gallery | Integrated Power Circuit Lab</title>
+  <link rel="stylesheet" href="gallery.css">
+  <script src="data.js" defer></script>
+  <script src="gallery.js" defer></script>
+</head>
+<body>
+  <main class="gallery-wrap">
+    <header class="page-header">
+      <h1>Gallery</h1>
+      <p>Our moments, year by year.</p>
+    </header>
+
+    <nav id="breadcrumbs" class="breadcrumbs" aria-label="Breadcrumb"></nav>
+    <nav id="year-nav" class="year-nav" aria-label="Browse by year" hidden></nav>
+    <section id="archive" aria-labelledby="archive-title">
+      <div class="section-header">
+        <h2 id="archive-title" tabindex="-1">Photo archive</h2>
+        <span class="section-line" aria-hidden="true"></span>
+      </div>
+      <p id="archive-description" class="archive-description" hidden></p>
+      <div id="gallery-grid" class="gallery-grid"></div>
+    </section>
+    <noscript><p>Enable JavaScript to browse the photo archive. <a href="https://ipc.kaist.ac.kr/gallery">View the existing gallery</a>.</p></noscript>
+  </main>
+
+  <dialog id="photo-viewer" class="photo-viewer" aria-label="Photo viewer" aria-describedby="viewer-caption">
+    <div class="viewer-toolbar">
+      <span id="viewer-counter" class="sr-only" aria-live="polite" aria-atomic="true"></span>
+      <div class="viewer-actions">
+        <a id="open-image" target="_blank" rel="noopener">Open image <span aria-hidden="true">↗</span></a>
+        <button id="close-viewer" class="icon-button" type="button" aria-label="Close photo viewer" autofocus>×</button>
+      </div>
+    </div>
+    <div class="viewer-stage">
+      <button id="previous-photo" class="icon-button viewer-arrow" type="button" aria-label="Previous photo">‹</button>
+      <div class="viewer-image-wrap">
+        <img id="viewer-image" alt="">
+        <p id="viewer-error" hidden>This photo could not be loaded. Try opening the image directly.</p>
+      </div>
+      <button id="next-photo" class="icon-button viewer-arrow" type="button" aria-label="Next photo">›</button>
+    </div>
+    <p id="viewer-caption" class="viewer-caption"></p>
+  </dialog>
+</body>
+</html>

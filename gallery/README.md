@@ -1,0 +1,47 @@
+# IPC Lab Gallery
+
+## 페이지 구조
+
+- `/gallery/`: 연도별 대표 사진
+- `/gallery/?year=2026`: 해당 연도의 이벤트 앨범
+- `/gallery/?year=2026&event=2026-september-sports-day`: 한 이벤트의 사진 모음
+- 사진 선택: 확대 보기. 좌우 버튼과 키보드 방향키로 이동하고 Esc로 닫습니다.
+
+HTML, CSS, JavaScript로 구성된 정적 페이지이며 별도 빌드나 서버 API가 필요하지 않습니다. `data.js`를 일반 스크립트로 불러오므로 GitHub Pages와 Google Sites URL 임베드에서 사용할 수 있습니다.
+
+## 새 이벤트 추가
+
+1. `photos/연도/고유-이벤트-id/` 폴더에 웹용 사진을 올립니다. 긴 변 2,000px 이내의 WebP/JPEG를 권장합니다. 확대 보기에서는 원래 비율을 유지합니다.
+2. 빠른 목록 표시를 위해 `thumbs/`에 썸네일을 넣습니다. 현재 썸네일은 720×480px입니다. 썸네일을 생략하면 원본 `src`를 사용합니다.
+3. `data.js`의 `window.GALLERY_ALBUMS` 배열에 다음 형태의 항목을 추가합니다. 예시의 파일명과 이벤트명을 실제 값으로 바꿉니다.
+
+```javascript
+{
+  id: "2027-new-event",
+  year: 2027,
+  title: "실제 행사 이름",
+  description: "선택 사항: 행사에 관한 짧은 설명",
+  photos: [
+    {
+      src: "photos/2027/2027-new-event/01.webp",
+      thumb: "photos/2027/2027-new-event/thumbs/01.webp"
+    },
+    {
+      src: "photos/2027/2027-new-event/02.webp",
+      thumb: "photos/2027/2027-new-event/thumbs/02.webp"
+    }
+  ]
+}
+```
+
+`id`는 이벤트마다 고유해야 합니다. 사진 경로는 `gallery/index.html` 기준입니다. 첫 사진을 이벤트 대표 사진으로 사용하고, 각 연도의 첫 이벤트 사진을 연도 대표 사진으로 사용합니다. 연도는 최신순으로 정렬하며 이벤트는 데이터에 입력된 순서를 유지합니다. 최신 이벤트를 앞에 추가하면 대표 사진도 함께 갱신됩니다. 화면에는 이벤트·사진 개수와 사진 번호를 표시하지 않습니다. 확대 보기의 현재 위치는 화면 읽기 도구에만 전달합니다. 사진이 바뀌면 새 파일명을 사용해 오래된 브라우저 캐시와 구분하세요.
+
+## 기존 자료
+
+2026-10-31에 확인한 [기존 IPC Lab Gallery](https://ipc.kaist.ac.kr/gallery)의 2024~2026년 19개 이벤트, 사진 71장을 사용했습니다. 이벤트 이름, 연도, 사진 순서는 원래 페이지의 묶음을 기준으로 유지했습니다. 정확한 행사 날짜는 별도로 확인되지 않아 날짜 필드를 만들지 않았습니다. 사진을 이 저장소에 보관하므로 Google Sites의 임시 이미지 주소에 의존하지 않습니다.
+
+## 로컬 확인
+
+저장소 루트에서 `python -m http.server 8765 --bind 127.0.0.1`을 실행한 뒤 `http://127.0.0.1:8765/gallery/`를 엽니다.
+
+Playwright가 설치된 환경에서 `node tests/gallery.spec.cjs`를 실행하면 연도·이벤트 탐색, 전체 사진 파일, 확대 보기와 키보드 조작, 브라우저 히스토리, 직접 링크, 모바일 배치를 확인합니다. 별도 주소를 쓸 때는 `GALLERY_BASE_URL` 환경 변수로 지정합니다.

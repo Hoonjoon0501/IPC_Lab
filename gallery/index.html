@@ -5,20 +5,21 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="description" content="IPC Lab photo archive. Browse by year, explore lab events, and view each event's photo collection.">
   <title>Gallery | Integrated Power Circuit Lab</title>
-  <link rel="stylesheet" href="gallery.css">
+  <link rel="stylesheet" href="gallery.css?v=photo-tiles">
   <script src="data.js" defer></script>
-  <script src="gallery.js" defer></script>
+  <script src="gallery.js?v=photo-tiles" defer></script>
 </head>
 <body>
   <main class="gallery-wrap">
     <header class="page-header">
-      <h1>Gallery</h1>
+      <h1 tabindex="-1">Gallery</h1>
     </header>
 
     <nav id="breadcrumbs" class="breadcrumbs" aria-label="Breadcrumb"></nav>
-    <nav id="year-nav" class="year-nav" aria-label="Browse by year" hidden></nav>
+    <nav id="back-nav" class="back-nav" aria-label="Back" hidden></nav>
     <section id="archive" aria-labelledby="archive-title">
-      <div class="section-header">
+      <div class="section-header" hidden>
+        <h2 id="archive-title" tabindex="-1"></h2>
         <span class="section-line" aria-hidden="true"></span>
       </div>
       <p id="archive-description" class="archive-description" hidden></p>

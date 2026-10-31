@@ -6,7 +6,7 @@
   const heading = document.querySelector('#archive-title');
   const description = document.querySelector('#archive-description');
   const breadcrumbs = document.querySelector('#breadcrumbs');
-  const yearNav = document.querySelector('#year-nav');
+  const backNav = document.querySelector('#back-nav');
   const viewer = document.querySelector('#photo-viewer');
   const viewerImage = document.querySelector('#viewer-image');
   const previous = document.querySelector('#previous-photo');
@@ -14,6 +14,7 @@
   let activeAlbum = null;
   let activeIndex = 0;
   let returnFocus = null;
+  let viewerOwnsFullscreen = false;
 
   function element(tag, className, text) {
     const node = document.createElement(tag);
@@ -76,33 +77,34 @@
     grid.dataset.view = view;
     breadcrumbs.replaceChildren();
     breadcrumbs.hidden = !selectedYear;
-    yearNav.replaceChildren();
-    yearNav.hidden = !selectedYear;
+    backNav.replaceChildren();
+    backNav.hidden = !selectedYear;
+    heading.parentElement.hidden = !selectedYear;
     description.hidden = !selectedEvent?.description;
     description.textContent = selectedEvent?.description || '';
     if (selectedYear) {
       crumb('Gallery', './');
       crumb(String(selectedYear), selectedEvent ? route(selectedYear) : null);
-      for (const year of years) {
-        const item = link(String(year), route(year));
-        if (year === selectedYear) item.setAttribute('aria-current', 'page');
-        yearNav.append(item);
-      }
+      const back = link(selectedEvent ? 'Back to events' : 'Back to years', selectedEvent ? route(selectedYear) : './', 'back-button');
+      const arrow = element('span', 'back-arrow', '←');
+      arrow.setAttribute('aria-hidden', 'true');
+      back.prepend(arrow);
+      backNav.append(back);
     }
     if (selectedEvent) crumb(selectedEvent.title);
 
     if (view === 'years') {
-      heading.textContent = 'Photo archive';
+      heading.textContent = 'Gallery by year';
       years.forEach((year, index) => {
         const events = albums.filter(album => album.year === year);
         const card = link('', route(year), 'archive-card year-card');
-        const frame = cover(events[0]?.photos[0], `${year} IPC Lab photo archive`, index < 3);
+        const frame = cover(events[0]?.photos[0], `${year} IPC Lab gallery`, index < 3);
         const overlay = element('div', 'year-overlay');
         const row = element('div', 'year-title-row');
         const arrow = element('span', 'card-arrow', '↗');
         arrow.setAttribute('aria-hidden', 'true');
         row.append(element('h3', '', String(year)), arrow);
-        overlay.append(element('span', 'year-kicker', 'IPC Lab · Photo archive'), row);
+        overlay.append(row);
         frame.append(overlay);
         card.append(frame);
         grid.append(card);
@@ -112,13 +114,11 @@
       items.forEach((album, index) => {
         const card = link('', route(album.year, album.id), 'archive-card event-card');
         const frame = cover(album.photos[0], album.title, index < 3);
-        const copy = element('div', 'event-copy');
-        const footer = element('div', 'event-footer');
-        const arrow = element('span', 'card-arrow', '→');
-        arrow.setAttribute('aria-hidden', 'true');
-        footer.append(element('span', '', 'View photos'), arrow);
-        copy.append(element('p', 'event-year', String(album.year)), element('h3', '', album.title), footer);
-        card.append(frame, copy);
+        const overlay = element('div', 'event-overlay');
+        overlay.append(element('h3', '', album.title), element('p', 'event-year', String(album.year)));
+        if (album.description) overlay.append(element('p', 'event-description', album.description));
+        frame.append(overlay);
+        card.append(frame);
         grid.append(card);
       });
     } else {
@@ -134,13 +134,26 @@
           returnFocus = button;
           updateViewer();
           viewer.showModal();
+          enterFullscreen();
         });
         grid.append(button);
       });
     }
     if (!grid.children.length) grid.append(element('p', 'empty-state', 'No photos have been added yet.'));
     document.title = `${selectedEvent?.title || selectedYear || 'Gallery'} | IPC Lab Gallery`;
-    if (focus) heading.focus({ preventScroll: true });
+    if (focus) (selectedYear ? heading : document.querySelector('h1')).focus({ preventScroll: true });
+  }
+
+  async function enterFullscreen() {
+    if (document.fullscreenElement || !document.fullscreenEnabled) return;
+    try {
+      // The document is used because dialog elements cannot enter native fullscreen.
+      await document.documentElement.requestFullscreen();
+      if (viewer.open) viewerOwnsFullscreen = true;
+      else if (document.fullscreenElement === document.documentElement) await document.exitFullscreen();
+    } catch {
+      // Embedded pages may deny native fullscreen; the dialog still fills its viewport.
+    }
   }
 
   function updateViewer() {
@@ -167,7 +180,7 @@
     event.preventDefault();
     history.pushState(null, '', anchor.href);
     render(true);
-    document.querySelector('#breadcrumbs').scrollIntoView({ block: 'start' });
+    document.querySelector('.gallery-wrap').scrollIntoView({ block: 'start' });
   });
   window.addEventListener('popstate', () => render(true));
   document.querySelector('#close-viewer').addEventListener('click', () => viewer.close());
@@ -184,7 +197,19 @@
     const bounds = viewer.getBoundingClientRect();
     if (event.clientX < bounds.left || event.clientX > bounds.right || event.clientY < bounds.top || event.clientY > bounds.bottom) viewer.close();
   });
-  viewer.addEventListener('close', () => { if (returnFocus?.isConnected) returnFocus.focus({ preventScroll: true }); });
+  viewer.addEventListener('close', async () => {
+    if (viewerOwnsFullscreen && document.fullscreenElement === document.documentElement) {
+      viewerOwnsFullscreen = false;
+      await document.exitFullscreen().catch(() => {});
+    }
+    if (returnFocus?.isConnected) returnFocus.focus({ preventScroll: true });
+  });
+  document.addEventListener('fullscreenchange', () => {
+    if (viewerOwnsFullscreen && !document.fullscreenElement) {
+      viewerOwnsFullscreen = false;
+      if (viewer.open) viewer.close();
+    }
+  });
   viewerImage.addEventListener('error', () => {
     viewerImage.hidden = true;
     document.querySelector('#viewer-error').hidden = false;

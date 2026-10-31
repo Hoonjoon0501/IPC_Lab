@@ -5,9 +5,13 @@
 - `/gallery/`: 연도별 대표 사진
 - `/gallery/?year=2026`: 해당 연도의 이벤트 앨범
 - `/gallery/?year=2026&event=2026-september-sports-day`: 한 이벤트의 사진 모음
-- 사진 선택: 확대 보기. 좌우 버튼과 키보드 방향키로 이동하고 Esc로 닫습니다.
+- 연도를 열면 `Back to years`, 이벤트를 열면 `Back to events`로 상위 목록에 돌아갑니다.
+- 이벤트 타일의 설명은 마우스 호버·키보드 포커스로 표시됩니다. 터치 화면에서는 항상 표시됩니다.
+- 사진 선택: 전체화면 보기. 좌우 버튼과 키보드 방향키로 이동하고 Esc 또는 닫기 버튼으로 닫습니다.
 
 HTML, CSS, JavaScript로 구성된 정적 페이지이며 별도 빌드나 서버 API가 필요하지 않습니다. `data.js`를 일반 스크립트로 불러오므로 GitHub Pages와 Google Sites URL 임베드에서 사용할 수 있습니다.
+
+브라우저 전체화면은 Fullscreen API를 사용합니다. 외부 iframe에 넣을 때는 호스트가 `allow="fullscreen"` 또는 `allowfullscreen` 권한을 허용해야 합니다. 권한이 없으면 임베드된 페이지 영역을 채우는 보기로 동작하며 사진은 잘리지 않도록 원래 비율을 유지합니다.
 
 ## 새 이벤트 추가
 

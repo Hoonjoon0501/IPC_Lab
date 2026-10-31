@@ -1,5 +1,40 @@
-// Event order within each year follows the original IPC Lab gallery.
+// Album order controls display order; the first photo is the cover.
 window.GALLERY_ALBUMS = [
+  {
+    "id": "2026-ecce-vancouver",
+    "year": 2026,
+    "title": "2026 ECCE in Vancouver",
+    "photos": [
+      {
+        "src": "photos/2026/2026-ecce-vancouver/01.webp",
+        "thumb": "photos/2026/2026-ecce-vancouver/thumbs/01.webp"
+      },
+      {
+        "src": "photos/2026/2026-ecce-vancouver/02.webp",
+        "thumb": "photos/2026/2026-ecce-vancouver/thumbs/02.webp"
+      },
+      {
+        "src": "photos/2026/2026-ecce-vancouver/03.webp",
+        "thumb": "photos/2026/2026-ecce-vancouver/thumbs/03.webp"
+      },
+      {
+        "src": "photos/2026/2026-ecce-vancouver/04.webp",
+        "thumb": "photos/2026/2026-ecce-vancouver/thumbs/04.webp"
+      },
+      {
+        "src": "photos/2026/2026-ecce-vancouver/05.webp",
+        "thumb": "photos/2026/2026-ecce-vancouver/thumbs/05.webp"
+      },
+      {
+        "src": "photos/2026/2026-ecce-vancouver/06.webp",
+        "thumb": "photos/2026/2026-ecce-vancouver/thumbs/06.webp"
+      },
+      {
+        "src": "photos/2026/2026-ecce-vancouver/07.webp",
+        "thumb": "photos/2026/2026-ecce-vancouver/thumbs/07.webp"
+      }
+    ]
+  },
   {
     "id": "2026-september-sports-day",
     "year": 2026,

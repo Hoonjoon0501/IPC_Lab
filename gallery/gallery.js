@@ -181,7 +181,7 @@
     event.preventDefault();
     history.pushState(null, '', anchor.href);
     render(true);
-    document.querySelector('.gallery-banner').scrollIntoView({ block: 'start' });
+    window.scrollTo({ top: document.querySelector('.gallery-wrap').offsetTop, behavior: 'instant' });
   });
   window.addEventListener('popstate', () => render(true));
   document.querySelector('#close-viewer').addEventListener('click', () => viewer.close());

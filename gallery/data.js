@@ -10,8 +10,16 @@ window.GALLERY_ALBUMS = [
         "thumb": "photos/2026/2026-ecce-vancouver/thumbs/01.webp"
       },
       {
+        "src": "photos/2026/2026-ecce-vancouver/09.webp",
+        "thumb": "photos/2026/2026-ecce-vancouver/thumbs/09.webp"
+      },
+      {
         "src": "photos/2026/2026-ecce-vancouver/02.webp",
         "thumb": "photos/2026/2026-ecce-vancouver/thumbs/02.webp"
+      },
+      {
+        "src": "photos/2026/2026-ecce-vancouver/08.webp",
+        "thumb": "photos/2026/2026-ecce-vancouver/thumbs/08.webp"
       },
       {
         "src": "photos/2026/2026-ecce-vancouver/03.webp",

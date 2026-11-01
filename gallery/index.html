@@ -5,16 +5,19 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="description" content="IPC Lab photo archive. Browse by year, explore lab events, and view each event's photo collection.">
   <title>Gallery | Integrated Power Circuit Lab</title>
-  <link rel="stylesheet" href="gallery.css?v=year-hover">
+  <link rel="preload" href="fonts/montserrat-bold.ttf" as="font" type="font/ttf" crossorigin>
+  <link rel="preload" href="photos/2026/2026-kpel-ipc-sports-day/01.webp" as="image">
+  <link rel="stylesheet" href="gallery.css?v=sports-banner">
   <script src="data.js?v=ecce-vancouver-2" defer></script>
-  <script src="gallery.js?v=year-divider" defer></script>
+  <script src="gallery.js?v=sports-banner" defer></script>
 </head>
 <body>
-  <main class="gallery-wrap">
-    <header class="page-header">
-      <h1 tabindex="-1">Gallery</h1>
-    </header>
+  <header class="gallery-banner">
+    <img class="banner-photo" src="photos/2026/2026-kpel-ipc-sports-day/01.webp" alt="" aria-hidden="true" fetchpriority="high">
+    <h1 tabindex="-1">Gallery</h1>
+  </header>
 
+  <main class="gallery-wrap">
     <nav id="breadcrumbs" class="breadcrumbs" aria-label="Breadcrumb"></nav>
     <nav id="back-nav" class="back-nav" aria-label="Back" hidden></nav>
     <hr id="year-divider" class="year-divider" aria-hidden="true">

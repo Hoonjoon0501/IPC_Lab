@@ -11,7 +11,7 @@
 
 HTML, CSS, JavaScript로 구성된 정적 페이지이며 별도 빌드나 서버 API가 필요하지 않습니다. `data.js`를 일반 스크립트로 불러오므로 GitHub Pages와 Google Sites URL 임베드에서 사용할 수 있습니다.
 
-상단 배너는 체육대회 단체사진 위에 흰색 Montserrat Bold 제목을 표시합니다. 제목은 배너의 가로·세로 정중앙에 고정합니다. 얼굴을 가리지 않고 앞줄의 두 자녀가 모두 보이도록 배너의 가로:세로 비율을 8:5로 설정하고 사진의 세로 위치를 80%로 맞췄습니다. 작은 화면에서도 높이는 최소 360px입니다. 제목은 데스크톱 최대 58pt입니다. 사진을 바꿀 때는 `index.html`의 `.banner-photo`와 해당 이미지 preload 경로를 함께 변경합니다. 사진의 세로 위치와 오버레이 농도는 `gallery.css`의 `.banner-photo`, `.gallery-banner::after`에서 조정합니다. 글꼴은 `fonts/`에 자체 저장했으며 SIL Open Font License는 `fonts/OFL.txt`에 있습니다.
+상단 배너는 사용자가 마지막에 제공한 1617×705px 참고 이미지의 비율·사진 크롭·제목 위치를 기준으로 구성했습니다. 사진은 배너 너비의 117.8%로 확대하고 왼쪽 위치 -10.26%, 세로 위치 62.28%로 맞췄습니다. 제목은 가로 48.64%, 세로 45.39% 위치에 표시합니다. 이 값은 참고 이미지의 크롭을 재현하기 위한 값이므로 배경 사진을 바꾸면 함께 조정해야 합니다. 모바일 높이는 최소 320px입니다. 제목은 흰색 Montserrat Bold이며 데스크톱 최대 58pt입니다. 사진을 바꿀 때는 `index.html`의 `.banner-photo`와 해당 이미지 preload 경로를 함께 변경합니다. 글꼴은 `fonts/`에 자체 저장했으며 SIL Open Font License는 `fonts/OFL.txt`에 있습니다.
 
 브라우저 전체화면은 Fullscreen API를 사용합니다. 외부 iframe에 넣을 때는 호스트가 `allow="fullscreen"` 또는 `allowfullscreen` 권한을 허용해야 합니다. 권한이 없으면 임베드된 페이지 영역을 채우는 보기로 동작하며 사진은 잘리지 않도록 원래 비율을 유지합니다.
 

@@ -272,3 +272,6 @@ a:focus-visible { outline: 3px solid #7fb0e6; outline-offset: 3px; border-radius
   .s-ipc { max-width: 100% !important; }
   .vision-toggle { margin: 0; padding: 8px 6px; }
 }
+
+/* No own header/footer: the page is shown inside the lab Google Site */
+.embed-foot { margin-top: 48px; padding: 16px; border-top: 0; }

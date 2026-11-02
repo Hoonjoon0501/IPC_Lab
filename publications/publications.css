@@ -321,8 +321,6 @@ footer {
 @media(prefers-reduced-motion:reduce) {
   * {
   transition:none!important}
-  .paper-card:hover {
-  transform:none}
 }
 
 

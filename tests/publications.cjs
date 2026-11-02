@@ -28,6 +28,18 @@ assert.equal(model.filterItems(items,'학회','','',false).length,0);
 assert.equal(model.filterItems(items,'특허','','',false).length,0);
 const monthly=[{...items[0],kind:'학회',year:'2026',id:'C44',order:202605},{...items[0],kind:'학회',year:'2026',id:'C41',order:202610}];
 assert.equal(model.filterItems(monthly,'학회','','',false)[0].id,'C41','Month order takes precedence over citation ID');
+const numbered=model.numberPublications(monthly);
+assert.deepEqual(numbered.map(p=>[p.id,p.displayId]),[['C41','C2'],['C44','C1']]);
+const mixed=model.numberPublications([
+  {...items[0],id:'J24',year:'2022',order:202206,venue:'A'},
+  {...items[0],id:'J23',year:'2022',order:202208,venue:'B'},
+  {...items[0],id:'J1',year:'2015',order:201509,venue:'A'},
+  ...monthly
+]);
+assert.deepEqual(mixed.filter(p=>p.kind==='저널').map(p=>[p.id,p.displayId]),[['J23','J3'],['J24','J2'],['J1','J1']]);
+assert.deepEqual(model.filterItems(mixed,'저널','','',false,'A').map(p=>p.displayId),['J2','J1'],'Venue filtering must not renumber cards');
+assert.equal(model.filterItems(mixed,'저널','2015','',false)[0].displayId,'J1');
+assert.equal(monthly[0].displayId,undefined,'Do not overwrite source records');
 assert.equal(model.filterItems(items,'저널','archive','',false).length,0);
 assert.equal(model.filterItems([{...items[0],year:'2021'}],'저널','archive','',false).length,1);
 assert.equal(model.filterItems([{...items[0],year:'2014'}],'저널','archive','',false).length,0);

@@ -241,7 +241,7 @@ a:focus-visible { outline: 3px solid #7fb0e6; outline-offset: 3px; border-radius
 .scale { padding: 30px 22px 22px; }
 .scale-row { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; align-items: start; }
 .scale-item { min-width: 0; }
-.scale-item .pic { display: flex; align-items: flex-end; justify-content: center; width: 100%; height: 118px; }
+.scale-item .pic { display: flex; align-items: center; justify-content: center; width: 100%; height: 118px; }
 .scale-item .pic img { width: auto; max-width: 100%; height: auto; }
 .s-discrete { max-height: 108px; max-width: 190px !important; } .s-ipc { max-height: 70px; max-width: calc(100% - 44px) !important; } .s-pmic { max-height: 26px; }
 .traits { list-style: none; margin: 12px 0 0; padding: 0; display: grid; gap: 5px; text-align: left; justify-self: center; }
@@ -252,7 +252,7 @@ a:focus-visible { outline: 3px solid #7fb0e6; outline-offset: 3px; border-radius
 /* arrows sit on both sides of the IPC chip and point into it */
 .is-ipc .pic { gap: 4px; align-items: center; }
 .is-ipc .scale-arrow svg { width: 18px; }
-.scale-arrow { flex: none; color: #9aa6b5; margin-top: 30px; }
+.scale-arrow { flex: none; color: #9aa6b5; }
 .scale-arrow svg { display: block; width: 24px; height: 10px; fill: none; stroke: currentColor; stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; }
 .scale-arrow circle { fill: #fff; }
 .scale-arrow.to-left svg { transform: scaleX(-1); }

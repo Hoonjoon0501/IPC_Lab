@@ -1,0 +1,12 @@
+﻿status,app,area,title,partner,partner_short,logo,start,end,order,visible,note
+ongoing,ai,,High-performance accelerator power delivery (MBVR + IVR),Samsung Electronics (System LSI),Samsung,samsung.png,2025.10,2028.09,1,Y,
+ongoing,ai,,"Power electronics for high-performance AI semiconductors: component, circuit, architecture and system",National Research Foundation of Korea (NRF) · Outstanding Young Scientist Grant,NRF,nrf.svg,2025.03,,2,Y,
+ongoing,ev,,Electric-vehicle charging architectures (vehicle-to-vehicle charging),Hyundai Motor Company,Hyundai,hyundai.png,2026.03,,3,Y,
+ongoing,ev,,Matrix-type power conversion for electric vehicles,Hyundai Motor Company,Hyundai,hyundai.png,,,4,Y,
+ongoing,ev,,Next-generation magnetic components for electric vehicles,"Consortium led by Chang Sung Corporation, with Hyundai Motor Company and research institutes",Chang Sung,changsung.png,2026,,5,Y,
+ongoing,humanoids,,SMA–motor hybrid actuation for humanoid robots,Korea Institute of Machinery and Materials (KIMM),KIMM,kimm.png,2025.04,,6,Y,
+ongoing,rf,,High-performance RF power amplifier and impedance matching systems,Samsung Research,Samsung,samsung.png,2025.04,,7,Y,
+ongoing,,Digital Twin,Digital twin of network power supplies,Samsung Electronics (Network),Samsung,samsung.png,2025.09,,8,Y,
+ongoing,,Aerospace,Power processing unit (PPU) for ion thrusters,Korea Aerospace Research Institute (KARI) · Co-PI,KARI,kari.svg,2025.03,,9,Y,
+ongoing,,Power conversion,Power conversion research,Korea Electronics Technology Institute (KETI),KETI,keti.png,,,10,Y,
+completed,wpt,,Multi-output wireless power transfer for future smart factories,VODA,VODA,voda.png,2025.04,,11,Y,

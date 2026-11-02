@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Power delivery for AI processors. KAIST Integrated Power Circuit Lab.">
+  <title>AI Datacenter | KAIST Integrated Power Circuit Lab</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <script>if (window.self !== window.top) document.documentElement.classList.add('embedded');</script>
+  <link rel="preload" as="image" href="../assets/apps/ai-photo.webp">
+  <link rel="stylesheet" href="../concept-v2.css">
+  <link rel="stylesheet" href="applications.css">
+</head>
+<body>
+<header class="site-head">
+  <a class="brand" href="../index.html"><b>IPC</b> Lab <span>KAIST Integrated Power Circuit Lab</span></a>
+  <nav aria-label="Sections"><a href="../index.html#research">Research</a><a href="../index.html#applications">Applications</a></nav>
+</header>
+<main>
+  <section class="app-hero" aria-labelledby="app-title">
+    <div class="app-hero-copy">
+      <a class="crumb" href="../index.html#applications">← All applications</a>
+      <p class="kicker">Application 01</p>
+      <h1 id="app-title">AI Datacenter</h1>
+      <p class="app-tag">Power delivery for AI processors</p>
+      <div class="app-intro"><p>An AI processor draws very large currents at a low core voltage, and the demand keeps rising with every generation.</p><p>Every conversion step between the grid and the chip costs efficiency, space and cooling, which makes power delivery a key constraint in AI hardware.</p></div>
+    </div>
+    <figure class="app-hero-img"><img src="../assets/apps/ai-photo.webp" width="1280" height="800" fetchpriority="high" alt="Rows of server racks with blue status lights in a data center aisle"></figure>
+  </section>
+
+  <section class="topics" aria-labelledby="topics-title">
+    <div class="sec-head">
+      <h2 id="topics-title">Research topics</h2>
+    </div>
+    <article class="topic">
+      <div class="art"><img src="../assets/circuit.webp" width="1200" height="660" loading="lazy" decoding="async" alt=""><svg class="flow-svg" viewBox="0 0 1200 660" aria-hidden="true" focusable="false"></svg></div>
+      <div class="topic-copy">
+        <span class="num">01</span>
+        <h3>High-ratio conversion to the processor</h3>
+        <p class="label">Challenge</p><p>Stepping the distribution voltage down to the processor core voltage in one stage loses efficiency, and distribution voltages keep changing.</p>
+        <p class="label">Approach</p><p>Compact, stackable point-of-load modules built on hybrid switched-capacitor converters that share the work between capacitors and small inductors.</p>
+      </div>
+    </article>
+    <article class="topic flip">
+      <div class="art"><img src="../assets/pdn.webp" width="1200" height="660" loading="lazy" decoding="async" alt=""><svg class="flow-svg" viewBox="0 0 1200 660" aria-hidden="true" focusable="false"><path class="base" d="M432.3 237.9 L513.3 256.1 L491.0 269.5 L535.5 279.8"/><path class="flow" pathLength="300" d="M432.3 237.9 L513.3 256.1 L491.0 269.5 L535.5 279.8"/><path class="base" d="M545.8 295.0 L543.7 174.6"/><path class="flow up" pathLength="300" d="M545.8 295.0 L543.7 174.6"/><path class="base" d="M638.3 285.2 L639.0 166.3"/><path class="flow up" pathLength="300" d="M638.3 285.2 L639.0 166.3"/><path class="base" d="M665.7 323.5 L667.4 198.7"/><path class="flow up" pathLength="300" d="M665.7 323.5 L667.4 198.7"/><path class="base" d="M760.2 312.8 L764.8 189.6"/><path class="flow up" pathLength="300" d="M760.2 312.8 L764.8 189.6"/><path class="base" d="M651.7 303.9 L652.8 182.0"/><path class="flow up" pathLength="300" d="M651.7 303.9 L652.8 182.0"/></svg></div>
+      <div class="topic-copy">
+        <span class="num">02</span>
+        <h3>Power delivery under the processor</h3>
+        <p class="label">Challenge</p><p>Long current paths across the board waste power and let the voltage sag.</p>
+        <p class="label">Approach</p><p>Deliver current vertically through the package, from directly beneath the chip.</p>
+      </div>
+    </article>
+    <article class="topic">
+      <div class="art"><img src="../assets/magnetics.webp" width="1200" height="660" loading="lazy" decoding="async" alt=""><svg class="flow-svg" viewBox="0 0 1200 660" aria-hidden="true" focusable="false"><path class="base" d="M444.7 435.5 L444.1 420.5 L442.6 399.7 L440.8 374.4 L438.9 346.2 L437.4 316.7 L436.5 287.5 L436.7 260.4 L438.4 237.0 L441.9 220.1 L444.4 212.5 L447.1 205.5 L450.2 199.1 L453.6 193.4 L457.4 188.3 L461.6 183.7 L466.3 179.6 L471.6 176.1 L477.9 172.8 L488.0 169.6 L500.1 167.5 L513.7 166.5 L528.3 166.7 L543.2 167.9 L557.8 170.3 L571.7 173.7 L583.8 178.1 L592.8 183.0 L599.0 187.4 L604.7 192.3 L609.8 197.8 L614.5 203.8 L618.7 210.4 L622.4 217.7 L625.9 225.6 L629.0 234.3 L632.8 248.0 L636.7 271.6 L639.0 299.7 L640.0 330.4 L639.7 362.2 L638.1 393.3 L635.3 422.3 L631.5 447.7 L626.6 468.0 L622.3 479.4 L619.0 486.4 L615.5 492.5 L611.6 498.1 L607.4 502.9 L602.8 506.9 L597.9 510.4 L592.4 513.1 L586.5 515.2 L578.0 516.9 L566.7 517.3 L554.0 516.3 L540.5 514.1 L526.6 510.9 L513.2 506.8 L500.6 502.0 L489.3 496.7 L480.0 490.9 L473.9 485.7 L468.8 479.8 L464.1 473.0 L459.8 465.9 L456.0 458.6 L452.6 451.6 L449.6 445.3 L447.1 439.9 L444.9 435.8 L444.4 435.1 L444.2 435.0 L444.1 435.2 L444.2 435.5 L444.3 435.9 L444.4 436.2 L444.6 436.3 L444.6 436.1 L444.7 435.5 Z"/><path class="flow loop" pathLength="300" d="M444.7 435.5 L444.1 420.5 L442.6 399.7 L440.8 374.4 L438.9 346.2 L437.4 316.7 L436.5 287.5 L436.7 260.4 L438.4 237.0 L441.9 220.1 L444.4 212.5 L447.1 205.5 L450.2 199.1 L453.6 193.4 L457.4 188.3 L461.6 183.7 L466.3 179.6 L471.6 176.1 L477.9 172.8 L488.0 169.6 L500.1 167.5 L513.7 166.5 L528.3 166.7 L543.2 167.9 L557.8 170.3 L571.7 173.7 L583.8 178.1 L592.8 183.0 L599.0 187.4 L604.7 192.3 L609.8 197.8 L614.5 203.8 L618.7 210.4 L622.4 217.7 L625.9 225.6 L629.0 234.3 L632.8 248.0 L636.7 271.6 L639.0 299.7 L640.0 330.4 L639.7 362.2 L638.1 393.3 L635.3 422.3 L631.5 447.7 L626.6 468.0 L622.3 479.4 L619.0 486.4 L615.5 492.5 L611.6 498.1 L607.4 502.9 L602.8 506.9 L597.9 510.4 L592.4 513.1 L586.5 515.2 L578.0 516.9 L566.7 517.3 L554.0 516.3 L540.5 514.1 L526.6 510.9 L513.2 506.8 L500.6 502.0 L489.3 496.7 L480.0 490.9 L473.9 485.7 L468.8 479.8 L464.1 473.0 L459.8 465.9 L456.0 458.6 L452.6 451.6 L449.6 445.3 L447.1 439.9 L444.9 435.8 L444.4 435.1 L444.2 435.0 L444.1 435.2 L444.2 435.5 L444.3 435.9 L444.4 436.2 L444.6 436.3 L444.6 436.1 L444.7 435.5 Z"/><path class="base" d="M444.7 435.5 L444.9 420.7 L445.8 400.3 L446.9 375.5 L447.9 347.7 L448.6 318.4 L448.7 289.2 L447.6 261.7 L445.2 237.8 L441.3 220.0 L438.5 211.9 L435.6 204.4 L432.4 197.7 L428.9 191.4 L425.1 185.8 L420.9 180.6 L416.3 176.0 L411.3 171.9 L405.3 167.8 L396.0 163.5 L385.2 160.0 L373.4 157.6 L361.2 156.1 L349.1 155.6 L337.5 156.1 L327.0 157.6 L318.1 160.2 L311.5 163.3 L307.2 166.4 L303.2 169.9 L299.7 173.9 L296.6 178.3 L293.8 183.4 L291.4 189.0 L289.2 195.1 L287.3 201.8 L285.0 212.5 L282.9 231.3 L281.9 253.8 L282.0 278.8 L282.9 304.9 L284.6 330.8 L287.1 355.4 L290.3 377.5 L294.1 396.0 L297.3 406.8 L299.8 413.8 L302.4 420.3 L305.2 426.3 L308.3 431.9 L311.7 437.1 L315.4 441.9 L319.4 446.4 L323.9 450.5 L330.3 455.4 L339.0 460.3 L349.0 464.8 L359.9 468.6 L371.3 471.7 L382.7 474.0 L393.6 475.2 L403.6 475.3 L412.2 474.1 L417.6 472.0 L422.3 468.5 L426.7 464.1 L430.6 459.0 L434.1 453.5 L437.3 448.1 L440.1 443.1 L442.5 438.8 L444.5 435.8 L445.0 435.2 L445.2 435.2 L445.2 435.4 L445.2 435.8 L445.1 436.1 L445.0 436.3 L444.9 436.4 L444.8 436.1 L444.7 435.5 Z"/><path class="flow loop" pathLength="300" d="M444.7 435.5 L444.9 420.7 L445.8 400.3 L446.9 375.5 L447.9 347.7 L448.6 318.4 L448.7 289.2 L447.6 261.7 L445.2 237.8 L441.3 220.0 L438.5 211.9 L435.6 204.4 L432.4 197.7 L428.9 191.4 L425.1 185.8 L420.9 180.6 L416.3 176.0 L411.3 171.9 L405.3 167.8 L396.0 163.5 L385.2 160.0 L373.4 157.6 L361.2 156.1 L349.1 155.6 L337.5 156.1 L327.0 157.6 L318.1 160.2 L311.5 163.3 L307.2 166.4 L303.2 169.9 L299.7 173.9 L296.6 178.3 L293.8 183.4 L291.4 189.0 L289.2 195.1 L287.3 201.8 L285.0 212.5 L282.9 231.3 L281.9 253.8 L282.0 278.8 L282.9 304.9 L284.6 330.8 L287.1 355.4 L290.3 377.5 L294.1 396.0 L297.3 406.8 L299.8 413.8 L302.4 420.3 L305.2 426.3 L308.3 431.9 L311.7 437.1 L315.4 441.9 L319.4 446.4 L323.9 450.5 L330.3 455.4 L339.0 460.3 L349.0 464.8 L359.9 468.6 L371.3 471.7 L382.7 474.0 L393.6 475.2 L403.6 475.3 L412.2 474.1 L417.6 472.0 L422.3 468.5 L426.7 464.1 L430.6 459.0 L434.1 453.5 L437.3 448.1 L440.1 443.1 L442.5 438.8 L444.5 435.8 L445.0 435.2 L445.2 435.2 L445.2 435.4 L445.2 435.8 L445.1 436.1 L445.0 436.3 L444.9 436.4 L444.8 436.1 L444.7 435.5 Z"/></svg></div>
+      <div class="topic-copy">
+        <span class="num">03</span>
+        <h3>High-voltage DC distribution</h3>
+        <p class="label">Challenge</p><p>Low-voltage distribution needs heavy copper and many conversion stages.</p>
+        <p class="label">Approach</p><p>Higher-voltage DC distribution with converters that pair switched-capacitor and transformer stages.</p>
+      </div>
+    </article>
+  </section>
+  <section class="projects" id="projects" aria-labelledby="projects-title" data-projects data-app="ai" data-prefix="../">
+    <div class="sec-head"><h2 id="projects-title">Current projects</h2></div>
+    <ul class="proj-list current"><li><span class="proj-logo"><img src="../assets/partners/samsung.png" alt="Samsung" loading="lazy" decoding="async"></span><div class="proj-copy"><h3>High-performance accelerator power delivery (MBVR + IVR)</h3><p>Samsung Electronics (System LSI)</p></div><span class="proj-period">2025.10 – 2028.09</span></li><li><span class="proj-logo"><img src="../assets/partners/nrf.svg" alt="NRF" loading="lazy" decoding="async"></span><div class="proj-copy"><h3>Power electronics for high-performance AI semiconductors: component, circuit, architecture and system</h3><p>National Research Foundation of Korea (NRF) · Outstanding Young Scientist Grant</p></div><span class="proj-period">Since 2025.03</span></li></ul>
+    <details class="proj-done" hidden><summary><span>Completed projects (<span class="proj-count">0</span>)</span></summary><ul class="proj-list"></ul></details>
+  </section>
+  <script src="../assets/projects-config.js?v=202611021204"></script><script src="../assets/projects.js?v=202611021204" defer></script>
+
+  <nav class="app-next" aria-label="Applications">
+    <p class="kicker">Explore other applications</p>
+    <div class="app-next-row">
+      <a href="ai-datacenter.html" aria-current="page"><img src="../assets/apps/ai-card.webp" width="640" height="400" alt="" loading="lazy" decoding="async"><span>AI Datacenter</span></a>
+      <a href="electric-vehicles.html"><img src="../assets/apps/ev-card.webp" width="640" height="400" alt="" loading="lazy" decoding="async"><span>Electric Vehicles</span></a>
+      <a href="humanoids.html"><img src="../assets/apps/humanoids-card.webp" width="640" height="400" alt="" loading="lazy" decoding="async"><span>Humanoids</span></a>
+      <a href="rf-systems.html"><img src="../assets/apps/rf-card.webp" width="640" height="400" alt="" loading="lazy" decoding="async"><span>RF Systems</span></a>
+      <a href="wireless-power-transfer.html"><img src="../assets/apps/wpt-card.webp" width="640" height="400" alt="" loading="lazy" decoding="async"><span>Wireless Power Transfer</span></a>
+    </div>
+  </nav>
+</main>
+<footer class="site-foot"><p>KAIST Integrated Power Circuit Lab</p><p class="credit">Header photo: AI data center aisle with server racks (illustrative image generated with ChatGPT).</p></footer>
+</body>
+</html>

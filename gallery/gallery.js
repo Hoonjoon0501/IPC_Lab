@@ -3,6 +3,7 @@
   const albums = window.GALLERY_ALBUMS || [];
   const years = [...new Set(albums.map(album => album.year))].sort((a, b) => b - a);
   const grid = document.querySelector('#gallery-grid');
+  const content = document.querySelector('#gallery-content');
   const heading = document.querySelector('#archive-title');
   const description = document.querySelector('#archive-description');
   const breadcrumbs = document.querySelector('#breadcrumbs');
@@ -175,13 +176,19 @@
     updateViewer();
   }
 
+  document.querySelector('#scroll-to-photos').addEventListener('click', () => {
+    content.focus({ preventScroll: true });
+    window.scrollTo({ top: content.offsetTop,
+      behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'instant' : 'smooth' });
+  });
+
   document.addEventListener('click', event => {
     const anchor = event.target.closest('a[data-gallery-link]');
     if (!anchor || event.button !== 0 || event.ctrlKey || event.metaKey || event.shiftKey || event.altKey) return;
     event.preventDefault();
     history.pushState(null, '', anchor.href);
     render(true);
-    window.scrollTo({ top: document.querySelector('.gallery-wrap').offsetTop, behavior: 'instant' });
+    window.scrollTo({ top: content.offsetTop, behavior: 'instant' });
   });
   window.addEventListener('popstate', () => render(true));
   document.querySelector('#close-viewer').addEventListener('click', () => viewer.close());

@@ -26,6 +26,10 @@ button { font: inherit; cursor: pointer; }
 .banner-photo { position: absolute; inset: 0; left: -10.26%; z-index: -2; display: block; width: 117.8%; height: 100%; object-fit: cover; object-position: center 62.28%; }
 .gallery-banner::after { content: ""; position: absolute; inset: 0; z-index: -1; background: rgba(0,0,0,.46); }
 .gallery-banner h1 { position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); margin: 0; padding: 0 20px; color: #fff; font-family: Montserrat, Arial, sans-serif; font-size: clamp(42px, 5.4vw, 58pt); font-weight: 700; line-height: 1.15; letter-spacing: -1.2px; text-align: center; }
+.ipc-scroll-cue { position: absolute; left: 50%; bottom: 18px; transform: translateX(-50%); display: flex; flex-direction: column; align-items: center; gap: 4px; min-height: 44px; padding: 6px 12px; border: 0; border-radius: 4px; background: transparent; color: #fff; text-align: center; font-family: Arial, sans-serif; font-size: 10px; font-weight: 700; line-height: 18px; letter-spacing: 2.8px; white-space: nowrap; text-shadow: 0 1px 5px #0009; }
+.ipc-scroll-cue svg { width: 16px; height: 10px; fill: none; stroke: currentColor; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }
+.ipc-scroll-cue:hover { background: #ffffff12; }
+.ipc-scroll-cue:focus-visible { outline-color: #fff; }
 .year-divider { height: 1px; margin: 0 0 30px; border: 0; background: #dddddd; }
 .breadcrumbs { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 10px; margin-bottom: 28px; min-height: 22px; font-size: 14px; line-height: 1.6; }
 .breadcrumbs a { text-decoration: none; color: var(--muted); }

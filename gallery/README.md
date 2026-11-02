@@ -3,6 +3,7 @@
 ## 페이지 구조
 
 - `/gallery/`: 연도별 대표 사진
+- 배너 하단의 `Scroll For Photos` 버튼으로 목록까지 부드럽게 이동합니다. 키보드로도 사용할 수 있으며 모션 줄이기 설정에서는 즉시 이동합니다.
 - `/gallery/?year=2026`: 해당 연도의 이벤트 앨범
 - `/gallery/?year=2026&event=2026-september-sports-day`: 한 이벤트의 사진 모음
 - 연도를 열면 `Back to years`, 이벤트를 열면 `Back to events`로 상위 목록에 돌아갑니다.

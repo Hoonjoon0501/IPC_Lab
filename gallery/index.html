@@ -7,17 +7,21 @@
   <title>Gallery | Integrated Power Circuit Lab</title>
   <link rel="preload" href="fonts/montserrat-bold.ttf" as="font" type="font/ttf" crossorigin>
   <link rel="preload" href="photos/2026/2026-kpel-ipc-sports-day/01.webp" as="image">
-  <link rel="stylesheet" href="gallery.css?v=content-navigation">
+  <link rel="stylesheet" href="gallery.css?v=scroll-cue">
   <script src="data.js?v=ecce-vancouver-2" defer></script>
-  <script src="gallery.js?v=content-navigation" defer></script>
+  <script src="gallery.js?v=scroll-cue" defer></script>
 </head>
 <body>
   <header class="gallery-banner">
     <img class="banner-photo" src="photos/2026/2026-kpel-ipc-sports-day/01.webp" alt="" aria-hidden="true" fetchpriority="high">
     <h1 tabindex="-1">Gallery</h1>
+    <button id="scroll-to-photos" class="ipc-scroll-cue" type="button" lang="en" aria-controls="gallery-content">
+      Scroll For Photos
+      <svg viewBox="0 0 16 10" aria-hidden="true"><path d="m2 2 6 6 6-6"></path></svg>
+    </button>
   </header>
 
-  <main class="gallery-wrap">
+  <main id="gallery-content" class="gallery-wrap" tabindex="-1">
     <nav id="breadcrumbs" class="breadcrumbs" aria-label="Breadcrumb"></nav>
     <nav id="back-nav" class="back-nav" aria-label="Back" hidden></nav>
     <hr id="year-divider" class="year-divider" aria-hidden="true">

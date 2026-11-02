@@ -179,6 +179,14 @@ a {
   display:block;
   width:100%;
   height:auto}
+.paper-figure img[hidden],.image-status[hidden] {
+  display:none}
+.image-status {
+  display:block;
+  padding:18px 0;
+  color:var(--muted);
+  font-size:13px;
+  text-align:center}
 .paper-content {
   min-width:0}
 .paper-label {

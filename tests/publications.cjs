@@ -2,9 +2,17 @@ const assert=require('node:assert/strict');
 const fs=require('node:fs');
 const vm=require('node:vm');
 const path=require('node:path');
+const crypto=require('node:crypto');
 const model=require('../publications/publications.js');
 let imageReads=0;
-const context=vm.createContext({SpreadsheetApp:{ValueType:{IMAGE:'IMAGE'}},cellImage_:()=>{imageReads++;return {src:'data:image/png;base64,iVBORw==',alt:'Circuit'};}});
+let imageSource='data:image/png;base64,iVBORw==';
+const cached=new Map();
+const context=vm.createContext({
+  SpreadsheetApp:{ValueType:{IMAGE:'IMAGE'}},
+  cellImage_:()=>{imageReads++;return {src:imageSource,alt:'Circuit'};},
+  Utilities:{DigestAlgorithm:{SHA_256:'sha256'},computeDigest:(algorithm,value)=>[...crypto.createHash(algorithm).update(value).digest()],getUuid:()=>crypto.randomUUID()},
+  CacheService:{getScriptCache:()=>({get:key=>cached.get(key)||null,getAll:keys=>Object.fromEntries(keys.filter(k=>cached.has(k)).map(k=>[k,cached.get(k)])),put:(key,value)=>cached.set(key,value),putAll:parts=>Object.entries(parts).forEach(([k,v])=>{assert(v.length<=100000);cached.set(k,v);})})}
+});
 const source=fs.readFileSync(path.join(__dirname,'../tools/publications-sheet/Publications.gs'),'utf8');
 vm.runInContext(source,context);
 const headers=['공개상태','구분','연도','제목','저자','게재지·특허정보','권호·쪽·발행일','논문링크','특별표기','특별표기설명','그림','그림설명','정렬','내부메모','출처ID'];
@@ -19,6 +27,27 @@ assert.equal(parsed[0].details,undefined);assert.equal(parsed[0].recognition,und
 const removed=[6,9,11],compactHeaders=headers.filter((_,i)=>!removed.includes(i));
 const compactRow=row.filter((_,i)=>!removed.includes(i));
 assert.equal(context.pubParse_([compactHeaders,compactRow])[0].id,'J24','Column removal must preserve IDs and images');
+const previousReads=imageReads;
+const deferred=context.pubParse_([compactHeaders,compactRow],true)[0];
+assert.equal(imageReads,previousReads,'Metadata must never download image bytes');
+assert.equal(deferred.image,'');assert.equal(deferred.imageRow,2);assert.match(deferred.imageKey,/^[a-f0-9]{64}$/);
+const imageParams={imageRow:'2',key:deferred.imageKey};
+imageSource='data:image/png;base64,'+'A'.repeat(240004);
+assert.equal(context.pubImageResponse_([compactHeaders,compactRow],imageParams).image,imageSource);
+assert.equal(context.pubImageResponse_([compactHeaders,compactRow],imageParams).image,imageSource);
+assert.equal(imageReads,previousReads+1,'Second image request must reuse the server cache');
+const nowDraft=[...compactRow];nowDraft[0]='작성 중';
+assert(context.pubImageResponse_([compactHeaders,nowDraft],imageParams).error,'Cached draft images must not be served');
+const changedIdentity=[...compactRow];changedIdentity[3]='Different publication';
+assert(context.pubImageResponse_([compactHeaders,changedIdentity],imageParams).error,'Moved or replaced rows must not return another paper image');
+assert(context.pubImageResponse_([compactHeaders,compactRow],{...imageParams,imageRow:'NaN'}).error);
+imageSource='data:image/jpeg;base64,BBBB';
+assert.equal(context.pubImageResponse_([compactHeaders,compactRow],{...imageParams,fresh:'1'}).image,imageSource);
+assert.equal(imageReads,previousReads+2,'Explicit refresh must bypass the server cache');
+const manifestKey='pub-image-v1:'+deferred.imageKey,manifest=JSON.parse(cached.get(manifestKey));
+cached.delete(manifestKey+':'+manifest.generation+':0');
+assert.equal(context.pubImageResponse_([compactHeaders,compactRow],imageParams).image,imageSource);
+assert.equal(imageReads,previousReads+3,'Evicted cache chunks must fall back to the current image');
 assert.equal(context.pubHttpUrl_('javascript:alert(1)'), '');assert.equal(context.pubHttpUrl_('https://good.test/" onerror="x'), '');
 assert.throws(()=>context.pubParse_([['wrong']]));
 assert.equal(model.safeLink('javascript:alert(1)'), '');assert.equal(model.safeImage('data:image/svg+xml,<svg/>'),'');

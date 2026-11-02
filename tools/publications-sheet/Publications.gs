@@ -4,11 +4,12 @@ const PUB_HEADERS_ = ['공개상태','구분','연도','제목','저자','게재
 
 function publicationsFeed_(e) {
   let payload;
+  const params=(e && e.parameter)||{};
   try {
     const sheet=SpreadsheetApp.openById(SPREADSHEET_ID).getSheetByName(PUB_SHEET_);
     if(!sheet)throw new Error('Publications sheet is missing');
     const rows=sheet.getRange(1,1,Math.max(1,sheet.getLastRow()),sheet.getLastColumn()).getValues();
-    payload={publications:pubParse_(rows),updated:new Date().toISOString(),error:false};
+    payload=params.imageRow!==undefined ? pubImageResponse_(rows,params) : {publications:pubParse_(rows,params.images==='deferred'),updated:new Date().toISOString(),error:false};
   } catch(error) {
     console.error('Publications feed: '+error.message);
     payload={publications:[],error:true};
@@ -17,7 +18,7 @@ function publicationsFeed_(e) {
   return ContentService.createTextOutput(body).setMimeType(ContentService.MimeType.JSON);
 }
 
-function pubParse_(rows) {
+function pubParse_(rows,deferred) {
   if(!rows.length || PUB_HEADERS_.some(h=>!rows[0].includes(h)))throw new Error('Publication headers have changed');
   const columns=Object.fromEntries(rows[0].map((name,index)=>[name,index]));
   const text=v=>v===undefined||v===null?'':String(v).trim();
@@ -29,10 +30,50 @@ function pubParse_(rows) {
     if(year && !/^(19|20)\d{2}$/.test(year))continue;
     const item={id:text(r[11]),kind:text(r[1]),year:year,title:text(r[3]),authors:text(r[4]),venue:text(r[5]),link:pubHttpUrl_(text(r[6])),badges:text(r[7]).split('|').map(s=>s.trim()).filter(Boolean),image:'',order:Number(r[9])||0};
     // Only public rows reach image conversion. Internal notes are never serialized.
-    if(r[8] && r[8].valueType===SpreadsheetApp.ValueType.IMAGE){const image=cellImage_(r[8],'',item.title);if(image)item.image=image.src;}
+    if(r[8] && r[8].valueType===SpreadsheetApp.ValueType.IMAGE){
+      if(deferred){item.imageRow=i+1;item.imageKey=pubImageKey_(i+1,item.id,item.title);}
+      else {const image=cellImage_(r[8],'',item.title);if(image)item.image=image.src;}
+    }
     else if(/^https:\/\//i.test(text(r[8])))item.image=pubHttpUrl_(text(r[8]));
     result.push(item);
   }
   return result;
 }
 function pubHttpUrl_(value){return /^https?:\/\/[^\s<>"\\]+$/i.test(value)?value:'';}
+
+function pubImageKey_(row,id,title){
+  return Utilities.computeDigest(Utilities.DigestAlgorithm.SHA_256,JSON.stringify([row,id,title]))
+    .map(b=>((b+256)%256).toString(16).padStart(2,'0')).join('');
+}
+
+function pubImageResponse_(rows,params){
+  const row=Number(params.imageRow);
+  if(!Number.isInteger(row) || row<2 || row>rows.length)return {image:'',error:true};
+  // Recheck public status and identity before consulting the image cache.
+  const item=pubParse_(rows,true).find(p=>p.imageRow===row && p.imageKey===params.key);
+  if(!item)return {image:'',error:true};
+  const key='pub-image-v1:'+item.imageKey;
+  let cache;
+  try {
+    cache=CacheService.getScriptCache();
+    const manifest=params.fresh==='1'?null:JSON.parse(cache.get(key)||'null');
+    if(manifest && manifest.expiresAt>Date.now()){
+      const keys=Array.from({length:manifest.parts},(_,i)=>key+':'+manifest.generation+':'+i);
+      const parts=cache.getAll(keys);
+      if(keys.every(k=>typeof parts[k]==='string'))return {image:keys.map(k=>parts[k]).join(''),expiresAt:manifest.expiresAt,error:false};
+    }
+  }catch(error){/* Cache failure must not prevent an image from loading. */}
+  const image=cellImage_(rows[row-1][rows[0].indexOf('그림')],'',item.title);
+  if(!image)return {image:'',error:true};
+  const expiresAt=Date.now()+300000;
+  try {
+    if(cache){
+      const generation=Utilities.getUuid(),parts={};let count=0;
+      // CacheService limits each value to 100 KB. Publish the manifest last.
+      for(let offset=0;offset<image.src.length;offset+=80000)parts[key+':'+generation+':'+count++]=image.src.slice(offset,offset+80000);
+      cache.putAll(parts,300);
+      cache.put(key,JSON.stringify({generation:generation,parts:count,expiresAt:expiresAt}),300);
+    }
+  }catch(error){/* Return the image even if cache storage is unavailable. */}
+  return {image:image.src,expiresAt:expiresAt,error:false};
+}

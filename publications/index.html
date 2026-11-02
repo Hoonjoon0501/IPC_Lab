@@ -5,11 +5,11 @@
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <meta name="description" content="Journal articles, conference papers and patents from the Integrated Power Circuit Lab at KAIST.">
   <title>Publications | KAIST IPC Lab</title>
-  <link rel="stylesheet" href="publications.css">
-  <script src="publications.js" defer></script>
+  <link rel="stylesheet" href="publications.css?v=2">
+  <script src="publications.js?v=2" defer></script>
 </head>
 <body>
-  <header class="banner"><div class="wrap"><p class="eyebrow">KAIST · INTEGRATED POWER CIRCUIT LAB</p><h1>Publications<span>.</span></h1><p>Circuits, magnetics and systems for advanced power conversion.</p></div></header>
+  <header class="banner"><div class="wrap"><h1>Publications</h1></div></header>
   <main class="wrap content" id="publications">
     <div class="toolbar">
       <div class="types" role="group" aria-label="Publication type">
@@ -20,6 +20,7 @@
       <label class="search"><span class="sr-only">Search publications</span><input id="search" type="search" placeholder="Search title, author, venue…" autocomplete="off"></label>
     </div>
     <div class="filters"><div id="years" role="group" aria-label="Publication year"></div><label class="highlight-filter"><input id="highlights" type="checkbox"> Awards &amp; highlights</label></div>
+    <label class="venue-filter" id="venue-filter"><span id="venue-label">Journal</span><select id="venue" aria-labelledby="venue-label"><option value="">All journals</option></select></label>
     <div class="status-row"><p id="result-count" role="status" aria-live="polite">Loading publications…</p><button id="refresh" type="button">Refresh ↻</button></div>
     <p id="connection" role="status" aria-live="polite"></p>
     <div id="results" aria-busy="true"></div>

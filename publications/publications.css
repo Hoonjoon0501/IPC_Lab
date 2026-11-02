@@ -160,11 +160,12 @@ a {
   padding:25px 28px;
   background:#fff;
   box-shadow:0 4px 17px #14273d05;
-  transition:border-color .2s,box-shadow .2s;
+  transition:transform .2s ease,border-color .2s,box-shadow .2s;
   min-width:0}
 .paper-card:hover {
+  transform:translateY(-4px);
   border-color:#bacbe2;
-  box-shadow:0 7px 24px #14273d0a}
+  box-shadow:0 10px 24px #14273d14}
 .paper-card.has-image {
   display:grid;
   grid-template-columns:210px minmax(0,1fr);
@@ -320,6 +321,8 @@ footer {
 @media(prefers-reduced-motion:reduce) {
   * {
   transition:none!important}
+  .paper-card:hover {
+  transform:none}
 }
 
 

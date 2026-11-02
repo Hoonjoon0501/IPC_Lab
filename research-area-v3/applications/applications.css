@@ -1,0 +1,56 @@
+/* Application pages: hero with intro + photo, alternating research topics, other applications. */
+.app-hero { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.05fr); gap: 56px; align-items: center; padding-top: 56px !important; padding-bottom: 72px !important; }
+.crumb { display: inline-block; margin-bottom: 28px; font-size: 14px; color: var(--body); text-decoration: none; }
+.crumb:hover { color: var(--accent); }
+.app-hero h1 { font-size: clamp(34px, 4.4vw, 52px); line-height: 1.08; font-weight: 800; }
+.app-tag { margin: 14px 0 0; font-size: 18px; font-weight: 600; color: var(--accent); }
+.app-intro { margin-top: 22px; }
+.app-intro p { margin: 0 0 14px; font-size: 17px; line-height: 1.75; color: var(--body); }
+.app-intro p:first-child { color: var(--ink); }
+.app-hero-img { margin: 0; border-radius: 18px; overflow: hidden; aspect-ratio: 4 / 3; background: var(--soft); }
+.app-hero-img img { width: 100%; height: 100%; object-fit: cover; }
+
+.topics { padding-top: 72px !important; border-top: 1px solid var(--line); }
+.topic { display: grid; grid-template-columns: minmax(0, 1.15fr) minmax(0, .85fr); gap: 52px; align-items: center; padding: 28px 0 44px; }
+.topic + .topic { border-top: 1px solid var(--line); padding-top: 44px; }
+.topic.flip { grid-template-columns: minmax(0, .85fr) minmax(0, 1.15fr); }
+.topic.flip .art { order: 2; }
+.topic .art { border-radius: 18px; overflow: hidden; }
+.topic .art.dark { background: radial-gradient(ellipse at 50% 40%, #16335c 0%, #0b1a30 75%); }
+.topic .art.dark .flow-svg .flow { stroke: #cfe6ff; filter: drop-shadow(0 0 4px #4f9dff); stroke-dasharray: 18 82; animation-duration: 1.6s; }
+.topic .art.dark .flow-svg .base { stroke-opacity: 0; }
+.flow-svg { overflow: hidden; }
+.topic-copy h3 { margin: 6px 0 18px; font-size: clamp(22px, 2.4vw, 28px); line-height: 1.2; font-weight: 700; }
+.topic-copy .label { margin: 18px 0 4px; font-size: 12px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; color: var(--mute); }
+.topic-copy .label + p { margin: 0; font-size: 16px; line-height: 1.7; color: var(--body); }
+
+.app-next { max-width: 1180px; margin: 40px auto 0; padding: 56px clamp(16px, 5vw, 64px) 0; border-top: 1px solid var(--line); }
+.app-next-row { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 14px; }
+.app-next a { text-decoration: none; }
+.app-next img { width: 100%; aspect-ratio: 4 / 3; object-fit: cover; border-radius: 12px; transition: transform .3s, opacity .3s; }
+.app-next span { display: block; margin-top: 10px; font-size: 14px; font-weight: 600; }
+.app-next a:hover img { transform: translateY(-3px); }
+.app-next a:hover span { color: var(--accent); }
+.app-next a[aria-current="page"] img { opacity: .45; }
+.app-next a[aria-current="page"] span { color: var(--mute); }
+
+.site-foot .credit { margin: 10px auto 0; max-width: 760px; font-size: 11px; letter-spacing: 0; text-transform: none; line-height: 1.6; }
+.site-foot .credit a { color: inherit; }
+
+@media (max-width: 1000px) {
+  .app-hero { grid-template-columns: minmax(0, 1fr); gap: 32px; padding-top: 32px !important; padding-bottom: 48px !important; }
+  .crumb { margin-bottom: 18px; }
+  .topic { grid-template-columns: minmax(0, 1fr); gap: 22px; }
+  .topic.flip { grid-template-columns: minmax(0, 1fr); }
+  .topic.flip .art { order: 0; }
+  .app-next-row { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+}
+@media (max-width: 640px) {
+  .app-next-row { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .app-intro p { font-size: 16px; }
+}
+
+/* Motion only where it explains something: power spreading inside the robot. */
+.topic .art:not(.dark) .flow-svg .flow { display: none; }
+.topic .art:not(.dark) .flow-svg .base { stroke-opacity: .45; }
+.app-next a:hover img { transform: none; }

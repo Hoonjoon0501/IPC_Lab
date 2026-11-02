@@ -1,0 +1,165 @@
+<!doctype html>
+<html><head><meta charset="utf-8">
+<style>html,body{margin:0;background:#000;overflow:hidden}canvas{display:block}#out{display:none}</style>
+<script type="importmap">{"imports":{"three":"./node_modules/three/build/three.module.js","three/addons/":"./node_modules/three/examples/jsm/"}}</script>
+</head><body><pre id="out"></pre>
+<script type="module">
+// Application header images: cinematic CG scenes in the site palette (deep navy, cool white, cyan/blue glow).
+import * as THREE from 'three';
+import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js';
+import { RoundedBoxGeometry } from 'three/addons/geometries/RoundedBoxGeometry.js';
+import { EffectComposer } from 'three/addons/postprocessing/EffectComposer.js';
+import { RenderPass } from 'three/addons/postprocessing/RenderPass.js';
+import { UnrealBloomPass } from 'three/addons/postprocessing/UnrealBloomPass.js';
+import { OutputPass } from 'three/addons/postprocessing/OutputPass.js';
+
+const S = new URLSearchParams(location.search).get('s') || 'dc';
+const W = 1200, H = 900;
+const renderer = new THREE.WebGLRenderer({ antialias: true, preserveDrawingBuffer: true });
+renderer.setPixelRatio(window.devicePixelRatio || 1); renderer.setSize(W, H);
+renderer.toneMapping = THREE.ACESFilmicToneMapping; renderer.toneMappingExposure = 1.0;
+renderer.outputColorSpace = THREE.SRGBColorSpace;
+renderer.shadowMap.enabled = true; renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+document.body.appendChild(renderer.domElement);
+const scene = new THREE.Scene();
+const pm = new THREE.PMREMGenerator(renderer);
+scene.environment = pm.fromScene(new RoomEnvironment(), 0.04).texture;
+const V = (x, y, z) => new THREE.Vector3(x, y, z);
+const box = (w, h, d, m, r = 0.05) => { const o = new THREE.Mesh(new RoundedBoxGeometry(w, h, d, 3, Math.min(r, w / 2.1, h / 2.1, d / 2.1)), m); o.castShadow = o.receiveShadow = true; return o; };
+const at = (o, x, y, z) => { o.position.set(x, y, z); return o; };
+const glow = (c, i = 1) => new THREE.MeshBasicMaterial({ color: new THREE.Color(c).multiplyScalar(i), toneMapped: false });
+const canvasTex = (w, h, draw) => { const c = document.createElement('canvas'); c.width = w; c.height = h; draw(c.getContext('2d'), w, h); const t = new THREE.CanvasTexture(c); t.colorSpace = THREE.SRGBColorSpace; t.anisotropy = 8; return t; };
+let camera = new THREE.PerspectiveCamera(35, W / H, 0.1, 500), bloom = [0.55, 0.5, 0.82];
+
+if (S === 'dc') {
+  scene.background = new THREE.Color(0x0a1424); scene.fog = new THREE.FogExp2(0x0d1a30, 0.018);
+  scene.environmentIntensity = 0.5;
+  const floor = new THREE.Mesh(new THREE.PlaneGeometry(200, 200), new THREE.MeshPhysicalMaterial({ color: 0x9aa8bc, roughness: 0.18, metalness: 0.1, clearcoat: 1, clearcoatRoughness: 0.12 }));
+  floor.rotation.x = -Math.PI / 2; floor.receiveShadow = true; scene.add(floor);
+  // rack front: server units with small blue status lights
+  const front = canvasTex(256, 1024, (g, w, h) => { g.fillStyle = '#0b1220'; g.fillRect(0, 0, w, h);
+    for (let y = 40; y < h - 40; y += 26) { g.fillStyle = '#141e30'; g.fillRect(18, y, w - 36, 20); g.fillStyle = '#1b2840'; for (let x = 26; x < w - 60; x += 7) g.fillRect(x, y + 4, 3, 12);
+      g.fillStyle = Math.random() < 0.85 ? '#5fb4ff' : '#9fd9ff'; g.fillRect(w - 50, y + 7, 5, 5); if (Math.random() < 0.6) g.fillRect(w - 38, y + 7, 5, 5); } });
+  const emis = canvasTex(256, 1024, (g, w, h) => { g.fillStyle = '#000'; g.fillRect(0, 0, w, h); for (let y = 40; y < h - 40; y += 26) { g.fillStyle = '#4fa8ff'; g.fillRect(w - 50, y + 7, 5, 5); if (Math.random() < 0.6) g.fillRect(w - 38, y + 7, 5, 5); } });
+  const rackM = [new THREE.MeshPhysicalMaterial({ color: 0x1a2232, roughness: 0.45, metalness: 0.6 }), new THREE.MeshPhysicalMaterial({ map: front, emissiveMap: emis, emissive: 0xffffff, emissiveIntensity: 2.2, roughness: 0.35, metalness: 0.4, clearcoat: 0.6 })];
+  const rackG = new THREE.BoxGeometry(0.6, 2.1, 1.1);
+  for (const side of [-1, 1]) for (let i = 0; i < 26; i++) {
+    const r = new THREE.Mesh(rackG, [rackM[0], rackM[0], rackM[0], rackM[0], rackM[0], rackM[0]]);
+    const mats = [rackM[0], rackM[0], rackM[0], rackM[0], rackM[0], rackM[0]]; mats[side > 0 ? 1 : 0] = rackM[1]; r.material = mats;
+    r.position.set(side * 1.3, 1.05, -i * 0.62); r.rotation.y = 0; r.castShadow = true; scene.add(r);
+    // swap geometry orientation so the front faces the aisle
+    r.geometry = new THREE.BoxGeometry(0.6, 2.1, 0.6); r.scale.set(1.8, 1, 1);
+  }
+  // ceiling cable trays and linear lights
+  for (const x of [-1.3, 1.3]) { const tray = box(0.5, 0.06, 18, new THREE.MeshStandardMaterial({ color: 0x8796ab, metalness: 0.8, roughness: 0.4 }), 0.01); at(tray, x, 2.75, -8); scene.add(tray); }
+  for (let i = 0; i < 9; i++) { const l = new THREE.Mesh(new THREE.BoxGeometry(0.08, 0.03, 1.4), glow(0xe8f3ff, 3)); at(l, 0, 3.05, -1 - i * 2); scene.add(l);
+    const pl = new THREE.PointLight(0xcfe4ff, 6, 6, 1.6); at(pl, 0, 2.9, -1 - i * 2); scene.add(pl); }
+  const ceil = new THREE.Mesh(new THREE.PlaneGeometry(10, 40), new THREE.MeshStandardMaterial({ color: 0x101a2a, roughness: 0.9 })); ceil.rotation.x = Math.PI / 2; at(ceil, 0, 3.1, -10); scene.add(ceil);
+  const back = new THREE.Mesh(new THREE.PlaneGeometry(6, 3.2), glow(0x3a6aa8, 0.9)); at(back, 0, 1.6, -17); scene.add(back);
+  scene.add(new THREE.HemisphereLight(0x8fb6ff, 0x0b1424, 0.6));
+  camera.position.set(0.15, 1.25, 2.6); camera.lookAt(0, 1.15, -10); camera.fov = 42; bloom = [0.7, 0.55, 0.75];
+} else if (S === 'ev') {
+  scene.background = canvasTex(64, 512, (g, w, h) => { const gr = g.createLinearGradient(0, 0, 0, h); gr.addColorStop(0, '#1d2c4d'); gr.addColorStop(0.55, '#7d6b8f'); gr.addColorStop(0.8, '#d7a3a0'); gr.addColorStop(1, '#2a3346'); g.fillStyle = gr; g.fillRect(0, 0, w, h); });
+  scene.environmentIntensity = 0.9;
+  // car flank: smooth white body panel with a charge port
+  const paint = new THREE.MeshPhysicalMaterial({ color: 0xe9ecf0, roughness: 0.22, metalness: 0.15, clearcoat: 1, clearcoatRoughness: 0.05 });
+  const body = new THREE.Mesh(new THREE.CylinderGeometry(6, 6, 9, 96, 1, true, Math.PI * 0.82, Math.PI * 0.36), paint); body.rotation.z = Math.PI / 2; body.position.set(-2.2, 0.6, -5.2); scene.add(body);
+  const port = new THREE.Mesh(new THREE.CircleGeometry(0.42, 48), new THREE.MeshPhysicalMaterial({ color: 0x15181d, roughness: 0.5 })); at(port, -1.6, 1.05, 0.62); port.rotation.y = 0.35; scene.add(port);
+  const ring = new THREE.Mesh(new THREE.TorusGeometry(0.4, 0.025, 12, 64), glow(0x29e0e6, 2.4)); ring.position.copy(port.position).add(V(0.01, 0, 0.01)); ring.rotation.y = 0.35; scene.add(ring);
+  const flap = box(0.95, 0.7, 0.05, paint, 0.12); at(flap, -1.85, 1.75, 0.55); flap.rotation.set(-0.6, 0.35, 0); scene.add(flap);
+  // plug and glowing cable
+  const plugM = new THREE.MeshPhysicalMaterial({ color: 0x1c2026, roughness: 0.35, clearcoat: 0.6 });
+  const plug = box(0.34, 0.42, 0.7, plugM, 0.12); at(plug, -1.48, 0.98, 0.98); plug.rotation.set(0.25, 0.35, 0); scene.add(plug);
+  const curve = new THREE.CatmullRomCurve3([V(-1.38, 0.8, 1.25), V(-1.2, 0.2, 1.6), V(-0.4, -0.6, 1.8), V(0.8, -0.4, 1.3), V(1.6, 0.4, 0.6)]);
+  scene.add(new THREE.Mesh(new THREE.TubeGeometry(curve, 160, 0.055, 16), glow(0x2bd9e0, 1.8)));
+  // charger kiosk with a screen
+  const kM = new THREE.MeshPhysicalMaterial({ color: 0x14171c, roughness: 0.3, metalness: 0.5, clearcoat: 0.8 });
+  const kiosk = box(1.3, 3.4, 0.6, kM, 0.25); at(kiosk, 2.3, 0.6, -0.2); kiosk.rotation.y = -0.35; scene.add(kiosk);
+  const scr = canvasTex(256, 384, (g, w, h) => { g.fillStyle = '#071018'; g.fillRect(0, 0, w, h); g.strokeStyle = '#3fe0e6'; g.lineWidth = 6; g.strokeRect(70, 90, 116, 210); g.fillStyle = '#3fe0e6'; for (let i = 0; i < 5; i++) g.fillRect(84, 270 - i * 38, 88, 26); g.font = 'bold 26px Arial'; g.fillText('EV CHARGING', 40, 50); });
+  const screen = new THREE.Mesh(new THREE.PlaneGeometry(0.8, 1.2), new THREE.MeshBasicMaterial({ map: scr, toneMapped: false })); screen.position.set(2.18, 1.3, 0.13); screen.rotation.y = -0.35; scene.add(screen);
+  const edge = new THREE.Mesh(new THREE.BoxGeometry(0.04, 3, 0.04), glow(0x2bd9e0, 2)); edge.position.set(1.72, 0.6, 0.0); edge.rotation.y = -0.35; scene.add(edge);
+  // wind turbines on the horizon
+  const tM = new THREE.MeshBasicMaterial({ color: 0x4a4f63 });
+  for (const [x, z, s] of [[-6, -30, 1], [0, -40, 0.8], [7, -34, 0.9], [-12, -45, 0.7]]) { const t = new THREE.Group(); t.add(at(new THREE.Mesh(new THREE.CylinderGeometry(0.12 * s, 0.25 * s, 9 * s, 12), tM), 0, 4.5 * s, 0));
+    for (let b = 0; b < 3; b++) { const bl = new THREE.Mesh(new THREE.BoxGeometry(0.25 * s, 4.5 * s, 0.05), tM); bl.geometry.translate(0, 2.25 * s, 0); bl.rotation.z = b * 2.094 + 0.4; bl.position.y = 9 * s; t.add(bl); }
+    t.position.set(x, -2, z); scene.add(t); }
+  scene.add(new THREE.HemisphereLight(0xffd8d0, 0x1a2234, 0.8));
+  const key = new THREE.DirectionalLight(0xfff1ea, 1.6); key.position.set(-4, 6, 6); scene.add(key);
+  camera.position.set(0.2, 1.2, 5.2); camera.lookAt(0.1, 0.8, 0); camera.fov = 38; bloom = [0.8, 0.5, 0.7];
+} else if (S === 'robot') {
+  scene.background = canvasTex(512, 512, (g, w, h) => { const gr = g.createRadialGradient(w * 0.6, h * 0.35, 20, w * 0.5, h * 0.5, w * 0.75); gr.addColorStop(0, '#24406b'); gr.addColorStop(1, '#070d18'); g.fillStyle = gr; g.fillRect(0, 0, w, h); });
+  scene.environmentIntensity = 1.0;
+  const shell = new THREE.MeshPhysicalMaterial({ color: 0xf2f4f7, roughness: 0.18, clearcoat: 1, clearcoatRoughness: 0.05 });
+  const dark = new THREE.MeshPhysicalMaterial({ color: 0x15181e, roughness: 0.35, metalness: 0.7 });
+  const g = new THREE.Group(); scene.add(g);
+  const head = new THREE.Mesh(new THREE.SphereGeometry(0.62, 64, 48), shell); head.scale.set(0.9, 1.08, 0.98); at(head, 0, 2.55, 0); g.add(head);
+  const visor = new THREE.Mesh(new THREE.SphereGeometry(0.6, 64, 48, -1.0, 2.0, 1.15, 0.7), new THREE.MeshPhysicalMaterial({ color: 0x05070b, roughness: 0.05, clearcoat: 1 })); visor.scale.set(0.92, 1.1, 1.0); visor.rotation.y = Math.PI / 2; at(visor, 0, 2.55, 0.03); g.add(visor);
+  const eye = new THREE.Mesh(new THREE.TorusGeometry(0.42, 0.012, 8, 64, 1.4), glow(0x39d5ff, 2.5)); eye.rotation.set(0, 0, Math.PI / 2 - 0.7); at(eye, 0, 2.5, 0.2); eye.rotation.x = -0.15; g.add(eye);
+  g.add(at(new THREE.Mesh(new THREE.CylinderGeometry(0.17, 0.2, 0.35, 32), dark), 0, 2.0, 0));
+  const chest = new THREE.Mesh(new THREE.SphereGeometry(1, 64, 48), shell); chest.scale.set(1.05, 0.95, 0.62); at(chest, 0, 1.2, 0); g.add(chest);
+  const core = new THREE.Mesh(new THREE.CircleGeometry(0.12, 48), glow(0x39d5ff, 2)); at(core, 0, 1.28, 0.62); g.add(core);
+  g.add(at(new THREE.Mesh(new THREE.CylinderGeometry(0.42, 0.52, 0.55, 48), dark), 0, 0.35, 0));
+  for (const s of [-1, 1]) {
+    const sh = new THREE.Mesh(new THREE.SphereGeometry(0.33, 48, 32), shell); at(sh, s * 1.12, 1.55, 0); g.add(sh);
+    const j = new THREE.Mesh(new THREE.TorusGeometry(0.3, 0.035, 12, 48), glow(0x39d5ff, 1.6)); j.rotation.y = Math.PI / 2; at(j, s * 1.28, 1.55, 0); g.add(j);
+    const up = new THREE.Mesh(new THREE.CapsuleGeometry(0.2, 0.75, 12, 32), shell); at(up, s * 1.3, 0.95, 0.05); up.rotation.z = s * 0.12; g.add(up);
+    g.add(at(new THREE.Mesh(new THREE.SphereGeometry(0.17, 32, 24), dark), s * 1.38, 0.45, 0.08));
+    const fo = new THREE.Mesh(new THREE.CapsuleGeometry(0.17, 0.6, 12, 32), shell); at(fo, s * 1.32, 0.0, 0.32); fo.rotation.x = 0.7; g.add(fo);
+  }
+  g.position.set(0.55, -0.2, 0); g.rotation.y = -0.38;
+  const rim = new THREE.DirectionalLight(0x6fc4ff, 3); rim.position.set(-4, 3, -3); scene.add(rim);
+  const key = new THREE.DirectionalLight(0xffffff, 1.4); key.position.set(3, 4, 5); scene.add(key);
+  camera.position.set(0, 1.6, 6.8); camera.lookAt(0.2, 1.3, 0); camera.fov = 35; bloom = [0.6, 0.6, 0.8];
+} else if (S === 'rf') {
+  scene.background = new THREE.Color(0x0b1628); scene.fog = new THREE.FogExp2(0x0b1628, 0.03);
+  scene.environmentIntensity = 0.8;
+  const steel = new THREE.MeshPhysicalMaterial({ color: 0xc9ced6, roughness: 0.28, metalness: 1, clearcoat: 0.3 });
+  const floor = new THREE.Mesh(new THREE.PlaneGeometry(80, 80), new THREE.MeshPhysicalMaterial({ color: 0x8592a6, roughness: 0.25, clearcoat: 1 })); floor.rotation.x = -Math.PI / 2; scene.add(floor);
+  // plasma process chamber with a viewport
+  const ch = new THREE.Group(); scene.add(ch);
+  ch.add(at(new THREE.Mesh(new THREE.CylinderGeometry(1.2, 1.2, 1.5, 96), steel), 0, 1.35, 0));
+  ch.add(at(new THREE.Mesh(new THREE.CylinderGeometry(1.32, 1.32, 0.16, 96), steel), 0, 2.15, 0));
+  ch.add(at(new THREE.Mesh(new THREE.CylinderGeometry(1.32, 1.32, 0.16, 96), steel), 0, 0.55, 0));
+  ch.add(at(new THREE.Mesh(new THREE.CylinderGeometry(0.9, 1.0, 0.5, 64), steel), 0, 0.25, 0));
+  const vp = new THREE.Mesh(new THREE.CylinderGeometry(0.42, 0.42, 0.25, 64), steel); vp.rotation.x = Math.PI / 2; at(vp, 0, 1.35, 1.2); ch.add(vp);
+  const glass = new THREE.Mesh(new THREE.CircleGeometry(0.34, 64), glow(0x8f7dff, 1.4)); at(glass, 0, 1.35, 1.33); ch.add(glass);
+  const plasma = new THREE.Mesh(new THREE.CircleGeometry(0.22, 64), glow(0xd2c6ff, 2.4)); at(plasma, 0, 1.33, 1.335); ch.add(plasma);
+  for (let i = 0; i < 12; i++) { const b = new THREE.Mesh(new THREE.CylinderGeometry(0.03, 0.03, 0.06, 12), steel); const a = i / 12 * Math.PI * 2; b.rotation.x = Math.PI / 2; at(b, Math.cos(a) * 0.38, 1.35 + Math.sin(a) * 0.38, 1.33); ch.add(b); }
+  const lid = new THREE.Mesh(new THREE.CylinderGeometry(0.35, 0.35, 0.5, 48), steel); at(lid, 0, 2.45, 0); ch.add(lid);
+  // RF generator and matching unit with a display
+  const gM = new THREE.MeshPhysicalMaterial({ color: 0x1a1f28, roughness: 0.4, metalness: 0.5, clearcoat: 0.5 });
+  const gen = box(1.6, 0.7, 1.2, gM, 0.05); at(gen, 2.6, 0.95, 0.2); gen.rotation.y = -0.5; scene.add(gen);
+  const stand = box(1.5, 0.6, 1.1, gM, 0.05); at(stand, 2.6, 0.3, 0.2); stand.rotation.y = -0.5; scene.add(stand);
+  const dsp = canvasTex(512, 160, (g, w, h) => { g.fillStyle = '#04101a'; g.fillRect(0, 0, w, h); g.strokeStyle = '#46d6ff'; g.lineWidth = 5; g.beginPath(); for (let x = 0; x < 300; x++) g.lineTo(20 + x, 80 + Math.sin(x / 300 * Math.PI * 8) * 40); g.stroke(); g.fillStyle = '#46d6ff'; for (let i = 0; i < 4; i++) g.fillRect(360 + i * 34, 40, 22, 80); });
+  const d = new THREE.Mesh(new THREE.PlaneGeometry(1.0, 0.32), new THREE.MeshBasicMaterial({ map: dsp, toneMapped: false })); const gp = gen.position.clone(); d.position.set(gp.x - Math.sin(0.5) * 0.61 + 0.0, gp.y + 0.05, gp.z + Math.cos(0.5) * 0.61); d.rotation.y = -0.5; scene.add(d);
+  const coax = new THREE.CatmullRomCurve3([V(2.0, 0.9, 0.6), V(1.4, 0.6, 1.0), V(0.9, 1.9, 0.6), V(0.3, 2.45, 0.1)]);
+  scene.add(new THREE.Mesh(new THREE.TubeGeometry(coax, 120, 0.05, 12), new THREE.MeshPhysicalMaterial({ color: 0x20252e, roughness: 0.5 })));
+  const pl = new THREE.PointLight(0x9d8bff, 4, 4); at(pl, 0, 1.35, 1.8); scene.add(pl);
+  scene.add(new THREE.HemisphereLight(0x9ec3ff, 0x0b1628, 0.7));
+  const key = new THREE.DirectionalLight(0xe8f1ff, 1.8); key.position.set(-3, 6, 5); scene.add(key);
+  camera.position.set(1.4, 1.9, 5.6); camera.lookAt(0.9, 1.15, 0.2); camera.fov = 36; bloom = [0.75, 0.5, 0.72];
+} else if (S === 'wpt') {
+  scene.background = new THREE.Color(0x0a1220);
+  scene.environmentIntensity = 0.8;
+  const desk = new THREE.Mesh(new THREE.PlaneGeometry(40, 40), new THREE.MeshPhysicalMaterial({ color: 0x1c2638, roughness: 0.35, clearcoat: 0.8, clearcoatRoughness: 0.2 })); desk.rotation.x = -Math.PI / 2; desk.receiveShadow = true; scene.add(desk);
+  const padM = new THREE.MeshPhysicalMaterial({ color: 0xe9edf2, roughness: 0.3, clearcoat: 1 });
+  const pad = new THREE.Mesh(new THREE.CylinderGeometry(1.25, 1.32, 0.16, 96), padM); at(pad, 0, 0.08, 0); pad.castShadow = true; scene.add(pad);
+  const ring = new THREE.Mesh(new THREE.TorusGeometry(1.29, 0.025, 12, 128), glow(0x35c8ff, 2.4)); ring.rotation.x = Math.PI / 2; at(ring, 0, 0.06, 0); scene.add(ring);
+  const halo = new THREE.Mesh(new THREE.RingGeometry(1.33, 2.3, 96), new THREE.MeshBasicMaterial({ color: 0x1b6fd0, transparent: true, opacity: 0.18, toneMapped: false })); halo.rotation.x = -Math.PI / 2; at(halo, 0, 0.005, 0); scene.add(halo);
+  const phone = box(1.45, 0.1, 2.95, new THREE.MeshPhysicalMaterial({ color: 0x0c0f14, roughness: 0.15, metalness: 0.3, clearcoat: 1 }), 0.2); at(phone, 0.05, 0.22, 0.05); phone.rotation.y = 0.5; phone.castShadow = true; scene.add(phone);
+  const scr = canvasTex(256, 520, (g, w, h) => { const gr = g.createLinearGradient(0, 0, w, h); gr.addColorStop(0, '#0d2c55'); gr.addColorStop(1, '#091426'); g.fillStyle = gr; g.fillRect(0, 0, w, h); g.strokeStyle = '#46d6ff'; g.lineWidth = 10; g.beginPath(); g.arc(w / 2, h / 2, 60, -Math.PI / 2, Math.PI * 1.1); g.stroke(); g.fillStyle = '#46d6ff'; g.fillRect(w / 2 - 8, h / 2 - 30, 16, 40); g.fillRect(w / 2 - 8, h / 2 + 18, 16, 16); });
+  const screen = new THREE.Mesh(new THREE.PlaneGeometry(1.32, 2.8), new THREE.MeshBasicMaterial({ map: scr, toneMapped: false })); screen.rotation.set(-Math.PI / 2, 0, 0.5); at(screen, 0.05, 0.276, 0.05); scene.add(screen);
+  // subtle field arcs rising from the coil
+  for (let k = 0; k < 4; k++) { const r = 0.5 + k * 0.28; const pts = []; for (let i = 0; i <= 60; i++) { const a = i / 60 * Math.PI; pts.push(V(-1.6 - Math.cos(a) * r, Math.sin(a) * r * 0.9 + 0.1, -0.9)); }
+    scene.add(new THREE.Mesh(new THREE.TubeGeometry(new THREE.CatmullRomCurve3(pts), 80, 0.008, 6), new THREE.MeshBasicMaterial({ color: 0x46d6ff, transparent: true, opacity: 0.55 - k * 0.1, toneMapped: false }))); }
+  const key = new THREE.DirectionalLight(0xffffff, 2.2); key.position.set(-3, 6, 4); key.castShadow = true; scene.add(key);
+  const rim = new THREE.DirectionalLight(0x5fb4ff, 2); rim.position.set(4, 2, -5); scene.add(rim);
+  camera.position.set(1.8, 3.4, 5.2); camera.lookAt(-0.2, 0.2, 0); camera.fov = 34; bloom = [0.7, 0.45, 0.7];
+}
+camera.updateProjectionMatrix();
+const comp = new EffectComposer(renderer); comp.addPass(new RenderPass(scene, camera));
+comp.addPass(new UnrealBloomPass(new THREE.Vector2(W, H), ...bloom)); comp.addPass(new OutputPass());
+comp.render();
+document.getElementById('out').textContent = '[]';
+document.title = 'done';
+</script></body></html>

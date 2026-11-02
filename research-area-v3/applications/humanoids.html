@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Actuators and power inside the robot. KAIST Integrated Power Circuit Lab.">
+  <title>Humanoids | KAIST Integrated Power Circuit Lab</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <script>if (window.self !== window.top) document.documentElement.classList.add('embedded');</script>
+  <link rel="preload" as="image" href="../assets/apps/humanoids-photo.webp">
+  <link rel="stylesheet" href="../concept-v2.css">
+  <link rel="stylesheet" href="applications.css">
+</head>
+<body>
+<header class="site-head">
+  <a class="brand" href="../index.html"><b>IPC</b> Lab <span>KAIST Integrated Power Circuit Lab</span></a>
+  <nav aria-label="Sections"><a href="../index.html#research">Research</a><a href="../index.html#applications">Applications</a></nav>
+</header>
+<main>
+  <section class="app-hero" aria-labelledby="app-title">
+    <div class="app-hero-copy">
+      <a class="crumb" href="../index.html#applications">← All applications</a>
+      <p class="kicker">Application 03</p>
+      <h1 id="app-title">Humanoids</h1>
+      <p class="app-tag">Actuators and power inside the robot</p>
+      <div class="app-intro"><p>A humanoid robot drives dozens of joints from one battery, with sharp power peaks at every step.</p><p>Its power electronics largely determine how long it runs, how much it lifts and how compact its limbs can be.</p></div>
+    </div>
+    <figure class="app-hero-img"><img src="../assets/apps/humanoids-photo.webp" width="1280" height="800" fetchpriority="high" alt="White humanoid robot standing in a laboratory"></figure>
+  </section>
+
+  <section class="topics" aria-labelledby="topics-title">
+    <div class="sec-head">
+      <h2 id="topics-title">Research topics</h2>
+    </div>
+    <article class="topic">
+      <div class="art dark"><img src="../assets/apps/robot.webp" width="1200" height="660" loading="lazy" decoding="async" alt=""><svg class="flow-svg" viewBox="0 0 1200 660" aria-hidden="true" focusable="false"><path class="base" d="M606.9 232.0 L606.9 228.0 L607.0 223.7 L607.4 219.3 L607.8 214.7 L608.3 210.2 L608.6 205.7 L608.9 201.3 L608.9 197.3 L608.5 193.4 L607.9 190.1 L606.9 187.1 L605.3 184.8 L603.3 183.1 L600.9 181.9 L598.1 181.0 L595.0 180.6 L591.6 180.3 L588.1 180.3 L584.5 180.5 L580.9 180.7 L577.3 181.1 L573.9 181.4 L570.6 181.6 L567.6 181.8 L565.1 181.8 L562.5 181.6 L560.0 181.4 L557.5 181.3 L555.2 181.1 L552.8 181.0 L550.5 181.1 L548.2 181.4 L546.0 182.0 L543.8 182.8 L541.8 184.0 L539.8 185.7 L536.6 189.3 L533.6 194.2 L530.7 200.1 L528.1 206.9 L525.4 214.2 L523.1 222.2 L520.7 230.5 L518.5 238.9 L516.3 247.3 L514.3 255.6 L512.2 263.4 L510.3 270.7 L508.6 277.4 L507.0 284.0 L505.5 290.6 L504.1 297.1 L502.8 303.7 L501.5 310.3 L500.4 316.9 L499.1 323.4 L498.0 330.0 L496.8 336.6 L495.5 343.2 L494.2 349.9"/><path class="flow" pathLength="300" d="M606.9 232.0 L606.9 228.0 L607.0 223.7 L607.4 219.3 L607.8 214.7 L608.3 210.2 L608.6 205.7 L608.9 201.3 L608.9 197.3 L608.5 193.4 L607.9 190.1 L606.9 187.1 L605.3 184.8 L603.3 183.1 L600.9 181.9 L598.1 181.0 L595.0 180.6 L591.6 180.3 L588.1 180.3 L584.5 180.5 L580.9 180.7 L577.3 181.1 L573.9 181.4 L570.6 181.6 L567.6 181.8 L565.1 181.8 L562.5 181.6 L560.0 181.4 L557.5 181.3 L555.2 181.1 L552.8 181.0 L550.5 181.1 L548.2 181.4 L546.0 182.0 L543.8 182.8 L541.8 184.0 L539.8 185.7 L536.6 189.3 L533.6 194.2 L530.7 200.1 L528.1 206.9 L525.4 214.2 L523.1 222.2 L520.7 230.5 L518.5 238.9 L516.3 247.3 L514.3 255.6 L512.2 263.4 L510.3 270.7 L508.6 277.4 L507.0 284.0 L505.5 290.6 L504.1 297.1 L502.8 303.7 L501.5 310.3 L500.4 316.9 L499.1 323.4 L498.0 330.0 L496.8 336.6 L495.5 343.2 L494.2 349.9"/><path class="base" d="M606.9 232.0 L606.6 228.0 L606.1 223.7 L605.5 219.3 L604.7 214.7 L604.0 210.2 L603.3 205.7 L602.8 201.4 L602.5 197.3 L602.5 193.5 L603.0 190.1 L603.9 187.2 L605.3 184.8 L607.1 183.0 L609.5 181.8 L612.2 180.8 L615.3 180.3 L618.6 179.9 L622.2 179.9 L625.9 179.9 L629.6 180.1 L633.4 180.4 L637.1 180.7 L640.7 180.8 L644.1 180.9 L647.0 180.8 L650.1 180.6 L653.2 180.3 L656.4 180.0 L659.4 179.9 L662.5 179.7 L665.6 179.8 L668.5 179.9 L671.3 180.5 L674.0 181.4 L676.6 182.5 L678.9 184.2 L682.3 188.0 L685.3 193.1 L687.8 199.4 L690.0 206.5 L692.0 214.4 L693.6 222.9 L695.1 231.7 L696.3 240.8 L697.4 249.9 L698.6 258.7 L699.5 267.3 L700.7 275.2 L701.6 282.4 L702.4 289.5 L702.9 296.7 L703.3 303.8 L703.6 311.1 L703.8 318.2 L704.0 325.4 L704.2 332.5 L704.3 339.7 L704.5 346.9 L704.7 354.2 L705.1 361.5"/><path class="flow" pathLength="300" d="M606.9 232.0 L606.6 228.0 L606.1 223.7 L605.5 219.3 L604.7 214.7 L604.0 210.2 L603.3 205.7 L602.8 201.4 L602.5 197.3 L602.5 193.5 L603.0 190.1 L603.9 187.2 L605.3 184.8 L607.1 183.0 L609.5 181.8 L612.2 180.8 L615.3 180.3 L618.6 179.9 L622.2 179.9 L625.9 179.9 L629.6 180.1 L633.4 180.4 L637.1 180.7 L640.7 180.8 L644.1 180.9 L647.0 180.8 L650.1 180.6 L653.2 180.3 L656.4 180.0 L659.4 179.9 L662.5 179.7 L665.6 179.8 L668.5 179.9 L671.3 180.5 L674.0 181.4 L676.6 182.5 L678.9 184.2 L682.3 188.0 L685.3 193.1 L687.8 199.4 L690.0 206.5 L692.0 214.4 L693.6 222.9 L695.1 231.7 L696.3 240.8 L697.4 249.9 L698.6 258.7 L699.5 267.3 L700.7 275.2 L701.6 282.4 L702.4 289.5 L702.9 296.7 L703.3 303.8 L703.6 311.1 L703.8 318.2 L704.0 325.4 L704.2 332.5 L704.3 339.7 L704.5 346.9 L704.7 354.2 L705.1 361.5"/><path class="base" d="M606.9 232.0 L606.8 229.6 L606.7 227.3 L606.5 224.9 L606.4 222.4 L606.3 220.0 L606.2 217.5 L606.1 215.0 L606.0 212.6 L605.9 210.1 L605.7 207.6 L605.6 205.2 L605.5 202.8 L605.5 200.4 L605.4 198.1 L605.4 195.7 L605.3 193.4 L605.3 191.1 L605.3 188.9 L605.3 186.8 L605.3 184.8 L605.4 183.2 L605.4 181.7 L605.5 180.3 L605.5 179.0 L605.7 177.6 L605.8 176.3 L605.9 175.0 L606.1 173.8 L606.2 172.6 L606.3 171.2 L606.4 170.0 L606.6 168.8 L606.8 167.5 L606.9 166.2 L607.0 164.9 L607.1 163.6 L607.2 162.2 L607.3 160.8 L607.4 159.3 L607.5 157.8 L607.6 155.6 L607.6 153.3 L607.6 151.0 L607.6 148.6 L607.7 146.2 L607.7 143.6 L607.7 141.1 L607.7 138.4 L607.7 135.8 L607.6 133.2 L607.6 130.4 L607.6 127.8 L607.6 125.1 L607.6 122.3 L607.6 119.5 L607.6 116.9 L607.5 114.2 L607.5 111.4 L607.5 108.8 L607.5 106.2"/><path class="flow" pathLength="300" d="M606.9 232.0 L606.8 229.6 L606.7 227.3 L606.5 224.9 L606.4 222.4 L606.3 220.0 L606.2 217.5 L606.1 215.0 L606.0 212.6 L605.9 210.1 L605.7 207.6 L605.6 205.2 L605.5 202.8 L605.5 200.4 L605.4 198.1 L605.4 195.7 L605.3 193.4 L605.3 191.1 L605.3 188.9 L605.3 186.8 L605.3 184.8 L605.4 183.2 L605.4 181.7 L605.5 180.3 L605.5 179.0 L605.7 177.6 L605.8 176.3 L605.9 175.0 L606.1 173.8 L606.2 172.6 L606.3 171.2 L606.4 170.0 L606.6 168.8 L606.8 167.5 L606.9 166.2 L607.0 164.9 L607.1 163.6 L607.2 162.2 L607.3 160.8 L607.4 159.3 L607.5 157.8 L607.6 155.6 L607.6 153.3 L607.6 151.0 L607.6 148.6 L607.7 146.2 L607.7 143.6 L607.7 141.1 L607.7 138.4 L607.7 135.8 L607.6 133.2 L607.6 130.4 L607.6 127.8 L607.6 125.1 L607.6 122.3 L607.6 119.5 L607.6 116.9 L607.5 114.2 L607.5 111.4 L607.5 108.8 L607.5 106.2"/><path class="base" d="M606.9 232.0 L606.7 237.1 L606.6 242.2 L606.4 247.4 L606.2 252.6 L606.2 257.8 L606.0 262.9 L605.8 268.0 L605.7 273.1 L605.5 278.0 L605.5 282.8 L605.4 287.6 L605.4 292.1 L605.4 295.8 L605.6 299.4 L606.0 303.2 L606.4 306.9 L606.9 310.6 L607.3 314.1 L607.6 317.6 L607.6 320.8 L607.6 323.9 L607.2 326.7 L606.4 329.3 L605.4 331.5 L603.7 333.2 L601.7 334.4 L599.1 335.1 L596.4 335.6 L593.4 335.8 L590.2 335.9 L587.2 336.2 L584.1 336.6 L581.1 337.2 L578.4 338.2 L576.0 339.7 L574.0 341.9 L571.2 347.0 L569.0 353.5 L567.4 361.3 L566.1 370.0 L565.4 379.5 L564.7 389.7 L564.5 400.3 L564.3 411.0 L564.2 421.7 L564.1 432.1 L564.0 442.1 L563.9 451.2 L563.7 459.8 L563.7 468.2 L563.9 476.5 L564.1 484.7 L564.5 492.8 L564.8 500.9 L565.4 508.8 L565.8 516.7 L566.2 524.5 L566.7 532.4 L567.1 540.2 L567.5 547.9"/><path class="flow" pathLength="300" d="M606.9 232.0 L606.7 237.1 L606.6 242.2 L606.4 247.4 L606.2 252.6 L606.2 257.8 L606.0 262.9 L605.8 268.0 L605.7 273.1 L605.5 278.0 L605.5 282.8 L605.4 287.6 L605.4 292.1 L605.4 295.8 L605.6 299.4 L606.0 303.2 L606.4 306.9 L606.9 310.6 L607.3 314.1 L607.6 317.6 L607.6 320.8 L607.6 323.9 L607.2 326.7 L606.4 329.3 L605.4 331.5 L603.7 333.2 L601.7 334.4 L599.1 335.1 L596.4 335.6 L593.4 335.8 L590.2 335.9 L587.2 336.2 L584.1 336.6 L581.1 337.2 L578.4 338.2 L576.0 339.7 L574.0 341.9 L571.2 347.0 L569.0 353.5 L567.4 361.3 L566.1 370.0 L565.4 379.5 L564.7 389.7 L564.5 400.3 L564.3 411.0 L564.2 421.7 L564.1 432.1 L564.0 442.1 L563.9 451.2 L563.7 459.8 L563.7 468.2 L563.9 476.5 L564.1 484.7 L564.5 492.8 L564.8 500.9 L565.4 508.8 L565.8 516.7 L566.2 524.5 L566.7 532.4 L567.1 540.2 L567.5 547.9"/><path class="base" d="M606.9 232.0 L606.7 237.1 L606.6 242.2 L606.4 247.4 L606.2 252.6 L606.2 257.8 L606.0 262.9 L605.8 268.0 L605.7 273.1 L605.5 278.0 L605.5 282.8 L605.4 287.6 L605.4 292.1 L605.2 295.8 L604.8 299.4 L604.4 303.1 L603.9 306.8 L603.4 310.4 L603.0 314.0 L602.6 317.4 L602.5 320.6 L602.7 323.6 L603.2 326.5 L604.0 329.2 L605.4 331.5 L607.2 333.4 L609.6 334.8 L612.5 335.8 L615.7 336.5 L619.3 337.1 L622.9 337.5 L626.6 338.0 L630.2 338.7 L633.7 339.7 L636.8 341.0 L639.7 342.9 L641.9 345.3 L644.7 350.9 L646.6 357.7 L647.7 365.9 L648.0 375.0 L647.9 384.9 L647.4 395.4 L646.6 406.3 L645.7 417.3 L644.8 428.3 L644.1 439.0 L643.8 449.2 L643.8 458.7 L644.1 467.6 L644.5 476.3 L644.8 484.9 L645.3 493.3 L645.7 501.7 L646.2 509.9 L646.6 518.1 L647.0 526.3 L647.5 534.4 L647.9 542.5 L648.4 550.5 L648.8 558.6"/><path class="flow" pathLength="300" d="M606.9 232.0 L606.7 237.1 L606.6 242.2 L606.4 247.4 L606.2 252.6 L606.2 257.8 L606.0 262.9 L605.8 268.0 L605.7 273.1 L605.5 278.0 L605.5 282.8 L605.4 287.6 L605.4 292.1 L605.2 295.8 L604.8 299.4 L604.4 303.1 L603.9 306.8 L603.4 310.4 L603.0 314.0 L602.6 317.4 L602.5 320.6 L602.7 323.6 L603.2 326.5 L604.0 329.2 L605.4 331.5 L607.2 333.4 L609.6 334.8 L612.5 335.8 L615.7 336.5 L619.3 337.1 L622.9 337.5 L626.6 338.0 L630.2 338.7 L633.7 339.7 L636.8 341.0 L639.7 342.9 L641.9 345.3 L644.7 350.9 L646.6 357.7 L647.7 365.9 L648.0 375.0 L647.9 384.9 L647.4 395.4 L646.6 406.3 L645.7 417.3 L644.8 428.3 L644.1 439.0 L643.8 449.2 L643.8 458.7 L644.1 467.6 L644.5 476.3 L644.8 484.9 L645.3 493.3 L645.7 501.7 L646.2 509.9 L646.6 518.1 L647.0 526.3 L647.5 534.4 L647.9 542.5 L648.4 550.5 L648.8 558.6"/></svg></div>
+      <div class="topic-copy">
+        <span class="num">01</span>
+        <h3>Power management inside the robot</h3>
+        <p class="label">Challenge</p><p>One battery must feed every joint, sensor and computer through fast-changing loads.</p>
+        <p class="label">Approach</p><p>A robot-wide power network that distributes, buffers and recovers energy — like a circulatory system.</p>
+      </div>
+    </article>
+    <article class="topic flip">
+      <div class="art"><img src="../assets/apps/actuator.webp" width="1200" height="660" loading="lazy" decoding="async" alt=""><svg class="flow-svg" viewBox="0 0 1200 660" aria-hidden="true" focusable="false"></svg></div>
+      <div class="topic-copy">
+        <span class="num">02</span>
+        <h3>Hybrid actuators and drivers</h3>
+        <p class="label">Challenge</p><p>Joint motors that hold heavy loads for long periods, as in an arm holding a weight, become large and hot.</p>
+        <p class="label">Approach</p><p>Pair the joint motor with a shape-memory alloy spring mounted on the arm like a muscle: the motor moves, the alloy holds — with drivers for both.</p>
+      </div>
+    </article>
+  </section>
+  <section class="projects" id="projects" aria-labelledby="projects-title" data-projects data-app="humanoids" data-prefix="../">
+    <div class="sec-head"><h2 id="projects-title">Current projects</h2></div>
+    <ul class="proj-list current"><li><span class="proj-logo"><img src="../assets/partners/kimm.png" alt="KIMM" loading="lazy" decoding="async"></span><div class="proj-copy"><h3>SMA–motor hybrid actuation for humanoid robots</h3><p>Korea Institute of Machinery and Materials (KIMM)</p></div><span class="proj-period">Since 2025.04</span></li></ul>
+    <details class="proj-done" hidden><summary><span>Completed projects (<span class="proj-count">0</span>)</span></summary><ul class="proj-list"></ul></details>
+  </section>
+  <script src="../assets/projects-config.js?v=202611021204"></script><script src="../assets/projects.js?v=202611021204" defer></script>
+
+  <nav class="app-next" aria-label="Applications">
+    <p class="kicker">Explore other applications</p>
+    <div class="app-next-row">
+      <a href="ai-datacenter.html"><img src="../assets/apps/ai-card.webp" width="640" height="400" alt="" loading="lazy" decoding="async"><span>AI Datacenter</span></a>
+      <a href="electric-vehicles.html"><img src="../assets/apps/ev-card.webp" width="640" height="400" alt="" loading="lazy" decoding="async"><span>Electric Vehicles</span></a>
+      <a href="humanoids.html" aria-current="page"><img src="../assets/apps/humanoids-card.webp" width="640" height="400" alt="" loading="lazy" decoding="async"><span>Humanoids</span></a>
+      <a href="rf-systems.html"><img src="../assets/apps/rf-card.webp" width="640" height="400" alt="" loading="lazy" decoding="async"><span>RF Systems</span></a>
+      <a href="wireless-power-transfer.html"><img src="../assets/apps/wpt-card.webp" width="640" height="400" alt="" loading="lazy" decoding="async"><span>Wireless Power Transfer</span></a>
+    </div>
+  </nav>
+</main>
+<footer class="site-foot"><p>KAIST Integrated Power Circuit Lab</p><p class="credit">Header photo: Humanoid robot in a laboratory (illustrative image generated with ChatGPT).</p></footer>
+</body>
+</html>

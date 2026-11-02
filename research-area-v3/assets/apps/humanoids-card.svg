@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="480" height="360" viewBox="0 0 480 360" role="img" aria-label="Humanoid robot: power from one battery in the torso is distributed to the joint actuators and their drivers">
+<title>Humanoid robot: power from one battery in the torso is distributed to the joint actuators and their drivers</title>
+<style>
+  text { font-family: Inter, Arial, Helvetica, sans-serif; font-size: 19px; font-weight: 600; fill: #46546a; }
+  .acc { fill: #1f6fe0; }
+  .chip { fill: #fff; font-weight: 800; letter-spacing: .5px; font-size: 11px; }
+  .flow { fill: none; stroke: #3f95ff; stroke-width: 3; stroke-linecap: round; stroke-linejoin: round; }
+  .thin { fill: none; stroke: #3f95ff; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+</style>
+<defs>
+  <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#f5f8fc"/><stop offset="1" stop-color="#e9eff7"/></linearGradient>
+  <marker id="ar" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="4" markerHeight="4" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#3f95ff"/></marker>
+</defs>
+<rect width="480" height="360" fill="url(#bg)"/>
+
+<circle cx="240" cy="66" r="22" fill="#e3e8ef" stroke="#c3ccd8" stroke-width="2"/>
+<rect x="226" y="62" width="28" height="9" rx="4" fill="#1a1c21"/>
+<path d="M204 112 L190 172" stroke="#c3ccd8" stroke-width="21" stroke-linecap="round"/><path d="M204 112 L190 172" stroke="#e3e8ef" stroke-width="18" stroke-linecap="round"/><path d="M190 172 L184 228" stroke="#c3ccd8" stroke-width="21" stroke-linecap="round"/><path d="M190 172 L184 228" stroke="#e3e8ef" stroke-width="18" stroke-linecap="round"/><path d="M276 112 L290 172" stroke="#c3ccd8" stroke-width="21" stroke-linecap="round"/><path d="M276 112 L290 172" stroke="#e3e8ef" stroke-width="18" stroke-linecap="round"/><path d="M290 172 L296 228" stroke="#c3ccd8" stroke-width="21" stroke-linecap="round"/><path d="M290 172 L296 228" stroke="#e3e8ef" stroke-width="18" stroke-linecap="round"/><path d="M226 212 L222 270" stroke="#c3ccd8" stroke-width="21" stroke-linecap="round"/><path d="M226 212 L222 270" stroke="#e3e8ef" stroke-width="18" stroke-linecap="round"/><path d="M222 270 L220 326" stroke="#c3ccd8" stroke-width="21" stroke-linecap="round"/><path d="M222 270 L220 326" stroke="#e3e8ef" stroke-width="18" stroke-linecap="round"/><path d="M254 212 L258 270" stroke="#c3ccd8" stroke-width="21" stroke-linecap="round"/><path d="M254 212 L258 270" stroke="#e3e8ef" stroke-width="18" stroke-linecap="round"/><path d="M258 270 L260 326" stroke="#c3ccd8" stroke-width="21" stroke-linecap="round"/><path d="M258 270 L260 326" stroke="#e3e8ef" stroke-width="18" stroke-linecap="round"/>
+<rect x="202" y="96" width="76" height="98" rx="16" fill="#e3e8ef" stroke="#c3ccd8" stroke-width="2"/>
+<rect x="212" y="194" width="56" height="26" rx="9" fill="#e3e8ef" stroke="#c3ccd8" stroke-width="2"/>
+<path class="thin" d="M240 146 L204 112" opacity=".85"/><path class="thin" d="M240 146 L276 112" opacity=".85"/><path class="thin" d="M240 146 L226 212" opacity=".85"/><path class="thin" d="M240 146 L254 212" opacity=".85"/><path class="thin" d="M204 112 L190 172" opacity=".85"/><path class="thin" d="M190 172 L184 228" opacity=".85"/><path class="thin" d="M276 112 L290 172" opacity=".85"/><path class="thin" d="M290 172 L296 228" opacity=".85"/><path class="thin" d="M226 212 L222 270" opacity=".85"/><path class="thin" d="M222 270 L220 326" opacity=".85"/><path class="thin" d="M254 212 L258 270" opacity=".85"/><path class="thin" d="M258 270 L260 326" opacity=".85"/>
+<rect x="226" y="126" width="28" height="40" rx="5" fill="#1f6fe0"/>
+<rect x="234" y="120" width="12" height="7" rx="2" fill="#1f6fe0"/><path d="M233 140 H247 M233 150 H247" stroke="#fff" stroke-width="2" opacity=".7"/>
+<circle cx="204" cy="112" r="7" fill="#1a1c21"/><circle cx="276" cy="112" r="7" fill="#1a1c21"/><circle cx="190" cy="172" r="7" fill="#1a1c21"/><circle cx="290" cy="172" r="7" fill="#1a1c21"/><circle cx="226" cy="212" r="7" fill="#1a1c21"/><circle cx="254" cy="212" r="7" fill="#1a1c21"/><circle cx="222" cy="270" r="7" fill="#1a1c21"/><circle cx="258" cy="270" r="7" fill="#1a1c21"/>
+<circle cx="290" cy="172" r="13" fill="none" stroke="#1f6fe0" stroke-width="2.5"/>
+<path d="M303 172 H318" stroke="#1f6fe0" stroke-width="1.2" stroke-dasharray="3 3"/>
+<text class="acc" x="322" y="178">Actuator</text>
+<path d="M226 146 H184" stroke="#9aa5b3" stroke-width="1.2" stroke-dasharray="3 3"/>
+<text x="180" y="152" text-anchor="end">Battery</text>
+</svg>

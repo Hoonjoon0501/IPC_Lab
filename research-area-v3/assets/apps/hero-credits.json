@@ -1,0 +1,22 @@
+{
+ "ai": {
+  "own": true,
+  "text": "AI data center aisle with server racks (illustrative image generated with ChatGPT)"
+ },
+ "ev": {
+  "own": true,
+  "text": "Electric car charging at a station at dusk (illustrative image generated with ChatGPT)"
+ },
+ "humanoids": {
+  "own": true,
+  "text": "Humanoid robot in a laboratory (illustrative image generated with ChatGPT)"
+ },
+ "rf": {
+  "own": true,
+  "text": "RF power amplifier module on a lab bench (illustrative image generated with ChatGPT)"
+ },
+ "wpt": {
+  "own": true,
+  "text": "Wireless power transfer between two coils (illustrative image generated with ChatGPT)"
+ }
+}

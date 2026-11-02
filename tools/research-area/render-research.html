@@ -1,0 +1,458 @@
+<!doctype html>
+<html><head><meta charset="utf-8">
+<style>html,body{margin:0;background:transparent;overflow:hidden}canvas{display:block}#out{display:none}</style>
+<script type="importmap">{"imports":{"three":"./node_modules/three/build/three.module.js","three/addons/":"./node_modules/three/examples/jsm/"}}</script>
+</head><body><pre id="out"></pre>
+<script type="module">
+// Research-area renders: navy board, black packages, copper, one electric-blue accent.
+// Each scene also exports 2D overlay paths (projected world polylines) for animated SVG flow.
+import * as THREE from 'three';
+import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js';
+import { RoundedBoxGeometry } from 'three/addons/geometries/RoundedBoxGeometry.js';
+import { LineSegments2 } from 'three/addons/lines/LineSegments2.js';
+import { LineSegmentsGeometry } from 'three/addons/lines/LineSegmentsGeometry.js';
+import { LineMaterial } from 'three/addons/lines/LineMaterial.js';
+
+const q = new URLSearchParams(location.search);
+const W = 1200, H = 660, S = q.get('s') || 'circuit';
+const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true, preserveDrawingBuffer: true });
+renderer.setPixelRatio(window.devicePixelRatio || 1); renderer.setSize(W, H);
+renderer.setClearColor(0x000000, 0);
+renderer.toneMapping = THREE.ACESFilmicToneMapping; renderer.toneMappingExposure = 1.0;
+renderer.outputColorSpace = THREE.SRGBColorSpace;
+renderer.shadowMap.enabled = true; renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+document.body.appendChild(renderer.domElement);
+
+const scene = new THREE.Scene();
+const pm = new THREE.PMREMGenerator(renderer);
+scene.environment = pm.fromScene(new RoomEnvironment(), 0.03).texture;
+scene.environmentIntensity = 0.75;
+const key = new THREE.DirectionalLight(0xffffff, 2.4); key.position.set(-40, 80, 50); key.castShadow = true;
+key.shadow.mapSize.set(4096, 4096); Object.assign(key.shadow.camera, { left: -70, right: 70, top: 70, bottom: -70, near: 1, far: 260 });
+key.shadow.radius = 8; key.shadow.bias = -0.0003; scene.add(key);
+const rim = new THREE.DirectionalLight(0xcfe2ff, 1.6); rim.position.set(60, 40, -80); scene.add(rim);
+const fill = new THREE.DirectionalLight(0xffffff, 0.6); fill.position.set(90, 25, 70); scene.add(fill);
+
+const M = {
+  pkg: new THREE.MeshPhysicalMaterial({ color: 0x101216, roughness: 0.32, clearcoat: 1, clearcoatRoughness: 0.18 }),
+  pkgMatte: new THREE.MeshPhysicalMaterial({ color: 0x15171b, roughness: 0.55, clearcoat: 0.4 }),
+  pcb: new THREE.MeshPhysicalMaterial({ color: 0x0e2647, roughness: 0.38, clearcoat: 1, clearcoatRoughness: 0.12 }),
+  pcbEdge: new THREE.MeshStandardMaterial({ color: 0xc9bf9e, roughness: 0.8 }),
+  substrate: new THREE.MeshPhysicalMaterial({ color: 0x173a34, roughness: 0.4, clearcoat: 0.9, clearcoatRoughness: 0.2 }),
+  tin: new THREE.MeshStandardMaterial({ color: 0xe3e6ea, roughness: 0.22, metalness: 1 }),
+  gold: new THREE.MeshStandardMaterial({ color: 0xe0b45a, roughness: 0.25, metalness: 1 }),
+  copper: new THREE.MeshPhysicalMaterial({ color: 0xd9824a, roughness: 0.22, metalness: 1, clearcoat: 0.6 }),
+  copperPlane: new THREE.MeshPhysicalMaterial({ color: 0xd38552, roughness: 0.28, metalness: 0.95, clearcoat: 0.5 }),
+  ceramic: new THREE.MeshStandardMaterial({ color: 0xbfa27a, roughness: 0.5 }),
+  ferrite: new THREE.MeshPhysicalMaterial({ color: 0x2b2d31, roughness: 0.62, clearcoat: 0.25 }),
+  lid: new THREE.MeshStandardMaterial({ color: 0xdfe3e8, roughness: 0.3, metalness: 1 }),
+  glow: new THREE.MeshBasicMaterial({ color: 0x3f95ff, toneMapped: false }),
+  glowSoft: new THREE.MeshBasicMaterial({ color: 0x6fb3ff, toneMapped: false, transparent: true, opacity: 0.85 }),
+  twinFill: new THREE.MeshPhysicalMaterial({ color: 0x4f9dff, emissive: 0x1f6fe0, emissiveIntensity: 0.5, transparent: true, opacity: 0.30, roughness: 0.2, depthWrite: false }),
+  twinLine: new THREE.LineBasicMaterial({ color: 0x2b86ff, toneMapped: false }),
+  shadow: new THREE.ShadowMaterial({ opacity: 0.18 }),
+};
+const box = (w, h, d, m, r = 0.25) => { const g = new THREE.Mesh(new RoundedBoxGeometry(w, h, d, 4, Math.min(r, w / 2.1, h / 2.1, d / 2.1)), m); g.castShadow = g.receiveShadow = true; return g; };
+const at = (o, x, y, z) => { o.position.set(x, y, z); return o; };
+const root = new THREE.Group(); scene.add(root);
+const ground = new THREE.Mesh(new THREE.PlaneGeometry(500, 500), M.shadow); ground.rotation.x = -Math.PI / 2; ground.receiveShadow = true; root.add(ground);
+
+function qfn(w, d, t = 1.0, pads = 5) {
+  const g = new THREE.Group();
+  g.add(at(box(w, t, d, M.pkg, 0.16), 0, t / 2 + 0.05, 0));
+  const pw = (w * 0.8) / pads;
+  for (let i = 0; i < pads; i++) for (const s of [-1, 1]) g.add(at(box(pw * 0.55, 0.3, 0.9, M.tin, 0.08), -w * 0.4 + pw * (i + 0.5), 0.15, s * (d / 2 + 0.25)));
+  return g;
+}
+function mlcc(l, w, h) {
+  const g = new THREE.Group();
+  g.add(at(box(l * 0.62, h, w, M.ceramic, 0.14), 0, h / 2, 0));
+  for (const s of [-1, 1]) g.add(at(box(l * 0.2, h * 1.03, w * 1.03, M.tin, 0.14), s * l * 0.4, h / 2, 0));
+  return g;
+}
+function strip(points, width, mat, y) { // flat glowing trace through xz points
+  const g = new THREE.Group();
+  for (let i = 0; i < points.length - 1; i++) {
+    const [x1, z1] = points[i], [x2, z2] = points[i + 1];
+    const m = new THREE.Mesh(new THREE.BoxGeometry(Math.hypot(x2 - x1, z2 - z1) + width, 0.08, width), mat);
+    m.position.set((x1 + x2) / 2, y, (z1 + z2) / 2); m.rotation.y = -Math.atan2(z2 - z1, x2 - x1); g.add(m);
+  }
+  return g;
+}
+function coilInductor(r = 4.2, turns = 7, wire = 0.55) { // open-frame inductor with visible copper helix
+  const g = new THREE.Group();
+  g.add(at(box(r * 2.6, 1.6, r * 2.6, M.ferrite, 0.4), 0, 0.8, 0));
+  g.add(at(new THREE.Mesh(new THREE.CylinderGeometry(r * 0.55, r * 0.55, 6.4, 40), M.ferrite), 0, 4.6, 0));
+  const pts = []; const h0 = 2.2, h1 = 7.2;
+  for (let i = 0; i <= turns * 48; i++) { const t = i / (turns * 48), a = t * turns * Math.PI * 2; pts.push(new THREE.Vector3(Math.cos(a) * r * 0.82, h0 + (h1 - h0) * t, Math.sin(a) * r * 0.82)); }
+  const coil = new THREE.Mesh(new THREE.TubeGeometry(new THREE.CatmullRomCurve3(pts), 900, wire, 14), M.copper); coil.castShadow = true; g.add(coil);
+  g.traverse(o => { if (o.isMesh) o.castShadow = o.receiveShadow = true; });
+  return g;
+}
+const twinFat = new LineMaterial({ color: 0x2f8bff, linewidth: 2.2, toneMapped: false }); twinFat.resolution.set(W, H);
+const overlays = []; // {id, pts: Vector3[] , kind}
+
+let camPos, camTarget, fov = 24; let orthoW = 0;
+
+// ---- scenes v3 ----
+function buildCircuit(b) {
+  b.add(at(box(70, 1.6, 40, M.pcb, 0.7), 0, 0.8, 0));
+  const top = 1.65;
+  const pour = (w, d, x, z) => b.add(at(box(w, 0.08, d, M.gold, 0.35), x, top + 0.02, z));
+  pour(5, 5, -30, -11); pour(5, 5, -30, 11);
+  [-22, -11, 0, 11].forEach(x => b.add(at(qfn(7, 6.2, 1.15, 5), x, top, -10)));
+  [-16.5, -5.5, 5.5].forEach(x => { for (const dz of [-1.6, 2.4]) { const c = mlcc(6.4, 3.3, 2.8); c.position.set(x, top, dz); b.add(c); } });
+  const L = coilInductor(4.4, 7, 0.55); L.position.set(24, top, -6); b.add(L);
+  for (let i = 0; i < 5; i++) { const c = mlcc(4.6, 2.6, 2.3); c.rotation.y = Math.PI / 2; c.position.set(16 + i * 3.6, top, 11.5); b.add(c); }
+  for (let i = 0; i < 3; i++) { const c = mlcc(4.6, 2.6, 2.3); c.rotation.y = Math.PI / 2; c.position.set(-27 + i * 3.6, top, 3); b.add(c); }
+  b.add(at(qfn(5, 5, 0.9, 4), -10, top, 12));
+  const path = [[-30, -14.5], [16.5, -14.5], [16.5, -6], [31.5, -6], [31.5, 6.5], [14, 6.5]];
+  b.add(strip(path, 0.8, M.gold, top + 0.05));
+  b.add(strip([[-30, -14.5], [-30, 8]], 0.8, M.gold, top + 0.05));
+  for (let i = 0; i < 30; i++) { const v = new THREE.Mesh(new THREE.CylinderGeometry(0.42, 0.42, 0.12, 16), M.gold); v.position.set(-31 + (i % 15) * 4.4, top + 0.04, i < 15 ? -18 : 18); b.add(v); }
+  return [[-30, 8], [-30, -14.5], ...path.slice(1)].map(([x, z]) => new THREE.Vector3(x, top + 0.1, z));
+}
+function buildLego(b) { // stacked point-of-load brick: cap board / windings + cores / mid board / windings + cores / base board / pins
+  const W = 64, D = 22, X = [-22.5, -7.5, 7.5, 22.5];
+  const board = (y, t = 1.5) => b.add(at(box(W, t, D, M.pcb, 0.5), 0, y + t / 2, 0));
+  const edge = (y) => { for (const s of [-1, 1]) b.add(at(box(W - 1, 0.3, 0.25, M.copper, 0.1), 0, y, s * (D / 2 + 0.05))); };
+  // bottom pins
+  for (let i = 0; i < 6; i++) for (const s of [-1, 1]) b.add(at(box(6.2, 2.4, 3.6, M.tin, 0.35), -26 + i * 10.4, 1.2, s * 7.6));
+  board(2.4); edge(3.15);
+  for (let i = 0; i < 16; i++) { const c = mlcc(2.6, 1.5, 1.3); c.rotation.y = Math.PI / 2; c.position.set(-28.5 + i * 3.8, 3.9, 9.4); b.add(c); }
+  // ferrite cores pass through the mid board; copper turns wrap the centre leg on both tiers
+  const ring = (cx, y, hx, hz, t, h) => { b.add(at(box(2 * hx + t, h, t, M.copper, 0.12), cx, y, -hz)); b.add(at(box(2 * hx + t, h, t, M.copper, 0.12), cx, y, hz)); b.add(at(box(t, h, 2 * hz - t, M.copper, 0.12), cx - hx, y, 0)); b.add(at(box(t, h, 2 * hz - t, M.copper, 0.12), cx + hx, y, 0)); };
+  X.forEach(x => {
+    b.add(at(box(11, 18.4, 3, M.ferrite, 0.4), x, 3.9 + 9.2, -7.4)); // back leg only, so the front turns stay visible
+    b.add(at(box(5.2, 18.4, 7.0, M.ferrite, 0.4), x, 3.9 + 9.2, -0.4));
+    for (const y0 of [3.9, 13.85]) { // per tier: ferrite plates top and bottom, three turns between
+      for (const yp of [y0 + 1.1, y0 + 7.35]) b.add(at(box(12, 2.2, 16, M.ferrite, 0.5), x, yp, -0.5));
+      for (const dy of [3.35, 5.1]) ring(x, y0 + dy, 4.2, 4.8, 1.1, 1.35);
+    }
+  });
+  board(12.35); edge(13.1);
+  // vertical copper interconnects at the ends
+  for (const x of [-30.6, 30.6]) for (const z of [-7, 0, 7]) b.add(at(box(1.6, 18.4, 2.2, M.copper, 0.3), x, 3.9 + 9.2, z));
+  board(22.3, 1.6); edge(23.1);
+  // top: rows of ceramic capacitors
+  for (let r = 0; r < 3; r++) for (let i = 0; i < 9; i++) { const c = mlcc(5.2, 3.0, 2.6); c.position.set(-27.2 + i * 6.8, 23.9, -6.6 + r * 6.6); b.add(c); }
+}
+function toWire(g) { // turn a built group into a translucent blue wire model
+  const meshes = []; g.traverse(o => { if (o.isMesh) meshes.push(o); });
+  meshes.forEach(o => {
+    o.castShadow = o.receiveShadow = false;
+    o.geometry.computeBoundingBox(); const bb = o.geometry.boundingBox; const sz = bb.getSize(new THREE.Vector3());
+    if (sz.x * sz.y * sz.z < 2.5 && Math.max(sz.x, sz.z) < 8) { o.visible = false; return; }
+    o.material = M.twinFill;
+    const c = [bb.min, bb.max]; const k = [];
+    for (const x of [0, 1]) for (const y of [0, 1]) for (const z of [0, 1]) k.push(new THREE.Vector3(c[x].x, c[y].y, c[z].z));
+    [[0,1],[2,3],[4,5],[6,7],[0,2],[1,3],[4,6],[5,7],[0,4],[1,5],[2,6],[3,7]].forEach(([i, j]) => {
+      const A = k[i], B = k[j], len = A.distanceTo(B); if (len < 0.01) return;
+      const cyl = new THREE.Mesh(new THREE.CylinderGeometry(0.14, 0.14, len, 6), M.glow);
+      cyl.position.copy(A).add(B).multiplyScalar(0.5);
+      cyl.quaternion.setFromUnitVectors(new THREE.Vector3(0, 1, 0), B.clone().sub(A).normalize());
+      o.add(cyl);
+    });
+  });
+}
+const proj0 = [];
+if (S === 'circuit') {
+  const b = new THREE.Group(); root.add(b);
+  buildLego(b);
+  camPos = new THREE.Vector3(58, 52, 118); camTarget = new THREE.Vector3(0, 12, 0); fov = 25;
+} else if (S === 'pdn') {
+  const g = new THREE.Group(); root.add(g);
+  const layer = (w, d, t, m, y, x = 0) => g.add(at(box(w, t, d, m, Math.min(0.6, t / 2.2)), x, y, 0));
+  // motherboard with VRM at the left
+  layer(78, 46, 2.0, M.pcb, 1.0);
+  for (let i = 0; i < 3; i++) { const L = box(5.4, 4.2, 5.4, M.pkgMatte, 0.5); L.position.set(-32, 4.1, -12 + i * 8); g.add(L); const sw = qfn(3.4, 3.4, 0.8, 3); sw.position.set(-25.5, 2.05, -12 + i * 8); g.add(sw); }
+  // plated vias on the board top: annular gold rings + copper barrels
+  const pitch = 3.2, nx = 9, nz = 7, x0 = 6;
+  const ballPts = [];
+  for (let ix = 0; ix < nx; ix++) for (let iz = 0; iz < nz; iz++) ballPts.push([x0 + (ix - (nx - 1) / 2) * pitch, (iz - (nz - 1) / 2) * pitch]);
+  ballPts.forEach(([x, z]) => {
+    const ring = new THREE.Mesh(new THREE.TorusGeometry(0.75, 0.22, 10, 24), M.gold); ring.rotation.x = Math.PI / 2; ring.position.set(x, 2.02, z); g.add(ring);
+  });
+  // BGA solder balls (exploded between board and package)
+  ballPts.forEach(([x, z]) => { const s = new THREE.Mesh(new THREE.SphereGeometry(0.95, 24, 16), M.tin); s.position.set(x, 6.0, z); s.castShadow = true; g.add(s); });
+  // package substrate with microvia pads and decoupling caps
+  layer(34, 28, 1.6, M.substrate, 10.2, x0);
+  for (let i = 0; i < 6; i++) for (const s of [-1, 1]) { const c = mlcc(2.8, 1.6, 1.3); c.position.set(x0 - 13 + i * 5.2, 11.0, s * 12); g.add(c); }
+  // flip-chip bumps + die + lid
+  for (let ix = -6; ix <= 6; ix++) for (let iz = -4; iz <= 4; iz++) { const s = new THREE.Mesh(new THREE.SphereGeometry(0.38, 12, 8), M.tin); s.position.set(x0 + ix * 1.5, 13.6, iz * 1.5); g.add(s); }
+  g.add(at(box(22, 1.0, 16, M.pkg, 0.2), x0, 15.0, 0));
+  g.add(at(box(16, 1.8, 11.5, M.lid, 0.6), x0, 16.4, 0));
+  // current path: VRM -> board trace -> up through balls, substrate and bumps -> die
+  g.add(strip([[-22, -4], [-12, -4], [-12, 0], [x0 - 12.8, 0]], 0.9, M.glow, 2.06));
+  overlays.push({ id: 'feed', pts: [[-22, -4], [-12, -4], [-12, 0], [x0 - 12.8, 0]].map(([x, z]) => new THREE.Vector3(x, 2.1, z)) });
+  [[x0 - 9.6, 3.2], [x0 - 3.2, -3.2], [x0 + 3.2, 3.2], [x0 + 9.6, -3.2], [x0, 0]].forEach(([x, z], i) => {
+    const v = new THREE.Mesh(new THREE.CylinderGeometry(0.32, 0.32, 12.5, 12), M.glowSoft); v.position.set(x, 8.3, z); g.add(v);
+    overlays.push({ id: 'up' + i, pts: [new THREE.Vector3(x, 2.4, z), new THREE.Vector3(x, 14.4, z)] });
+  });
+  camPos = new THREE.Vector3(70, 62, 118); camTarget = new THREE.Vector3(2, 7.5, 0); fov = 25;
+} else if (S === 'magnetics') {
+  // planar transformer: two E-cores around stacked copper windings; flux overlay follows the core loops
+  const g = new THREE.Group(); root.add(g);
+  const D = 24, zf = D / 2 + 0.25;
+  const E = (flip) => { const e = new THREE.Group();
+    e.add(at(box(46, 6, D, M.ferrite, 0.6), 0, 3, 0));
+    for (const [x, w] of [[-20, 6], [0, 12], [20, 6]]) e.add(at(box(w, 12.6, D, M.ferrite, 0.5), x, 6 + 6.3, 0));
+    if (flip) { e.rotation.z = Math.PI; e.position.y = 37.8; } return e; };
+  g.add(E(false)); g.add(E(true));
+  const ring = (ri, ro, zi, zo, r) => { const sh = new THREE.Shape(); const rr = (w, d, rad, path) => { path.moveTo(-w + rad, -d); path.lineTo(w - rad, -d); path.quadraticCurveTo(w, -d, w, -d + rad); path.lineTo(w, d - rad); path.quadraticCurveTo(w, d, w - rad, d); path.lineTo(-w + rad, d); path.quadraticCurveTo(-w, d, -w, d - rad); path.lineTo(-w, -d + rad); path.quadraticCurveTo(-w, -d, -w + rad, -d); };
+    rr(ro, zo, r + 3, sh); const hole = new THREE.Path(); rr(ri, zi, r, hole); sh.holes.push(hole); return sh; };
+  for (let i = 0; i < 6; i++) {
+    const y = 8.6 + i * 3.6;
+    const cu = new THREE.Mesh(new THREE.ExtrudeGeometry(ring(6.8, 15.6, 12.8, 19.5, 1.5), { depth: 1.0, bevelEnabled: false }), M.copper); cu.rotation.x = Math.PI / 2; cu.position.y = y + 1.0; cu.castShadow = true; g.add(cu);
+    const pcb = new THREE.Mesh(new THREE.ExtrudeGeometry(ring(6.4, 16.2, 12.4, 20.2, 1.5), { depth: 1.4, bevelEnabled: false }), M.pcb); pcb.rotation.x = Math.PI / 2; pcb.position.y = y + 2.6; g.add(pcb);
+  }
+  // terminals
+  for (const x of [-4, 4]) g.add(at(box(3, 1.2, 8, M.copper, 0.3), x, 9.2 + (x > 0 ? 7.2 : 0), 22));
+  // two flux loops on the front face: up the centre leg, across the yoke, down an outer leg
+  for (const sgn of [1, -1]) {
+    const r = 4, xs = sgn * 20, pts = [];
+    const corner = (cx, cy, a0) => { for (let k = 0; k <= 6; k++) { const a = a0 + k / 6 * Math.PI / 2; pts.push(new THREE.Vector3(cx + Math.cos(a) * r, cy + Math.sin(a) * r, zf)); } };
+    // rounded loop: up the centre leg, across the top yoke, down the outer leg, back along the bottom yoke
+    if (sgn > 0) { corner(r, 34.8 - r, Math.PI / 2 * 2); corner(xs - r, 34.8 - r, Math.PI / 2 * 1 - Math.PI / 2 * 1); }
+    const P = sgn > 0 ? [[0, 8], [0, 30], [4, 34.8], [16, 34.8], [20, 30], [20, 8], [16, 3], [4, 3], [0, 8]] : [[0, 8], [0, 30], [-4, 34.8], [-16, 34.8], [-20, 30], [-20, 8], [-16, 3], [-4, 3], [0, 8]];
+    pts.length = 0; const c = new THREE.CatmullRomCurve3(P.map(([x, y]) => new THREE.Vector3(x, y, zf)), true, 'centripetal', 0.2);
+    overlays.push({ id: 'flux' + (sgn > 0 ? 'R' : 'L'), pts: c.getPoints(80), closed: true });
+  }
+  camPos = new THREE.Vector3(58, 46, 96); camTarget = new THREE.Vector3(0, 19, 0); fov = 25;
+} else if (S === 'twinphys' || S === 'twinwire') {
+  const b = new THREE.Group(); b.position.set(-38, 0, 0); root.add(b);
+  buildCircuit(b);
+  if (S === 'twinwire') { toWire(b); ground.visible = false; }
+  camPos = new THREE.Vector3(40, 118, 170); camTarget = new THREE.Vector3(0, 0, 0); fov = 25; orthoW = 170;
+  // screen offset that matches moving the board +76 along x
+  proj0.push(new THREE.Vector3(-38, 0, 0), new THREE.Vector3(38, 0, 0));
+} else if (S.startsWith('plate')) {
+  const g = new THREE.Group(); root.add(g);
+  const k = +S.slice(5);
+  if (k === 0) { // PDN: copper power plane with via grid
+    // power/ground plane pair + via array + BGA-style ball grid where the load connects
+    g.add(at(box(52, 0.6, 36, M.copperPlane, 0.3), 0, 0.3, 0));
+    g.add(at(box(51, 0.5, 35, M.pcb, 0.2), 0, 0.85, 0));
+    g.add(at(box(52, 0.5, 36, M.copperPlane, 0.25), 0, 1.35, 0));
+    for (let ix = -6; ix <= 6; ix++) for (let iz = -4; iz <= 4; iz++) {
+      const x = ix * 3.8, z = iz * 3.8;
+      if (Math.abs(ix) <= 2 && iz <= -2 && iz >= -4) continue;
+      const ring = new THREE.Mesh(new THREE.TorusGeometry(0.62, 0.2, 10, 24), M.gold); ring.rotation.x = Math.PI / 2; ring.position.set(x, 1.62, z); g.add(ring);
+      const hole = new THREE.Mesh(new THREE.CylinderGeometry(0.42, 0.42, 0.1, 16), M.pkg); hole.position.set(x, 1.62, z); g.add(hole);
+    }
+    for (let ix = -4; ix <= 4; ix++) for (let iz = -2; iz <= 2; iz++) { const b2 = new THREE.Mesh(new THREE.SphereGeometry(0.72, 20, 14), M.tin); b2.position.set(ix * 1.9, 2.15, -11.4 + iz * 1.9); b2.castShadow = true; g.add(b2); }
+  } else if (k === 1) { // Magnetics: ferrite plate with a planar copper winding
+    g.add(at(box(52, 1.0, 36, M.ferrite, 0.4), 0, 0.5, 0));
+    const p = []; const turns = 5;
+    for (let i = 0; i <= 13; i++) { const s = 19 - Math.floor((i + 1) / 2) * 2.1; const c = i % 4; const w = s, d = s * 0.62; p.push([[-w, -d], [w, -d], [w, d], [-w, d]][c]); }
+    g.add(strip(p.map(([x, z]) => [x, z]), 1.1, M.copper, 1.06));
+  } else if (k === 2) { // Circuit: navy board with switches and caps
+    g.add(at(box(52, 1.0, 36, M.pcb, 0.4), 0, 0.5, 0));
+    [-15, -5, 5, 15].forEach(x => g.add(at(qfn(6, 5.4, 1.0, 4), x, 1.0, -7)));
+    [-10, 0, 10].forEach(x => { const c = mlcc(5.4, 2.8, 2.3); c.position.set(x, 1.0, 3); g.add(c); });
+    g.add(strip([[-22, -12], [18, -12], [18, 10], [-22, 10]], 0.5, M.glow, 1.06));
+  } else { // Digital twin: translucent glass plate with a wire grid
+    const glass = box(52, 1.0, 36, M.twinFill, 0.4); glass.castShadow = false; g.add(at(glass, 0, 0.5, 0));
+    for (let i = -6; i <= 6; i++) { const a = new THREE.Mesh(new THREE.BoxGeometry(0.18, 0.08, 34), M.glow); a.position.set(i * 4, 1.05, 0); g.add(a); }
+    for (let i = -4; i <= 4; i++) { const a = new THREE.Mesh(new THREE.BoxGeometry(50, 0.08, 0.18), M.glow); a.position.set(0, 1.05, i * 4); g.add(a); }
+  }
+  ground.visible = false;
+  camPos = new THREE.Vector3(60, 70, 96); camTarget = new THREE.Vector3(0, 0, 0); fov = 25;
+}
+
+// ---- application topic scenes ----
+const AL = new THREE.MeshPhysicalMaterial({ color: 0xc9ced6, roughness: 0.35, metalness: 1, clearcoat: 0.3 });
+const ALd = new THREE.MeshStandardMaterial({ color: 0x9aa2ad, roughness: 0.4, metalness: 1 });
+const TIRE = new THREE.MeshStandardMaterial({ color: 0x15161a, roughness: 0.8 });
+const GLASS = new THREE.MeshPhysicalMaterial({ color: 0xdfeeff, roughness: 0.08, transmission: 0.9, thickness: 2, ior: 1.3, transparent: true, opacity: 0.35, depthWrite: false });
+const SHELL = new THREE.MeshPhysicalMaterial({ color: 0xd6e4f5, emissive: 0x6f9fd8, emissiveIntensity: 0.08, roughness: 0.18, metalness: 0.1, transparent: true, opacity: 0.38, depthWrite: false, clearcoat: 1, clearcoatRoughness: 0.1 });
+const SHELLedge = new THREE.MeshPhysicalMaterial({ color: 0x9fc4f2, roughness: 0.3, transparent: true, opacity: 0.35, depthWrite: false });
+const CAPel = new THREE.MeshPhysicalMaterial({ color: 0x1b2e52, roughness: 0.45, clearcoat: 0.6 });
+const tube = (pts, r, m, closed = false) => { const t = new THREE.Mesh(new THREE.TubeGeometry(new THREE.CatmullRomCurve3(pts, closed), Math.max(64, pts.length * 8), r, 12, closed), m); t.castShadow = true; return t; };
+const V = (x, y, z) => new THREE.Vector3(x, y, z);
+function eCap(r, h) { const g = new THREE.Group(); const b = new THREE.Mesh(new THREE.CylinderGeometry(r, r, h, 36), CAPel); b.position.y = h / 2; b.castShadow = true; g.add(b); const t = new THREE.Mesh(new THREE.CylinderGeometry(r * 0.98, r * 0.98, 0.25, 36), M.tin); t.position.y = h + 0.1; g.add(t); return g; }
+function planarCore(w, d) { const g = new THREE.Group(); g.add(at(box(w, 1.6, d, M.ferrite, 0.3), 0, 0.8, 0)); g.add(at(box(w * 0.98, 0.5, d * 1.08, M.copper, 0.2), 0, 1.85, 0)); g.add(at(box(w, 1.6, d, M.ferrite, 0.3), 0, 2.9, 0)); return g; }
+function spiralPts(r0, r1, turns, y, n = 400) { const p = []; for (let i = 0; i <= n; i++) { const t = i / n, a = t * turns * Math.PI * 2, r = r0 + (r1 - r0) * t; p.push(V(Math.cos(a) * r, y, Math.sin(a) * r)); } return p; }
+function skateboard() { // EV platform: chassis, battery, wheels, charge port
+  const g = new THREE.Group();
+  g.add(at(box(46, 3, 20, M.pkgMatte, 1.2), 0, 5, 0));
+  const pack = box(36, 2.2, 16, M.pcb, 0.6); pack.position.set(0, 7.4, 0); g.add(pack);
+  for (let i = 0; i < 6; i++) for (let j = 0; j < 2; j++) g.add(at(box(5.2, 1.2, 6.8, M.pkgMatte, 0.4), -14.5 + i * 5.8, 9.0, -3.7 + j * 7.4));
+  g.add(at(box(30, 0.3, 1.2, M.copper, 0.1), 0, 9.75, 0));
+  for (const sx of [-1, 1]) for (const sz of [-1, 1]) {
+    const w = new THREE.Group(); w.position.set(sx * 17, 4.6, sz * 11.2);
+    const tire = new THREE.Mesh(new THREE.TorusGeometry(3.4, 1.35, 20, 48), TIRE); tire.castShadow = true; w.add(tire);
+    const rim = new THREE.Mesh(new THREE.CylinderGeometry(2.7, 2.7, 2.2, 40), AL); rim.rotation.x = Math.PI / 2; w.add(rim);
+    g.add(w);
+  }
+  g.add(at(box(3, 2, 2, AL, 0.4), 22.5, 7.2, 6));
+  return g;
+}
+
+if (S === 'obc') {
+  const g = new THREE.Group(); root.add(g);
+  g.add(at(box(64, 2, 42, ALd, 0.8), 0, 1, 0));
+  for (const [w, d, x, z] of [[64, 1.6, 0, -20.2], [64, 1.6, 0, 20.2], [1.6, 42, -31.2, 0]]) g.add(at(box(w, 7, d, AL, 0.5), x, 5.5, z));
+  g.add(at(box(56, 1.4, 36, M.pcb, 0.5), 2, 2.7, 0));
+  const top = 3.4;
+  [-14, -2, 10].forEach((x, i) => { const m = box(8.5, 3, 9, M.pkg, 0.5); m.position.set(x, top + 1.5, -8); g.add(m); for (let k = 0; k < 6; k++) g.add(at(box(0.5, 0.6, 1.2, M.gold, 0.1), x - 3.5 + k * 1.4, top + 0.3, -3)); });
+  const pc = planarCore(14, 10); pc.position.set(18, top, 6); g.add(pc);
+  for (let i = 0; i < 4; i++) { const c = eCap(2.3, 6); c.position.set(-20 + i * 5.6, top, 9); g.add(c); }
+  // three-phase input terminals at the open side
+  const ins = [];
+  [-10, 0, 10].forEach((z, i) => { const t = new THREE.Mesh(new THREE.CylinderGeometry(1.3, 1.3, 2.5, 24), M.copper); t.position.set(-27, top + 1.2, z * 0.9 - 2); t.castShadow = true; g.add(t); ins.push([-27, z * 0.9 - 2]); });
+  ins.forEach(([x, z], i) => { const tgt = [[-14, -8], [-2, -8], [10, -8]][i]; const pts = [[x, z], [x + 4, z], [x + 4, -2.5 + (i - 1) * 1.2], [tgt[0], -2.5 + (i - 1) * 1.2], [tgt[0], -3.6]]; g.add(strip(pts, 0.55, M.glow, top + 0.06)); overlays.push({ id: 'in' + i, pts: pts.map(([a, b]) => V(a, top + 0.1, b)) }); });
+  const outp = [[14, -8], [18, -8], [18, 1]]; g.add(strip(outp, 0.7, M.glow, top + 0.06)); overlays.push({ id: 'out', pts: outp.map(([a, b]) => V(a, top + 0.1, b)) });
+  camPos = V(58, 82, 112); camTarget = V(0, 3, 0); fov = 25;
+} else if (S === 'v2v') {
+  const a = skateboard(); a.position.set(-27, 0, 4); root.add(a);
+  const b = skateboard(); b.position.set(27, 0, -4); b.rotation.y = Math.PI; root.add(b);
+  const p0 = V(-27 + 22.5 + 1.5, 7.2, 10), p1 = V(27 - 22.5 - 1.5, 7.2, -10);
+  const cable = []; for (let i = 0; i <= 40; i++) { const t = i / 40; const v = p0.clone().lerp(p1, t); v.y = 7.2 - Math.sin(Math.PI * t) * 4.5 + 0.6; cable.push(v); }
+  root.add(tube(cable, 0.5, TIRE));
+  root.add(tube(cable.map(v => v.clone().add(V(0, 0.55, 0))), 0.16, M.glow));
+  overlays.push({ id: 'cable', pts: cable.map(v => v.clone().add(V(0, 0.7, 0))) });
+  camPos = V(26, 92, 150); camTarget = V(0, 4, 0); fov = 25;
+} else if (S === 'actuator') {
+  // humanoid arm in a curl: elbow motor moves the forearm, an SMA spring on the front of the upper arm acts like a biceps and holds the load
+  const g = new THREE.Group(); root.add(g); ground.visible = false;
+  const skin = new THREE.MeshPhysicalMaterial({ color: 0xe6eaf0, roughness: 0.34, clearcoat: 0.8, clearcoatRoughness: 0.2 });
+  const cap = (A, B, r, m = skin) => { const len = A.distanceTo(B); const o = new THREE.Mesh(new THREE.CapsuleGeometry(r, len, 12, 40), m); o.position.copy(A).add(B).multiplyScalar(0.5); o.quaternion.setFromUnitVectors(V(0, 1, 0), B.clone().sub(A).normalize()); o.castShadow = true; g.add(o); return o; };
+  const joint = (P, r, len) => { const j = new THREE.Group(); j.position.copy(P);
+    const m = new THREE.Mesh(new THREE.CylinderGeometry(r, r, len, 56), M.pkg); m.rotation.x = Math.PI / 2; m.castShadow = true; j.add(m);
+    for (let i = 0; i < 4; i++) { const f = new THREE.Mesh(new THREE.TorusGeometry(r + 0.05, 0.18, 8, 56), AL); f.position.z = -len / 2 + 1.4 + i * (len - 2.8) / 3; j.add(f); }
+    const ring = new THREE.Mesh(new THREE.TorusGeometry(r * 0.62, 0.22, 10, 48), M.glow); ring.position.z = len / 2 + 0.05; j.add(ring);
+    const hub = new THREE.Mesh(new THREE.CylinderGeometry(r * 0.45, r * 0.45, 0.6, 40), AL); hub.rotation.x = Math.PI / 2; hub.position.z = len / 2 + 0.2; j.add(hub);
+    g.add(j); };
+  // torso and shoulder
+  const chest = box(12, 22, 21, skin, 4.5); chest.position.set(-2, 47, -12.5); g.add(chest);
+  const waist = new THREE.Mesh(new THREE.CylinderGeometry(5.2, 6, 8, 40), M.pkg); waist.position.set(-2, 33, -12.5); g.add(waist);
+  const neck = new THREE.Mesh(new THREE.CylinderGeometry(2.2, 2.4, 5, 32), M.pkg); neck.position.set(-2, 60.5, -12.5); g.add(neck);
+  const head = new THREE.Mesh(new THREE.SphereGeometry(5.6, 48, 32), skin); head.scale.set(1, 1.12, 1); head.position.set(-2, 68, -12.5); head.castShadow = true; g.add(head);
+  const visor = new THREE.Mesh(new THREE.SphereGeometry(5.2, 48, 32, -0.75, 1.5, 1.15, 0.75), M.pkg); visor.scale.set(1.06, 1.12, 1.06); visor.position.set(-2, 68, -12.5); g.add(visor);
+  const SH = V(0, 56, 0), EL = V(0, 31, 0), WR = V(20, 45, 0);
+  joint(SH, 4.0, 6.5);
+  cap(SH, EL, 3.3);
+  joint(EL, 4.0, 6.5);
+  cap(EL, WR, 2.9);
+  // hand: palm and curled fingers around a handle, load hanging below
+  const dir = WR.clone().sub(EL).normalize();
+  const palm = box(4.2, 5.2, 4.6, M.pkgMatte, 1.2); palm.position.copy(WR).addScaledVector(dir, 2.4); palm.rotation.z = Math.atan2(dir.y, dir.x); g.add(palm);
+  const HP = WR.clone().addScaledVector(dir, 5.2).add(V(0, -2.2, 0));
+  for (const z of [-1.6, 0, 1.6]) { const f = new THREE.Mesh(new THREE.TorusGeometry(1.3, 0.55, 10, 24, Math.PI * 1.3), M.pkgMatte); f.position.set(HP.x, HP.y, z); f.rotation.z = Math.PI * 0.55; g.add(f); }
+  const handle = new THREE.Mesh(new THREE.CylinderGeometry(0.55, 0.55, 7, 20), M.tin); handle.rotation.x = Math.PI / 2; handle.position.copy(HP); g.add(handle);
+  for (const z of [-3.2, 3.2]) { const st = new THREE.Mesh(new THREE.CylinderGeometry(0.35, 0.35, 5, 12), M.tin); st.position.set(HP.x, HP.y - 2.6, z); g.add(st); }
+  const load = box(8, 6, 8, M.pkg, 0.9); load.position.set(HP.x, HP.y - 7.8, 0); g.add(load);
+  // SMA spring as a biceps: tab near the shoulder -> tab on the forearm just past the elbow
+  const tabA = box(2.4, 2.2, 3.4, ALd, 0.4); tabA.position.set(4.0, 50.6, 0); g.add(tabA);
+  const tabB = box(2.4, 2.2, 3.4, ALd, 0.4); tabB.position.set(3.0, 39.6, 0); tabB.rotation.z = 0.6; g.add(tabB);
+  const A = V(4.9, 49.4, 0), B = V(3.9, 40.6, 0), sp = [], n = 16;
+  const ax = B.clone().sub(A), len = ax.length(); ax.normalize(); const nx = V(-ax.y, ax.x, 0);
+  for (let i = 0; i <= n * 40; i++) { const t = i / (n * 40), a2 = t * n * Math.PI * 2, bulge = 1.25 + 0.55 * Math.sin(Math.PI * t); sp.push(A.clone().addScaledVector(ax, len * t).addScaledVector(nx, Math.cos(a2) * bulge).add(V(0, 0, Math.sin(a2) * bulge))); }
+  g.add(tube(sp, 0.24, M.tin));
+  camPos = V(46, 62, 136); camTarget = V(3, 43, -6); fov = 25;
+} else if (S === 'robot') {
+  // x-ray humanoid: glass shell, dark joint actuators, battery "heart" and glowing power vessels
+  const g = new THREE.Group(); root.add(g); ground.visible = false;
+  scene.environmentIntensity = 0.9;
+  const shell = new THREE.MeshPhysicalMaterial({ color: 0xb9d3f5, emissive: 0x2a5aa0, emissiveIntensity: 0.25, roughness: 0.12, metalness: 0.0, transparent: true, opacity: 0.2, depthWrite: false, clearcoat: 1, clearcoatRoughness: 0.05 });
+  const seg = (a, b, r0, r1 = r0) => { const len = a.distanceTo(b); const geo = new THREE.CylinderGeometry(r1, r0, len, 40, 1); const m = new THREE.Mesh(geo, shell); m.position.copy(a).add(b).multiplyScalar(0.5); m.quaternion.setFromUnitVectors(V(0, 1, 0), b.clone().sub(a).normalize()); g.add(m);
+    for (const [p, r] of [[a, r0], [b, r1]]) { const sp = new THREE.Mesh(new THREE.SphereGeometry(r, 32, 20), shell); sp.position.copy(p); g.add(sp); } };
+  const J = { head: V(0, 75, 0), neck: V(0, 66, 0), lsh: V(-11, 62, 0), rsh: V(11, 62, 0), lel: V(-15, 49, 2.5), rel: V(15, 49, 2.5), lwr: V(-16.5, 37, 5.5), rwr: V(16.5, 37, 5.5),
+    lhip: V(-5.5, 38, 0), rhip: V(5.5, 38, 0), lkn: V(-6.5, 21, 2), rkn: V(6.5, 21, 2), lan: V(-6.8, 4.5, 0), ran: V(6.8, 4.5, 0) };
+  // head (helmet + visor)
+  const head = new THREE.Mesh(new THREE.SphereGeometry(5.4, 48, 32), shell); head.scale.set(0.95, 1.12, 1.02); head.position.copy(J.head); g.add(head);
+  const visor = new THREE.Mesh(new THREE.SphereGeometry(5.0, 48, 32, -0.9, 1.8, 1.1, 0.8), new THREE.MeshPhysicalMaterial({ color: 0x0b1424, roughness: 0.1, clearcoat: 1, transparent: true, opacity: 0.75 })); visor.position.copy(J.head).add(V(0, 0, 0.6)); visor.rotation.y = Math.PI / 2 - 1.57; g.add(visor);
+  // torso: chest + waist + pelvis
+  const chest = new THREE.Mesh(new THREE.SphereGeometry(10, 48, 32), shell); chest.scale.set(1.18, 1.05, 0.62); chest.position.set(0, 56, 0); g.add(chest);
+  const waist = new THREE.Mesh(new THREE.CylinderGeometry(6.4, 7.8, 9, 40), shell); waist.position.set(0, 45.5, 0); waist.scale.z = 0.72; g.add(waist);
+  const pelvis = new THREE.Mesh(new THREE.SphereGeometry(7.6, 40, 28), shell); pelvis.scale.set(1.05, 0.7, 0.72); pelvis.position.set(0, 39.5, 0); g.add(pelvis);
+  seg(J.neck, J.head.clone().add(V(0, -4, 0)), 2.2);
+  seg(J.lsh, J.lel, 3.0, 2.6); seg(J.lel, J.lwr, 2.5, 2.0); seg(J.rsh, J.rel, 3.0, 2.6); seg(J.rel, J.rwr, 2.5, 2.0);
+  seg(J.lhip, J.lkn, 3.8, 3.0); seg(J.lkn, J.lan, 3.0, 2.2); seg(J.rhip, J.rkn, 3.8, 3.0); seg(J.rkn, J.ran, 3.0, 2.2);
+  for (const s2 of [-1, 1]) { const hand = new THREE.Mesh(new THREE.SphereGeometry(2.3, 24, 16), shell); hand.scale.set(0.8, 1.3, 0.6); hand.position.copy(s2 < 0 ? J.lwr : J.rwr).add(V(0, -3, 0.5)); g.add(hand);
+    const foot = box(5.6, 2.6, 11, shell, 1.1); foot.position.set(s2 * 6.8, 1.3, 2.6); g.add(foot); }
+  const jmat = new THREE.MeshPhysicalMaterial({ color: 0x1a1d23, roughness: 0.3, metalness: 0.6, clearcoat: 0.8 });
+  ['lsh', 'rsh', 'lel', 'rel', 'lwr', 'rwr', 'lhip', 'rhip', 'lkn', 'rkn', 'lan', 'ran'].forEach(k => { const m = new THREE.Mesh(new THREE.CylinderGeometry(2.1, 2.1, 2.6, 32), jmat); m.position.copy(J[k]); m.rotation.z = Math.PI / 2; g.add(m);
+    const ring = new THREE.Mesh(new THREE.TorusGeometry(2.15, 0.22, 10, 40), M.glow); ring.position.copy(J[k]); ring.rotation.y = Math.PI / 2; g.add(ring); });
+  // battery heart
+  const B = V(0, 55, 0.3);
+  const bat = box(8, 10, 4.4, jmat, 0.9); bat.position.copy(B); g.add(bat);
+  const core = box(6.2, 8.2, 4.6, new THREE.MeshBasicMaterial({ color: 0x5aa8ff, toneMapped: false, transparent: true, opacity: 0.85 }), 0.6); core.position.copy(B).add(V(0, 0, 0.1)); g.add(core);
+  const hubs = { up: V(0, 62, 1), low: V(0, 46, 1), hip: V(0, 40, 1) };
+  const vessel = new THREE.MeshBasicMaterial({ color: 0x4f9dff, toneMapped: false });
+  const paths = [
+    [B, hubs.up, V(-6, 62.5, 1), J.lsh, J.lel, J.lwr], [B, hubs.up, V(6, 62.5, 1), J.rsh, J.rel, J.rwr], [B, hubs.up, J.neck, J.head.clone().add(V(0, -1.5, 0))],
+    [B, hubs.low, hubs.hip, J.lhip, J.lkn, J.lan], [B, hubs.low, hubs.hip, J.rhip, J.rkn, J.ran]];
+  paths.forEach((p, i) => { const c = new THREE.CatmullRomCurve3(p, false, 'centripetal'); g.add(tube(c.getPoints(90), 0.5, vessel)); overlays.push({ id: 'v' + i, pts: c.getPoints(60) }); });
+  // capillaries: short side branches toward the shell
+  [[J.lel, V(-17.5, 52, 2)], [J.rel, V(17.5, 52, 2)], [J.lkn, V(-9, 25, 2)], [J.rkn, V(9, 25, 2)], [hubs.low, V(-6, 47, 2)], [hubs.low, V(6, 47, 2)]].forEach(([a, b]) => g.add(tube([a, a.clone().lerp(b, 0.5).add(V(0, 0.5, 1)), b], 0.22, vessel)));
+  camPos = V(44, 58, 128); camTarget = V(0, 40, 0); fov = 36;
+} else if (S === 'rfpa') {
+  const g = new THREE.Group(); root.add(g);
+  for (let i = 0; i < 14; i++) g.add(at(box(62, 6, 0.9, AL, 0.2), 0, 3, -16 + i * 2.5));
+  g.add(at(box(64, 1.2, 36, ALd, 0.4), 0, 6.6, 0));
+  g.add(at(box(58, 1.4, 30, M.pcb, 0.5), 0, 7.9, 0));
+  const top = 8.6;
+  // flange-mounted push-pull transistor
+  g.add(at(box(14, 0.8, 9, M.copper, 0.3), -2, top + 0.4, 0));
+  g.add(at(box(9, 2.6, 7, M.pkg, 0.4), -2, top + 2.1, 0));
+  for (const s of [-1, 1]) for (const z of [-2, 2]) g.add(at(box(4, 0.25, 1.6, M.gold, 0.1), -2 + s * 6.5, top + 1.2, z));
+  // striplines in, balun-style output transformer, N connector
+  const inL = [[-27, -2], [-12, -2]], inL2 = [[-27, 2], [-12, 2]];
+  const outL = [[8, -2], [14, -2], [16, 0], [22, 0]], outL2 = [[8, 2], [14, 2], [16, 0]];
+  [inL, inL2, outL, outL2].forEach(p => g.add(strip(p, 1.3, M.gold, top + 0.06)));
+  const tr = new THREE.Mesh(new THREE.TorusGeometry(3.4, 1.4, 24, 48), M.ferrite); tr.position.set(17, top + 3.4, 7); tr.castShadow = true; g.add(tr);
+  const coax = new THREE.Mesh(new THREE.CylinderGeometry(2.2, 2.2, 6, 32), M.tin); coax.rotation.z = Math.PI / 2; coax.position.set(28, top + 2.6, 0); g.add(coax);
+  for (let i = 0; i < 4; i++) { const c = mlcc(3.2, 2, 1.8); c.position.set(-20 + i * 4, top, 8); g.add(c); }
+  overlays.push({ id: 'rf', pts: [[-27, 0], [-9, 0], [5, 0], [16, 0], [25, 0]].map(([x, z]) => V(x, top + 0.25, z)) });
+  camPos = V(52, 70, 104); camTarget = V(0, 6, 0); fov = 25;
+} else if (S === 'matching') {
+  const g = new THREE.Group(); root.add(g);
+  g.add(at(box(60, 1.6, 34, ALd, 0.6), 0, 0.8, 0));
+  const vac = (x, z) => { const c = new THREE.Group(); c.position.set(x, 1.6, z);
+    const env = new THREE.Mesh(new THREE.CylinderGeometry(4.6, 4.6, 13, 48), GLASS); env.position.y = 9; c.add(env);
+    for (let i = 0; i < 6; i++) { const r = new THREE.Mesh(new THREE.CylinderGeometry(3.6 - i * 0.5, 3.6 - i * 0.5, 10, 40, 1, true), M.copper); r.position.y = 9; c.add(r); }
+    for (const y of [2.2, 15.8]) { const cap = new THREE.Mesh(new THREE.CylinderGeometry(5, 5, 1.6, 48), M.tin); cap.position.y = y; cap.castShadow = true; c.add(cap); }
+    const knob = new THREE.Mesh(new THREE.CylinderGeometry(1.2, 1.2, 4, 24), M.tin); knob.position.y = 18.6; c.add(knob); g.add(c); };
+  vac(-16, -4); vac(16, -4);
+  const coil = []; const T = 7; for (let i = 0; i <= T * 60; i++) { const t = i / (T * 60), a = t * T * Math.PI * 2; coil.push(V(-7 + 14 * t, 10 + Math.cos(a) * 4.6, 6 + Math.sin(a) * 4.6)); }
+  g.add(tube(coil, 0.75, M.copper));
+  for (const x of [-9, 9]) g.add(at(box(1.6, 6, 1.6, M.tin, 0.3), x, 4.6, 6));
+  const coax = new THREE.Mesh(new THREE.CylinderGeometry(2.4, 2.4, 6, 32), M.tin); coax.rotation.z = Math.PI / 2; coax.position.set(-30, 6, 8); g.add(coax);
+  const bus = [V(-27, 7, 8), V(-16, 7, 8), V(-16, 18.5, -4)];
+  overlays.push({ id: 'coil', pts: coil.filter((_, i) => i % 4 === 0).map(v => v.clone()) });
+  camPos = V(44, 64, 104); camTarget = V(0, 8, 0); fov = 25;
+} else if (S === 'wpt') {
+  const g = new THREE.Group(); root.add(g);
+  // transmitter pad (left) and a small sensor node far to the right
+  g.add(at(box(34, 1.6, 34, M.pcb, 0.8), -22, 0.8, 0));
+  g.add(tube(spiralPts(4, 14.5, 7, 1.9), 0.42, M.copper).translateX(-22));
+  const node = new THREE.Group(); node.position.set(30, 0, -2);
+  node.add(at(box(9, 6, 9, AL, 1.2), 0, 3, 0)); node.add(at(box(9.4, 0.6, 9.4, M.pcb, 0.3), 0, 6.3, 0));
+  node.add(tube(spiralPts(1, 3.8, 4, 6.75), 0.22, M.copper));
+  const led = new THREE.Mesh(new THREE.SphereGeometry(0.5, 16, 12), M.glow); led.position.set(3, 4, 4.6); node.add(led);
+  g.add(node);
+  // magnetic field lines from the pad toward the node
+  for (let k = 0; k < 4; k++) { const p = []; const h = 6 + k * 4.5; for (let i = 0; i <= 50; i++) { const t = i / 50; p.push(V(-22 + (30 + 22) * t, 2 + Math.sin(Math.PI * t) * h, -1 + k * 0.5)); } overlays.push({ id: 'f' + k, pts: p }); }
+  camPos = V(20, 66, 122); camTarget = V(4, 6, 0); fov = 25;
+} else if (S === 'wptres') {
+  const g = new THREE.Group(); root.add(g);
+  g.add(at(box(64, 1.6, 36, M.pcb, 0.7), 0, 0.8, 0));
+  const top = 1.65;
+  g.add(tube(spiralPts(3, 13.5, 6, top + 0.35), 0.5, M.copper).translateX(14));
+  for (let i = 0; i < 5; i++) for (let j = 0; j < 2; j++) { const c = mlcc(4.4, 2.4, 2.1); c.position.set(-6, top, -8 + i * 4); c.translateX(j * 5.4 - 2.7); g.add(c); }
+  [-24, -17].forEach(x => [-6, 4].forEach(z => g.add(at(qfn(5, 5, 1, 4), x, top, z))));
+  const loop = [[-20, -10], [-6, -10], [-6, 10], [-20, 10], [-20, -10]];
+  g.add(strip(loop, 0.6, M.glow, top + 0.06));
+  overlays.push({ id: 'res', pts: spiralPts(3, 13.5, 6, top + 0.9, 220).map(v => v.add(V(14, 0, 0))) });
+  camPos = V(56, 80, 112); camTarget = V(0, 2, 0); fov = 25;
+}
+
+const camera = (typeof orthoW !== 'undefined' && orthoW) ? new THREE.OrthographicCamera(-orthoW / 2, orthoW / 2, orthoW * H / W / 2, -orthoW * H / W / 2, 1, 2000) : new THREE.PerspectiveCamera(fov, W / H, 1, 1000);
+camera.position.copy(camPos); camera.lookAt(camTarget);
+renderer.render(scene, camera);
+const proj = v => { const p = v.clone().project(camera); return [Math.round((p.x + 1) / 2 * W * 10) / 10, Math.round((1 - p.y) / 2 * H * 10) / 10]; };
+document.getElementById('out').textContent = JSON.stringify(overlays.map(o => ({ id: o.id, closed: !!o.closed, pts: o.pts.map(proj) })).concat(proj0.length ? [{ id: 'slide', closed: false, pts: proj0.map(proj) }] : []));
+document.title = 'done';
+</script></body></html>

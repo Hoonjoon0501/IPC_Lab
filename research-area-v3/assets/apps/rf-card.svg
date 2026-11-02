@@ -1,0 +1,34 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="480" height="360" viewBox="0 0 480 360" role="img" aria-label="RF system: RF amplifier, impedance matching network and plasma load in a chain">
+<title>RF system: RF amplifier, impedance matching network and plasma load in a chain</title>
+<style>
+  text { font-family: Inter, Arial, Helvetica, sans-serif; font-size: 19px; font-weight: 600; fill: #46546a; }
+  .acc { fill: #1f6fe0; }
+  .chip { fill: #fff; font-weight: 800; letter-spacing: .5px; font-size: 11px; }
+  .flow { fill: none; stroke: #3f95ff; stroke-width: 3; stroke-linecap: round; stroke-linejoin: round; }
+  .thin { fill: none; stroke: #3f95ff; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+</style>
+<defs>
+  <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#f5f8fc"/><stop offset="1" stop-color="#e9eff7"/></linearGradient>
+  <marker id="ar" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="4" markerHeight="4" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#3f95ff"/></marker>
+</defs>
+<rect width="480" height="360" fill="url(#bg)"/>
+
+<rect x="66" y="146" width="94" height="88" rx="8" fill="#0e2647"/>
+<path d="M96 168 L96 212 L134 190 Z" fill="none" stroke="#fff" stroke-width="3" stroke-linejoin="round"/>
+<path d="M82 190 H96 M134 190 H148" stroke="#fff" stroke-width="2.5"/>
+<path d="M160 190.0 L161 187.2 L162 184.7 L163 183.0 L164 182.1 L165 182.2 L166 183.3 L167 185.3 L168 187.9 L169 190.7 L170 193.5 L171 195.8 L172 197.4 L173 198.0 L174 197.6 L175 196.3 L176 194.1 L177 191.4 L178 188.6 L179 185.9 L180 183.7 L181 182.4 L182 182.0 L183 182.6 L184 184.2 L185 186.5 L186 189.3 L187 192.1 L188 194.7 L189 196.7 L190 197.8 L191 197.9 L192 197.0 L193 195.3 L194 192.8 L195 190.0" class="flow"/>
+<rect x="195" y="146" width="90" height="88" rx="8" fill="#fff" stroke="#1d3f6b" stroke-width="2"/>
+<path d="M207 176 h10 c0 -10 10 -10 10 0 c0 -10 10 -10 10 0 c0 -10 10 -10 10 0 h26" fill="none" stroke="#d9824a" stroke-width="3" stroke-linecap="round"/>
+<path d="M240 176 V196 M228 196 H252 M228 204 H252 M240 204 V218" fill="none" stroke="#1d3f6b" stroke-width="2.5" stroke-linecap="round"/>
+<path d="M226 214 L254 186" stroke="#1f6fe0" stroke-width="2" marker-end="url(#ar)"/>
+<path d="M285 190.0 L286 187.2 L287 184.7 L288 183.0 L289 182.1 L290 182.2 L291 183.3 L292 185.3 L293 187.9 L294 190.7 L295 193.5 L296 195.8 L297 197.4 L298 198.0 L299 197.6 L300 196.3 L301 194.1 L302 191.4 L303 188.6 L304 185.9 L305 183.7 L306 182.4 L307 182.0 L308 182.6 L309 184.2 L310 186.5 L311 189.3 L312 192.1 L313 194.7 L314 196.7 L315 197.8 L316 197.9 L317 197.0 L318 195.3 L319 192.8 L320 190.0" class="flow"/>
+<ellipse cx="366" cy="150" rx="46" ry="12" fill="#c9ced6"/>
+<rect x="320" y="150" width="92" height="84" fill="#dfe3e8"/>
+<ellipse cx="366" cy="234" rx="46" ry="12" fill="#c9ced6"/>
+<ellipse cx="366" cy="192" rx="28" ry="18" fill="#3f95ff" opacity=".35"/>
+<ellipse cx="366" cy="192" rx="16" ry="9" fill="#3f95ff" opacity=".7"/>
+<ellipse cx="366" cy="150" rx="46" ry="12" fill="none" stroke="#9aa5b3" stroke-width="1.5"/>
+<text class="acc" x="113" y="268" text-anchor="middle">RF</text><text class="acc" x="113" y="292" text-anchor="middle">amplifier</text>
+<text class="acc" x="240" y="268" text-anchor="middle">Matching</text><text class="acc" x="240" y="292" text-anchor="middle">network</text>
+<text x="366" y="274" text-anchor="middle">Plasma</text><text x="366" y="298" text-anchor="middle">load</text>
+</svg>

@@ -175,6 +175,7 @@ a {
   align-self:center;
   width:100%;
   aspect-ratio:1/1;
+  padding:8px;
   overflow:hidden;
   border-radius:12px;
   background:#f5f7fa}
@@ -182,7 +183,7 @@ a {
   display:block;
   width:100%;
   height:100%;
-  object-fit:cover;
+  object-fit:contain;
   object-position:center}
 .paper-content {
   min-width:0}

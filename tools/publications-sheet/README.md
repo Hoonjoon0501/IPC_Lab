@@ -20,7 +20,7 @@ Update the existing main deployment through **Deploy > Manage deployments > Edit
 
 The sheet includes status, type, year, title, authors, venue, paper link, recognition badges, optional image, sort order, internal notes and source ID. Separate multiple badges with `|`. Journals and conferences have separate venue selectors. The year buttons are 2026–2022 and the grouped 2015–2021 archive. Within each year, larger sort-order values appear first. The in-preparation A1 entry is retained as a draft rather than published.
 
-Illustrations appear as centered square thumbnails with rounded corners; alt text uses the publication title. Full names in the Researchers page are bolded automatically. Verified abbreviations for Jaeil Baek, Chaeyoung Moon and Doyeon Eom are also recognized; other ambiguous initials are not automatically attributed to a lab member.
+Illustrations fit inside centered square frames with rounded corners, retaining their original proportions and full content with padding; alt text uses the publication title. Full names in the Researchers page are bolded automatically. Verified abbreviations for Jaeil Baek, Chaeyoung Moon and Doyeon Eom are also recognized; other ambiguous initials are not automatically attributed to a lab member.
 
 The initial records were transcribed from the supplied CV, updated March 2026: 29 journal papers, 40 conference papers and 11 registered/applied/in-preparation patent entries. Seminar talks and private contact information were not included. Patent statuses describe that CV snapshot, not a live legal-status lookup. Unknown links remain blank. The J24 award-year discrepancy in the CV is recorded in the internal sheet notes, and the badge omits the year.
 

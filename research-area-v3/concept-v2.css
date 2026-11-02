@@ -237,21 +237,36 @@ a:focus-visible { outline: 3px solid #7fb0e6; outline-offset: 3px; border-radius
 .embedded .site-foot { margin-top: 48px; padding: 16px; border-top: 0; }
 
 /* Size comparison: three traits under each item, arrows pointing toward IPC */
-.scale-row { grid-template-columns: minmax(0, 1.3fr) 26px minmax(0, 1.2fr) 26px minmax(0, 1fr); gap: 6px; align-items: start; }
+@media (min-width: 1001px) { .hero { grid-template-columns: minmax(0, .92fr) minmax(0, 1.08fr); } }
+.scale { padding: 30px 22px 22px; }
+.scale-row { grid-template-columns: minmax(0, 1fr) 22px minmax(0, 1fr) 22px minmax(0, 1fr); gap: 6px; align-items: start; }
+.scale-item { min-width: 0; }
 .scale-item .pic { display: flex; align-items: flex-end; justify-content: center; width: 100%; height: 118px; }
 .scale-item .pic img { width: auto; max-width: 100%; height: auto; }
-.s-discrete { max-height: 112px; } .s-ipc { max-height: 70px; } .s-pmic { max-height: 26px; }
+.s-discrete { max-height: 108px; max-width: 190px !important; } .s-ipc { max-height: 70px; } .s-pmic { max-height: 26px; }
 .traits { list-style: none; margin: 12px 0 0; padding: 0; display: grid; gap: 5px; text-align: left; justify-self: center; }
-.traits li { display: flex; align-items: flex-start; gap: 6px; font-size: 11.5px; line-height: 1.35; color: var(--body); }
-.traits svg { flex: none; width: 13px; height: 13px; margin-top: 1px; fill: none; stroke: #8a97a8; stroke-width: 1.7; stroke-linejoin: round; stroke-linecap: round; }
+.traits li { display: flex; align-items: center; gap: 6px; font-size: 11.5px; line-height: 1.35; color: var(--body); white-space: nowrap; }
+@media (max-width: 1000px) { .scale { max-width: none; } .traits li { white-space: normal; align-items: flex-start; } .traits svg { margin-top: 1px; } }
+.traits svg { flex: none; width: 13px; height: 13px; fill: none; stroke: #8a97a8; stroke-width: 1.7; stroke-linejoin: round; stroke-linecap: round; }
 .is-ipc .traits svg { stroke: var(--accent); }
 .scale-arrow { align-self: start; margin-top: 74px; color: #9aa6b5; }
-.scale-arrow svg { display: block; width: 26px; height: 10px; fill: none; stroke: currentColor; stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; }
+.scale-arrow svg { display: block; width: 24px; height: 10px; fill: none; stroke: currentColor; stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; }
 .scale-arrow circle { fill: #fff; }
 .scale-arrow.to-left svg { transform: scaleX(-1); }
+@media (max-width: 1240px) and (min-width: 1001px) { .traits li { font-size: 10.5px; gap: 4px; } .traits svg { width: 11px; height: 11px; } .scale { padding: 30px 16px 22px; } }
 @media (max-width: 640px) {
-  .scale-row { grid-template-columns: minmax(0, 1.25fr) 16px minmax(0, 1.2fr) 16px minmax(0, 1fr); gap: 3px; }
-  .scale-item .pic { height: 84px; } .s-discrete { max-height: 80px; } .s-ipc { max-height: 52px; } .s-pmic { max-height: 20px; }
-  .scale-arrow { margin-top: 52px; } .scale-arrow svg { width: 16px; }
-  .traits li { font-size: 10px; gap: 3px; } .traits svg { width: 10px; height: 10px; }
+  /* stack the three items; arrows point down/up toward IPC */
+  .scale-row { grid-template-columns: 1fr; justify-items: center; gap: 4px; }
+  .scale-item { display: grid; grid-template-columns: 96px minmax(0, 1fr); grid-template-rows: auto auto; column-gap: 14px; align-items: center; justify-items: start; text-align: left; width: 100%; max-width: 320px; min-width: 0; }
+  .scale-item .pic { grid-row: 1 / 3; height: 76px; justify-content: center; }
+  .s-discrete { max-height: 72px; } .s-ipc { max-height: 52px; } .s-pmic { max-height: 22px; }
+  .scale-item .ruler { display: none; }
+  .scale-item p { margin: 0; text-align: left; }
+  .traits { margin-top: 6px; justify-self: start; min-width: 0; }
+  .traits li { white-space: normal; font-size: 12px; }
+  .scale-item p { white-space: normal; }
+  .scale-arrow { margin: 2px 0; justify-self: center; }
+  .scale-arrow.to-right svg { transform: rotate(90deg); }
+  .scale-arrow.to-left svg { transform: rotate(-90deg); }
+  .vision-toggle { margin: 0; padding: 8px 6px; }
 }

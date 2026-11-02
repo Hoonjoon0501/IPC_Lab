@@ -24,7 +24,7 @@ function pubParse_(rows) {
   const result=[];
   for(let i=1;i<rows.length;i++){
     const r=PUB_HEADERS_.map(name=>rows[i][columns[name]]);
-    if(text(r[0])!=='공개' || !['저널','학회','특허'].includes(text(r[1])) || !text(r[3]))continue;
+    if(text(r[0])!=='공개' || !['저널','학회'].includes(text(r[1])) || !text(r[3]))continue;
     const year=text(r[2]);
     if(year && !/^(19|20)\d{2}$/.test(year))continue;
     const item={id:text(r[11]),kind:text(r[1]),year:year,title:text(r[3]),authors:text(r[4]),venue:text(r[5]),link:pubHttpUrl_(text(r[6])),badges:text(r[7]).split('|').map(s=>s.trim()).filter(Boolean),image:'',order:Number(r[9])||0};

@@ -12,9 +12,9 @@ const row=['공개','저널','2022','<img onerror=alert(1)>','J. Baek','IEEE TPE
 const draft=[...row];draft[0]='작성 중';
 const patent=[...row];patent[1]='특허';patent[2]='';patent[10]='';
 const parsed=context.pubParse_([headers,row,draft,patent]);
-assert.equal(parsed.length,2);assert.equal(imageReads,1,'Draft images must not be read');
+assert.equal(parsed.length,1,'Patents must not be included in the public feed');assert.equal(imageReads,1,'Draft images must not be read');
 assert.equal(parsed[0].badges.length,2);assert.ok(!JSON.stringify(parsed).includes('PRIVATE NOTE'));
-assert.equal(parsed[1].year,'');assert.equal(parsed[0].title,row[3]);
+assert.equal(parsed[0].title,row[3]);
 assert.equal(parsed[0].details,undefined);assert.equal(parsed[0].recognition,undefined);assert.equal(parsed[0].imageAlt,undefined);
 const removed=[6,9,11],compactHeaders=headers.filter((_,i)=>!removed.includes(i));
 const compactRow=row.filter((_,i)=>!removed.includes(i));
@@ -25,7 +25,9 @@ assert.equal(model.safeLink('javascript:alert(1)'), '');assert.equal(model.safeI
 const items=JSON.parse(JSON.stringify(parsed));
 assert.equal(model.filterItems(items,'저널','2022','baek',true).length,1);
 assert.equal(model.filterItems(items,'학회','','',false).length,0);
-assert.equal(model.filterItems(items,'특허','','',false).length,1);
+assert.equal(model.filterItems(items,'특허','','',false).length,0);
+const monthly=[{...items[0],kind:'학회',year:'2026',id:'C44',order:202605},{...items[0],kind:'학회',year:'2026',id:'C41',order:202610}];
+assert.equal(model.filterItems(monthly,'학회','','',false)[0].id,'C41','Month order takes precedence over citation ID');
 assert.equal(model.filterItems(items,'저널','archive','',false).length,0);
 assert.equal(model.filterItems([{...items[0],year:'2021'}],'저널','archive','',false).length,1);
 assert.equal(model.filterItems([{...items[0],year:'2014'}],'저널','archive','',false).length,0);

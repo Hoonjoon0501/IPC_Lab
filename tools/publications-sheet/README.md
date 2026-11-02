@@ -18,7 +18,7 @@ Update the existing main deployment through **Deploy > Manage deployments > Edit
 
 ## Editing
 
-The sheet includes status, type, year, title, authors, venue, paper link, recognition badges, optional image, sort order, internal notes and source ID. Separate multiple badges with `|`. Journals and conferences have separate venue selectors. The year buttons are 2026–2022 and the grouped 2015–2021 archive. Within each year, larger sort-order values appear first. The in-preparation A1 entry is retained as a draft rather than published.
+The public page includes journals and conference papers only. Patent rows are retained in the sheet as drafts and are excluded by the feed even if accidentally marked public. The sheet includes status, type, year, title, authors, venue, paper link, recognition badges, optional image, sort month, internal notes and source ID. Separate multiple badges with `|`. Journals and conferences have separate venue selectors. The year buttons are 2026–2022 and the grouped 2015–2021 archive. Column J stores the verified issue/event month as `YYYYMM` (for example, `202610`), sorted newest first within each year; use `0` for an unknown month so it appears last. Citation IDs do not determine chronological order.
 
 Illustrations retain their original proportions and full content, vertically centered beside the publication with no surrounding frame, background or padding; alt text uses the publication title. Full names in the Researchers page are bolded automatically. Verified abbreviations for Jaeil Baek, Chaeyoung Moon and Doyeon Eom are also recognized; other ambiguous initials are not automatically attributed to a lab member.
 

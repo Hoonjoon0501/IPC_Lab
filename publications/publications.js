@@ -1,7 +1,7 @@
 (function () {
   'use strict';
   const FEED = 'https://script.google.com/macros/s/AKfycbwNoBz6CV-hy7kZjFKRyhjerlrpG4nm5H89jLuc-ZBmju-F5C6c2HOVDi-XXwvABpcv/exec?type=publications';
-  const TYPE_LABELS = {'저널':'Journal','학회':'Conference','특허':'Patent'};
+  const TYPE_LABELS = {'저널':'Journal','학회':'Conference'};
   function safeLink(value) { try { const u=new URL(value); return ['https:','http:'].includes(u.protocol) ? u.href : ''; } catch { return ''; } }
   function safeImage(value) { return /^data:image\/(png|jpeg|gif|webp);base64,[A-Za-z0-9+/=]+$/.test(value||'') ? value : (safeLink(value).startsWith('https://') ? safeLink(value) : ''); }
   const YEAR_OPTIONS = [['','All years'],...['2026','2025','2024','2023','2022'].map(y=>[y,y]),['archive','2015–2021']];
@@ -42,7 +42,7 @@
       authors.append(isLabAuthor(name,labAuthors)?element('strong','',name):document.createTextNode(name));
     });body.append(authors,element('p','venue',p.venue));
     if(p.badges.length){const badges=element('div','badges');p.badges.forEach(b=>badges.append(element('span','badge'+(/highlight/i.test(b)?' highlight':''),b)));body.append(badges);}
-    if(link){const actions=element('div','paper-actions'),a=element('a','paper-link',p.kind==='특허'?'Patent link ↗':'Paper link ↗');a.href=link;a.target='_blank';a.rel='noopener noreferrer';a.setAttribute('aria-label',(p.kind==='특허'?'Open patent: ':'Open paper: ')+p.title);actions.append(a);body.append(actions);}
+    if(link){const actions=element('div','paper-actions'),a=element('a','paper-link','Paper link ↗');a.href=link;a.target='_blank';a.rel='noopener noreferrer';a.setAttribute('aria-label','Open paper: '+p.title);actions.append(a);body.append(actions);}
     article.append(body);return article;
   }
   function renderYears(){
@@ -50,7 +50,6 @@
     YEAR_OPTIONS.forEach(([value,label])=>{const button=element('button','',label);button.type='button';button.dataset.year=value;button.setAttribute('aria-pressed',String(value===year));$('years').append(button);});
   }
   function renderVenues(){
-    $('venue-filter').hidden=type==='특허';
     $('venue-label').textContent=type==='학회'?'Conference':'Journal';
     const previous=$('venue').value,values=[...new Set(items.filter(p=>p.kind===type).map(p=>venueGroup(p.venue)).filter(Boolean))].sort();
     $('venue').replaceChildren();
@@ -58,9 +57,9 @@
     $('venue').value=values.includes(previous)?previous:'';
   }
   function render(){
-    const selected=filterItems(items,type,year,$('search').value,$('highlights').checked,$('venue-filter').hidden?'':$('venue').value);
+    const selected=filterItems(items,type,year,$('search').value,$('highlights').checked,$('venue').value);
     document.querySelectorAll('[data-type]').forEach(button=>{button.setAttribute('aria-pressed',String(button.dataset.type===type));button.querySelector('span').textContent=items.filter(p=>p.kind===button.dataset.type).length;});
-    $('result-count').textContent=selected.length+' '+(type==='특허'?(selected.length===1?'patent':'patents'):(selected.length===1?'publication':'publications'));
+    $('result-count').textContent=selected.length+' '+(selected.length===1?'publication':'publications');
     const fragment=document.createDocumentFragment();let current=null,list=null;
     selected.forEach(p=>{const key=String(p.year||'');if(key!==current){current=key;const group=element('section','year-group');group.append(element('h2','',key));list=element('div','cards');group.append(list);fragment.append(group);}list.append(card(p));});
     if(!selected.length)fragment.append(element('p','empty','No publications match these filters.'));

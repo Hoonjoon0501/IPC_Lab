@@ -57,15 +57,15 @@ APPS = [
    ]},
   {'slug': 'rf-systems', 'key': 'rf', 'name': 'RF Systems',
    'tag': 'RF power generation and matching',
-   'intro': ['Kilowatts of radio-frequency power create the plasmas used in semiconductor manufacturing, and drive systems from medical imaging to fusion research.',
-             'The challenge is to generate that power efficiently and keep it steady as the load changes in microseconds.'],
+   'intro': ['Kilowatt-level radio-frequency (RF) power systems enable a wide range of applications, from plasma processing in semiconductor manufacturing to industrial dielectric heating.',
+             'These applications require efficient RF power generation and precise impedance matching to ensure stable power delivery, even under rapidly changing load conditions.'],
    'alt': 'RF power amplifier module on a lab bench',
    'topics': [
-     ('Kilowatt-class RF amplifiers', 'rfpa', '../assets/apps/rfpa',
-      'At megahertz frequencies, switching losses grow quickly.',
-      'Switched-mode amplifiers and layouts that stay efficient at kilowatt output.'),
-     ('Fast impedance matching', 'matching', '../assets/apps/matching',
-      'Plasma conditions shift, and mismatched power reflects back.',
+     ('High-Power RF Amplifiers', 'photo:rfpa', '../assets/apps/rf-pa-photo',
+      'In high-power RF systems, switching losses, parasitic effects, and thermal stress are key design challenges.',
+      'Resonant switch-mode amplifiers with low-parasitic circuit layouts and effective thermal management.'),
+     ('Impedance matching system', 'photo:matching', '../assets/apps/rf-evc-photo',
+      'Changes in load impedance can cause impedance mismatches and reflected power, potentially damaging the RF system.',
       'Matching networks that track the load quickly and accurately.'),
      ('RF magnetics', 'magnetics', '../assets/magnetics',
       'Air-core inductors are bulky and leak magnetic field.',
@@ -143,6 +143,7 @@ def page(i, a):
     for k, (title, name, src, problem, approach) in enumerate(a['topics']):
         dark = ' dark' if name == 'robot' else ''
         art = (f'<div class="art chart">{resonance_chart()}</div>' if name == 'chart:resonance' else
+               f'<div class="art photo"><img src="{src}.webp" loading="lazy" decoding="async" alt="{title}"></div>' if name.startswith('photo:') else
                f'<div class="art{dark}"><img src="{src}.webp" width="1200" height="660" loading="lazy" decoding="async" alt="">{flow_svg(src, name)}</div>')
         topics.append(f'''    <article class="topic{" flip" if k % 2 else ""}">
       {art}
@@ -173,10 +174,6 @@ def page(i, a):
   <link rel="stylesheet" href="applications.css">
 </head>
 <body>
-<header class="site-head">
-  <a class="brand" href="../index.html"><b>IPC</b> Lab <span>KAIST Integrated Power Circuit Lab</span></a>
-  <nav aria-label="Sections"><a href="../index.html#research">Research</a><a href="../index.html#applications">Applications</a></nav>
-</header>
 <main>
   <section class="app-hero" aria-labelledby="app-title">
     <div class="app-hero-copy">
@@ -203,7 +200,7 @@ def page(i, a):
     </div>
   </nav>
 </main>
-<footer class="site-foot"><p>KAIST Integrated Power Circuit Lab</p><p class="credit">{credit(a["key"])}</p></footer>
+<footer class="site-foot embed-foot"><p class="credit">{credit(a["key"])}</p></footer>
 </body>
 </html>
 '''

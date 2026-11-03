@@ -239,11 +239,11 @@ a:focus-visible { outline: 3px solid #7fb0e6; outline-offset: 3px; border-radius
 /* Size comparison: three traits under each item, arrows pointing toward IPC */
 @media (min-width: 1001px) { .hero { grid-template-columns: minmax(0, .92fr) minmax(0, 1.08fr); } }
 .scale { padding: 30px 22px 22px; }
-.scale-row { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; align-items: start; }
+.scale-row { grid-template-columns: minmax(0, 1.3fr) minmax(0, 1.15fr) max-content; gap: 10px; align-items: start; }
 .scale-item { min-width: 0; }
 .scale-item .pic { display: flex; align-items: center; justify-content: center; width: 100%; height: 118px; }
 .scale-item .pic img { width: auto; max-width: 100%; height: auto; }
-.s-discrete { max-height: 108px; max-width: 190px !important; } .s-ipc { max-height: 70px; max-width: calc(100% - 44px) !important; } .s-pmic { max-height: 26px; }
+.s-discrete { max-height: 114px; max-width: 100% !important; } .s-ipc { max-height: 70px; max-width: calc(100% - 44px) !important; } .s-pmic { max-height: 26px; }
 .traits { list-style: none; margin: 12px 0 0; padding: 0; display: grid; gap: 5px; text-align: left; justify-self: center; }
 .traits li { display: flex; align-items: center; gap: 6px; font-size: 11.5px; line-height: 1.35; color: var(--body); white-space: nowrap; }
 @media (max-width: 1000px) { .scale { max-width: none; } .traits li { white-space: normal; align-items: flex-start; } .traits svg { margin-top: 1px; } }
@@ -275,3 +275,22 @@ a:focus-visible { outline: 3px solid #7fb0e6; outline-offset: 3px; border-radius
 
 /* No own header/footer: the page is shown inside the lab Google Site */
 .embed-foot { margin-top: 48px; padding: 16px; border-top: 0; }
+
+/* Comparison row v3: columns sized to content, one equal gap, arrows centred in the gaps on the image axis */
+@media (min-width: 641px) {
+  .scale-row { grid-template-columns: max-content 1fr max-content 1fr max-content; gap: 0 10px; justify-content: center; }
+  .scale-item .pic { height: 118px; }
+  .scale-item .pic img.s-discrete { width: 160px; max-width: none; max-height: none; }
+  .scale-item .pic img.s-ipc { width: 104px; max-width: none !important; max-height: none; }
+  .scale-item .pic img.s-pmic { width: 30px; max-height: none; }
+  .scale-arrow { display: block; align-self: start; margin-top: 54px; justify-self: center; }
+  .scale-arrow svg { width: 30px !important; }
+  .scale-item .ruler { width: 100%; }
+  .traits li { font-size: 11px; }
+}
+@media (min-width: 1001px) { .hero { grid-template-columns: minmax(0, .86fr) minmax(0, 1.14fr); } }
+@media (min-width: 1001px) and (max-width: 1240px) {
+  .scale-item .pic img.s-discrete { width: 128px; } .scale-item .pic img.s-ipc { width: 88px; }
+  .scale-arrow svg { width: 20px !important; }
+  .traits li { font-size: 10px; }
+}

@@ -1,0 +1,305 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>News | KAIST Integrated Power Circuit Lab</title>
+<link rel="preconnect" href="https://script.google.com">
+<link rel="preconnect" href="https://script.googleusercontent.com" crossorigin>
+<style>
+html, body { margin: 0; padding: 0; background: #fff; }
+#ipc-news, #ipc-news * { box-sizing: border-box; }
+#ipc-news {
+  --ink: #14273d; --blue: #2056b3; --muted: #5c6979; --line: #dce3eb;
+  color: var(--ink); background: #fff;
+  font-family: Arial, Helvetica, sans-serif; -webkit-font-smoothing: antialiased;
+  padding: 64px 30px 32px; font-size: 18px;
+}
+#ipc-news [hidden] { display: none !important; }
+#ipc-news button { font: inherit; color: inherit; cursor: pointer; }
+#ipc-news button:focus-visible { outline: 3px solid #3978dc; outline-offset: 5px; }
+#ipc-news .ipc-shell { max-width: 1140px; margin: 0 auto; }
+#ipc-news .ipc-heading { margin-bottom: 32px; }
+#ipc-news h2 { margin: 0; font-size: clamp(40px, 4.5vw, 56px); font-weight: 600; letter-spacing: -2.1px; line-height: 1.08; }
+#ipc-news .ipc-featured { display: grid; grid-template-columns: 1.12fr 1fr 1fr; gap: 16px; }
+#ipc-news .ipc-card { padding: 28px 25px 24px; background: #f2f5f9; border-radius: 5px; min-width: 0; display: flex; flex-direction: column; border-top: 3px solid #b8c7db; }
+#ipc-news .ipc-card-image { display: block; width: 100%; aspect-ratio: 16 / 10; object-fit: contain; background: #e7edf5; border-radius: 3px; margin: 0 0 20px; }
+#ipc-news .ipc-detail-image { display: block; width: auto; max-width: 100%; height: auto; max-height: 720px; object-fit: contain; border-radius: 4px; margin: 26px 0 0; }
+#ipc-news .ipc-card:first-child { background: #102d50; color: #fff; border-top-color: #508ae4; }
+#ipc-news .ipc-card-meta { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 8px 12px; font-size: 13px; letter-spacing: 1px; color: #59697c; margin-bottom: 29px; }
+#ipc-news .ipc-card:first-child .ipc-card-meta { color: #c0d5f0; }
+#ipc-news .ipc-latest { display: inline-flex; align-items: center; gap: 7px; font-weight: 700; }
+#ipc-news .ipc-latest::before { content: ''; width: 5px; height: 5px; background: currentColor; border-radius: 50%; }
+#ipc-news .ipc-topic { font-size: 12px; font-weight: 700; letter-spacing: 1.2px; color: #41669c; margin: 0 0 11px; }
+#ipc-news .ipc-card:first-child .ipc-topic { color: #a6c9ff; }
+#ipc-news .ipc-card h3 { font-size: 30px; line-height: 1.22; letter-spacing: -.7px; font-weight: 600; margin: 0 0 18px; white-space: pre-line; overflow-wrap: anywhere; }
+#ipc-news .ipc-summary { font-size: 16px; line-height: 1.7; color: #526173; margin: 0 0 26px; overflow-wrap: anywhere; }
+#ipc-news .ipc-card:first-child .ipc-summary { color: #dae5f4; }
+#ipc-news .ipc-card-footer { margin-top: auto; border-top: 1px solid #d6dfe9; padding-top: 18px; }
+#ipc-news .ipc-card:first-child .ipc-card-footer { border-color: #365170; }
+#ipc-news .ipc-event { font-size: 15px; font-weight: 700; margin: 0 0 7px; }
+#ipc-news .ipc-event-detail { font-size: 13px; line-height: 1.6; color: #59697c; margin: 0; }
+#ipc-news .ipc-card:first-child .ipc-event-detail { color: #c0d5f0; }
+#ipc-news .ipc-feature-open { border: 0; background: transparent; text-align: left; padding: 13px 0 0; min-height: 40px; font-size: 14px; font-weight: 700; color: inherit; }
+#ipc-news .ipc-feature-open:hover { text-decoration: underline; text-underline-offset: 4px; }
+#ipc-news .ipc-archive { margin-top: 48px; }
+#ipc-news .ipc-archive-head { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding-bottom: 17px; border-bottom: 2px solid var(--ink); }
+#ipc-news .ipc-archive h3 { margin: 0; font-size: 26px; letter-spacing: -.5px; font-weight: 600; }
+#ipc-news .ipc-years { display: flex; gap: 7px; flex-wrap: wrap; }
+#ipc-news .ipc-year { background: transparent; border: 1px solid transparent; border-radius: 3px; padding: 9px 13px; font-size: 16px; font-weight: 700; min-height: 44px; }
+#ipc-news .ipc-year span { font-size: 12px; margin-left: 6px; font-weight: 400; color: #657589; }
+#ipc-news .ipc-year[aria-pressed="true"] { background: var(--ink); color: white; }
+#ipc-news .ipc-year[aria-pressed="true"] span { color: #cfdbeb; }
+#ipc-news .ipc-year:hover:not([aria-pressed="true"]) { background: #f2f5f9; }
+#ipc-news .ipc-year-summary { color: var(--muted); font-size: 14px; line-height: 1.5; margin: 17px 0 5px; }
+#ipc-news .ipc-results { min-height: 408px; }
+#ipc-news .ipc-row { width: 100%; display: grid; grid-template-columns: 72px 115px 1fr 28px; gap: 17px; align-items: center; min-height: 102px; padding: 20px 7px; border: 0; border-bottom: 1px solid var(--line); text-align: left; background: transparent; transition: background .2s; }
+#ipc-news .ipc-row:hover { background: #f5f8fc; }
+#ipc-news .ipc-date { font-size: 14px; line-height: 1.5; font-weight: 700; letter-spacing: .2px; }
+#ipc-news .ipc-date small { display: block; color: #6b7787; font-weight: 400; font-size: 13px; }
+#ipc-news .ipc-category { font-size: 14px; color: var(--blue); font-weight: 600; }
+#ipc-news .ipc-row-title { font-size: 20px; line-height: 1.5; font-weight: 600; letter-spacing: -.2px; overflow-wrap: anywhere; }
+#ipc-news .ipc-arrow { font-size: 24px; font-weight: 400; color: #55718f; justify-self: end; }
+#ipc-news .ipc-pagination { display: flex; justify-content: space-between; align-items: center; gap: 12px; padding-top: 19px; }
+#ipc-news .ipc-range { font-size: 14px; color: var(--muted); }
+#ipc-news .ipc-page-buttons { display: flex; align-items: center; gap: 5px; }
+#ipc-news .ipc-page { min-width: 40px; min-height: 44px; border: 0; border-radius: 3px; padding: 8px; background: transparent; font-size: 14px; }
+#ipc-news .ipc-page[aria-current="page"] { background: #e9eff8; color: #184d9d; font-weight: 700; }
+#ipc-news .ipc-page:hover:enabled { background: #edf2f8; }
+#ipc-news .ipc-page:disabled { opacity: .3; cursor: default; }
+#ipc-news .ipc-detail { min-height: 408px; border-bottom: 1px solid var(--line); padding: 22px 7px 30px; }
+#ipc-news .ipc-back { border: 0; padding: 8px 0; background: transparent; font-size: 16px; color: var(--blue); margin-bottom: 25px; }
+#ipc-news .ipc-detail-meta { color: var(--blue); font-size: 14px; margin: 0 0 17px; }
+#ipc-news .ipc-detail h4 { font-size: 32px; line-height: 1.3; letter-spacing: -.6px; margin: 0 0 23px; max-width: 850px; }
+#ipc-news .ipc-detail-text { font-size: 20px; line-height: 1.75; max-width: 850px; margin: 0; overflow-wrap: anywhere; white-space: pre-wrap; }
+#ipc-news .ipc-sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; border: 0; }
+@media (max-width: 900px) {
+  #ipc-news { padding: 44px 22px 28px; }
+  #ipc-news .ipc-card { padding: 23px 19px 20px; }
+  #ipc-news .ipc-card h3 { font-size: 26px; }
+  #ipc-news .ipc-row { grid-template-columns: 60px 100px 1fr 22px; gap: 12px; }
+}
+@media (max-width: 650px) {
+  #ipc-news { padding: 34px 18px 24px; }
+  #ipc-news .ipc-heading { margin-bottom: 24px; }
+  #ipc-news h2 { font-size: 40px; letter-spacing: -1.5px; }
+  #ipc-news .ipc-featured { grid-template-columns: 1fr; gap: 12px; }
+  #ipc-news .ipc-card { padding: 17px 19px; }
+  #ipc-news .ipc-card-meta { margin-bottom: 11px; font-size: 12px; }
+  #ipc-news .ipc-topic { font-size: 11px; margin-bottom: 6px; }
+  #ipc-news .ipc-card h3 { font-size: 26px; white-space: normal; margin-bottom: 13px; }
+  #ipc-news .ipc-summary { display: none; }
+  #ipc-news .ipc-card-footer { padding-top: 11px; display: flex; flex-wrap: wrap; gap: 5px 12px; align-items: baseline; }
+  #ipc-news .ipc-event { margin: 0; font-size: 14px; }
+  #ipc-news .ipc-event-detail { font-size: 12px; }
+  #ipc-news .ipc-feature-open { font-size: 14px; min-height: 44px; padding-top: 9px; }
+  #ipc-news .ipc-archive { margin-top: 31px; }
+  #ipc-news .ipc-archive-head { display: block; padding-bottom: 12px; }
+  #ipc-news .ipc-archive h3 { font-size: 24px; margin-bottom: 13px; }
+  #ipc-news .ipc-years { gap: 5px; }
+  #ipc-news .ipc-year { padding: 8px 12px; }
+  #ipc-news .ipc-results { min-height: 270px; }
+  #ipc-news .ipc-row { grid-template-columns: 51px 1fr 20px; gap: 5px 11px; padding: 17px 0; min-height: 135px; }
+  #ipc-news .ipc-date { grid-column: 1; grid-row: 1 / 3; }
+  #ipc-news .ipc-category { grid-column: 2; grid-row: 1; align-self: end; font-size: 13px; }
+  #ipc-news .ipc-row-title { grid-column: 2; grid-row: 2; align-self: start; font-size: 17px; }
+  #ipc-news .ipc-arrow { grid-column: 3; grid-row: 1 / 3; }
+  #ipc-news .ipc-pagination { align-items: flex-start; flex-direction: column; gap: 9px; }
+  #ipc-news .ipc-page-buttons { gap: 3px; flex-wrap: wrap; }
+  #ipc-news .ipc-page { min-width: 38px; min-height: 44px; }
+  #ipc-news .ipc-detail { min-height: 270px; }
+  #ipc-news .ipc-detail h4 { font-size: 26px; }
+  #ipc-news .ipc-detail-text { font-size: 17px; line-height: 1.75; }
+}
+@media (prefers-reduced-motion: reduce) { #ipc-news * { transition: none !important; } }
+</style>
+</head>
+<body>
+<section id="ipc-news" lang="en" aria-labelledby="ipc-news-heading">
+  <div class="ipc-shell">
+    <header class="ipc-heading">
+      <h2 id="ipc-news-heading">News &amp; stories<span style="color:#2056b3">.</span></h2>
+    </header>
+    <div id="ipc-featured" class="ipc-featured" aria-label="Latest research updates"></div>
+    <section class="ipc-archive" aria-labelledby="ipc-archive-title">
+      <div class="ipc-archive-head">
+        <h3 id="ipc-archive-title">Explore the archive</h3>
+        <div class="ipc-years" id="ipc-years" role="group" aria-label="Filter news by year"></div>
+      </div>
+      <p class="ipc-year-summary" id="ipc-year-summary"></p>
+      <div class="ipc-results" id="ipc-results"></div>
+      <article class="ipc-detail" id="ipc-detail" aria-labelledby="ipc-detail-title" hidden>
+        <button type="button" class="ipc-back" id="ipc-back">← Back to updates</button>
+        <p class="ipc-detail-meta" id="ipc-detail-meta"></p>
+        <h4 id="ipc-detail-title" tabindex="-1"></h4>
+        <p class="ipc-detail-text" id="ipc-detail-text"></p>
+        <div id="ipc-detail-media"></div>
+      </article>
+      <nav class="ipc-pagination" id="ipc-pagination" aria-label="News pages">
+        <span class="ipc-range" id="ipc-range"></span>
+        <div class="ipc-page-buttons" id="ipc-page-buttons"></div>
+      </nav>
+      <p class="ipc-sr-only" id="ipc-status" role="status" aria-live="polite"></p>
+    </section>
+    <noscript><p>Enable JavaScript to browse the news archive.</p></noscript>
+  </div>
+</section>
+
+<script id="ipc-payload" type="application/json">{"news": [{"id": "row-2", "date": "2026-10", "category": "Conference", "title": "Dongjin's work on VRM for AI accelerators has been accepted for APEC 2027", "text": "Our work on Voltage Regulator Modules for High-Current AI Accelerators  has been accepted for presentation at the 2027 IEEE APEC, March 07-11, 2027, in  New Orleans, LA. Congrats,  Dongjin!! More exciting research on AI Accelerators is coming!", "feature": {"summary": "Dongjin’s work on voltage regulator modules for high-current AI accelerators has been accepted for presentation at IEEE APEC 2027.", "topic": "CONFERENCE", "headline": "Dongjin's work on VRM for AI accelerators has been accepted for APEC 2027", "event": "APEC 2027", "eventDetails": "Mar 07–11, 2027 · New Orleans, LA"}}, {"id": "row-3", "date": "2026-10", "category": "Conference", "title": "Chaeyoung presented his research on RF impedance matching at ECCE 2026", "text": "Chaeyoung successfully presented his research on \"A Series-Stacked Resonant Electrical Variable Capacitor for RF Impedance Matching Systems \" at ECCE 2026, held in Vancouver , CA, Canada! Congrats, Chaeyoung!", "feature": {"summary": "Chaeyoung presented his research on a series-stacked resonant electrical variable capacitor for RF impedance matching systems at ECCE 2026.", "topic": "CONFERENCE", "headline": "Chaeyoung presented his research on RF impedance matching at ECCE 2026", "event": "ECCE 2026", "eventDetails": "Presented in Vancouver, Canada"}}, {"id": "row-4", "date": "2026-10", "category": "Conference", "title": "Yunsu's work on Motor–SMA hybrid actuator has been accepted for Humanoids 2026", "text": "Our work on Motor-SMA Hybrid Actuator for Humanoid Robots  has been accepted for presentation at the 2026 IEEE-RAS 25th International Conference on Humanoid Robots, December 06-09, 2026, in  Santa Clara, CA. Congrats,  Yunsu!! More exciting research on humanoid robotics is coming!", "feature": {"summary": "Yunsu’s work on a Motor–SMA hybrid actuator for humanoid robots has been accepted for presentation at IEEE-RAS Humanoids 2026.", "topic": "CONFERENCE", "headline": "Yunsu's work on Motor–SMA hybrid actuator has been accepted for Humanoids 2026", "event": "Humanoids 2026", "eventDetails": "Dec 06–09, 2026 · Santa Clara, CA"}}, {"id": "row-5", "date": "2026-09", "category": "People", "title": "Welcome to IPC Lab, Doyun Gu", "text": "Doyun Gu joins Integrated Power Circuit (IPC) Lab. Welcome, Doyun!"}, {"id": "row-6", "date": "2026-07", "category": "Award", "title": "Chaeyoung receives the KIPE Best Paper Award", "text": "Chaeyoung received the Best Paper Award at the 2026 KIPE Conference for “Architecture of a Resonant Series Electrically Variable Capacitor (S-EVC) for RF Impedance Matching System.” Congrats, Chaeyoung!"}, {"id": "row-7", "date": "2026-06", "category": "Research", "title": "Next-generation magnetics collaboration project for EV", "text": "A collaborative proposal (led by Chang Sung Corportaion) has been  selected! IPC Lab will develop next-generation magnetic components for electric vehicles (EVs) in collaboration with leading research institutes and Hyundai Motor Company."}, {"id": "row-8", "date": "2026-05", "category": "Conference", "title": "Chaeyoung's work on impedance matching has been accepted for ECCE 2026", "text": "Our work on a Impedance Matching Network has been accepted for presentation at the IEEE ECCE  (Energy Conversion Conference and Expo) 2026 , October 04-08, 2026, in Vancouver, Canada! Congrats,  Chaeyung and Doyeon!!"}, {"id": "row-9", "date": "2026-04", "category": "Collaboration", "title": "Expanding our collaboration project with Samsung Research", "text": "IPC Lab has renewed and expanded its collaboration with Samsung Research to further advance High-performance RF + Impedance Matching Systems for future applications!"}, {"id": "row-10", "date": "2026-03", "category": "Collaboration", "title": "Advancing EV charging project with Hyundai Motor Company", "text": "IPC Lab launched a collaboration project with Hyundai Motor Company to improve Electric Vehicles Charging Architectures!"}, {"id": "row-11", "date": "2026-02", "category": "Recognition", "title": "Prof. Baek named Kwon Oh-Hyun Endowed Chair Professor", "text": "Prof. Baek appointed as Kwon Oh-Hyun Endowed Chair Professor!"}, {"id": "row-12", "date": "2026-02", "category": "People", "title": "Welcome to IPC Lab, Jinwook", "text": "Jinwook joined  Integrated Power Circuit (IPC) Lab. Welcome, Jinwook!"}, {"id": "row-13", "date": "2026-01", "category": "People", "title": "Welcome to IPC Lab, Sangeun", "text": "Sangeun  joined  Integrated Power Circuit (IPC) Lab. Welcome, Sangeun!"}, {"id": "row-14", "date": "2025-12", "category": "Award", "title": "Nayeon & Hoonjoon receive a KAIST URP program award", "text": "Nayeon & Hoonjoon's research proposal for the KAIST URP program was awarded (IPC's 3rd URP program award)!. Congrats, Nayeon & Hoonjoon!"}, {"id": "row-15", "date": "2025-12", "category": "People", "title": "Welcome to IPC Lab, Kidae", "text": "Kidae  joined  Integrated Power Circuit (IPC) Lab. Welcome, Kidae!"}, {"id": "row-16", "date": "2025-10", "category": "People", "title": "Welcome to IPC Lab, Donghyun", "text": "Donghyun  joined  Integrated Power Circuit (IPC) Lab. Welcome, Donghyun!"}, {"id": "row-17", "date": "2025-10", "category": "Collaboration", "title": "AI accelerator power delivery project with Samsung Electronics LSI", "text": "IPC Lab launched a collaboration project with Samsung Electronics (LSI) for MBVR+IVR High Performance Accelerator Power Delivery from 2025. 10 to 2028.09!"}, {"id": "row-18", "date": "2025-09", "category": "Award", "title": "Prof. Baek receives the Outstanding Teaching Award", "text": "Prof. Baek received the Outstanding Teaching Award (EE30094: Power Electronics Control)!"}, {"id": "row-19", "date": "2025-09", "category": "Collaboration", "title": "Digital twins project for network power supplies with Samsung", "text": "IPC Lab launched a collaboration project with Samsung Electronics (Network) for Digital Twin Development of Network Power Supplies!"}, {"id": "row-20", "date": "2025-08", "category": "People", "title": "Welcome to IPC Lab, Junwoo Kim", "text": "Junwoo Kim joins Integrated Power Circuit (IPC) Lab. Welcome, Junwoo!"}, {"id": "row-21", "date": "2025-07", "category": "People", "title": "Welcome to IPC Lab, Doyeon Eom", "text": "Doyeon Eom joins Integrated Power Circuit (IPC) Lab. Welcome, Doyeon!"}, {"id": "row-22", "date": "2025-07", "category": "People", "title": "Welcome to IPC Lab, Youngjoon Song", "text": "Youngjoon Song joins Integrated Power Circuit (IPC) Lab. Welcome, Youngjoon!"}, {"id": "row-23", "date": "2025-06", "category": "People", "title": "Welcome to IPC Lab, Chaewon Yoon", "text": "Chaewon Yoon joins Integrated Power Circuit (IPC) Lab. Welcome, Chaewon!"}, {"id": "row-24", "date": "2025-06", "category": "People", "title": "Welcome to IPC Lab, Junseo Yang", "text": "Junseo Yang joins Integrated Power Circuit (IPC) Lab. Welcome, Junseo!"}, {"id": "row-25", "date": "2025-06", "category": "Award", "title": "Jaeyun & Yunsu receive a KAIST URP program award", "text": "Jaeyun & Yunsu's research proposal for the KAIST URP program has been awarded!  Congrats, Jaeyun & Yunsu!"}, {"id": "row-26", "date": "2025-06", "category": "Award", "title": "Daehyung & Chaeyoung receive a KAIST URP program award", "text": "Daehyung & Chaeyoung's research proposal for the KAIST URP program has been awarded!  Congrats, Daehyung & Chaeyoung!"}, {"id": "row-27", "date": "2025-05", "category": "People", "title": "Welcome to IPC Lab, Leo Choung", "text": "Leo Choung joins Integrated Power Circuit (IPC) Lab. Welcome, Leo!"}, {"id": "row-28", "date": "2025-05", "category": "People", "title": "Welcome to IPC Lab, Nayeon Kim", "text": "Nayeon Kim joins Integrated Power Circuit (IPC) Lab. Welcome, Nayeon!"}, {"id": "row-29", "date": "2025-05", "category": "People", "title": "Welcome to IPC Lab, Hyeonseo Kim", "text": "Hyeonseo Kim joins Integrated Power Circuit (IPC) Lab. Welcome,  Hyeonseo!"}, {"id": "row-30", "date": "2025-04", "category": "Collaboration", "title": "Wireless power transfer project for future smart factories with VODA", "text": "IPC Lab launched a collaboration project with VODA for Multi-Output Wireless Power Transfer for FutureSmart Factory!"}, {"id": "row-31", "date": "2025-04", "category": "Collaboration", "title": "Humanoid robotics project with KIMM", "text": "IPC Lab launched a collaboration project with KIMM for Humanoid Robots! More exciting research topics are coming!"}, {"id": "row-32", "date": "2025-04", "category": "Collaboration", "title": "RF impedance matching project with Samsung Research", "text": "IPC Lab launched a collaboration project with Samsung Research for High-performance RF + Impedance Matching Systems for future applications!"}, {"id": "row-33", "date": "2025-03", "category": "Service", "title": "Prof. Baek joins the PwrSoC 2025 technical committee", "text": "Prof. Baek will serve as a Technical Program Committee (TPC) member for Power Supply on Chip (PwrSoC) 2025."}, {"id": "row-34", "date": "2025-03", "category": "Award", "title": "NRF Outstanding Young Scientist Grant for AI power electronics", "text": "Prof. Baek received the NRF of Korea Award - Outstanding Young Scientist Grant (우수신진) for his proposal \"Research on Sophisticated Power Electronics for High Performance AI Semiconductor: Component, Circuit, Architecture, and System\". More exciting research is coming!"}, {"id": "row-35", "date": "2025-03", "category": "Collaboration", "title": "Ion-thruster power processing unit (PPU) project with KARI", "text": "Proposal as a Co-PI \"Research on Core Technologies of Power Processing Unit (PPU) for Ion Thruster\" was selected for funding by  Korea Aerospace Research Institute (KARI). More exciting research is coming!"}, {"id": "row-36", "date": "2025-03", "category": "Service", "title": "Prof. Baek will chair Technical Session 38 at APEC 2025", "text": "Prof. Baek will chair the Technical Session 38 at APEC 2025, held in Atlanta, GA."}, {"id": "row-37", "date": "2025-03", "category": "Conference", "title": "Prof. Baek's work on package in-situ coupled inductor has been accepted for APEC 2025", "text": "Prof. Baek will present his research on \"High Power Density Fully Integrated Voltage Regulator (FIVR) for High Power Density Microprocessors (GPU, CPU, and XPU) \" at APEC 2025, held in Atlanta, GA."}, {"id": "row-38", "date": "2025-02", "category": "People", "title": "Welcome to IPC Lab, Jaeyun Lee", "text": "Jaeyun Lee joins Integrated Power Circuit (IPC) Lab. Welcome, Jaeyun!"}, {"id": "row-39", "date": "2025-02", "category": "People", "title": "Welcome to IPC Lab, Dongjin Chae", "text": "Dongjin Chae joins Integrated Power Circuit (IPC) Lab. Welcome, Dongjin!"}, {"id": "row-40", "date": "2025-01", "category": "People", "title": "Welcome to IPC Lab, Chaeyoung Moon", "text": "Chaeyoung Moon joins Integrated Power Circuit (IPC) Lab. Welcome, Chaeyoung!"}, {"id": "row-41", "date": "2025-01", "category": "People", "title": "Welcome to IPC Lab, Yunsu Kang", "text": "Yunsu Kang joins Integrated Power Circuit (IPC) Lab. Welcome, Yunsu!"}, {"id": "row-42", "date": "2025-01", "category": "People", "title": "Welcome to IPC Lab, Daehyung Lim", "text": "Daehyung Lim joins Integrated Power Circuit (IPC) Lab. Welcome, Daehyung!"}, {"id": "row-43", "date": "2025-01", "category": "People", "title": "Welcome to IPC Lab, Hoonjoon Lee", "text": "Hoonjoon Lee joins Integrated Power Circuit (IPC) Lab. Welcome, Hoonjoon!"}, {"id": "row-44", "date": "2024-10", "category": "Recognition", "title": "Prof. Baek becomes an IEEE Senior Member", "text": "Prof. Baek became a Senior Member of IEEE."}, {"id": "row-45", "date": "2024-10", "category": "People", "title": "Jaeil Baek joins KAIST Electrical Engineering", "text": "Jaeil Baek joins KAIST School of Electrical Engineering as an Assistant Professor."}]}</script>
+<script>
+(() => {
+  'use strict';
+  // News feed: the Apps Script web app (same sheet "IPC Lab 뉴스 관리", tab 뉴스관리) with ?type=news.
+  const FEED = 'https://script.google.com/macros/s/AKfycbwNoBz6CV-hy7kZjFKRyhjerlrpG4nm5H89jLuc-ZBmju-F5C6c2HOVDi-XXwvABpcv/exec?type=news';
+  const KEY = 'ipc-news:v1';
+  const root = document.getElementById('ipc-news');
+  const el = id => root.querySelector('#' + id);
+  const months = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+  const esc = value => String(value ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+  const media = window.matchMedia('(max-width: 650px)');
+  const pageSize = () => media.matches ? 2 : 4;
+  const fullDate = n => months[Number(n.date.slice(5))-1] + ' ' + n.date.slice(0,4);
+
+  let NEWS = [], sorted = [], years = [], featured = [];
+  let year, page = 1, selectedId = null, featureOpener = null, touched = false, shown = '';
+  const currentItems = () => sorted.filter(n => n.date.startsWith(year));
+
+  function appendImage(container, item, className) {
+    if (!item.image || typeof item.image.src !== 'string' || !['image/png','image/jpeg','image/gif','image/webp'].some(type => item.image.src.startsWith('data:' + type + ';base64,'))) return;
+    const image = document.createElement('img');
+    image.className = className;
+    image.alt = item.image.alt || item.title;
+    image.decoding = 'async';
+    image.addEventListener('error', () => image.remove(), {once: true});
+    image.src = item.image.src;
+    container.appendChild(image);
+  }
+
+  function renderYears() {
+    el('ipc-years').innerHTML = years.map(y => `<button type="button" class="ipc-year" data-year="${y}" aria-pressed="${y===year}" aria-controls="ipc-results">${y}<span>${sorted.filter(n=>n.date.startsWith(y)).length}</span></button>`).join('');
+  }
+  function renderRows(announce = true) {
+    selectedId = null;
+    const items = currentItems(), size = pageSize(), totalPages = Math.max(1, Math.ceil(items.length/size));
+    page = Math.min(Math.max(page, 1), totalPages);
+    const start = (page-1)*size;
+    el('ipc-year-summary').textContent = `${year} / ${items.length} updates · Select a story to read more`;
+    el('ipc-results').hidden = false;
+    el('ipc-detail').hidden = true;
+    el('ipc-pagination').hidden = false;
+    el('ipc-results').innerHTML = items.slice(start,start+size).map(n => `<button type="button" class="ipc-row" data-story="${esc(n.id)}" aria-controls="ipc-detail" aria-label="Read update: ${esc(n.title)}"><time class="ipc-date" datetime="${esc(n.date)}">${months[Number(n.date.slice(5))-1].slice(0,3).toUpperCase()}<small>${n.date.slice(0,4)}</small></time><span class="ipc-category">${esc(n.category)}</span><span class="ipc-row-title">${esc(n.title)}</span><span class="ipc-arrow" aria-hidden="true">→</span></button>`).join('');
+    el('ipc-range').textContent = `${start+1}–${Math.min(start+size,items.length)} of ${items.length} updates`;
+    // Show a compact five-page window instead of squeezing 15 numbers onto mobile.
+    let first = Math.max(1, page-2), last = Math.min(totalPages, first+4);
+    first = Math.max(1,last-4);
+    const numbers = Array.from({length:last-first+1},(_,i)=>i+first);
+    el('ipc-page-buttons').innerHTML = `<button type="button" class="ipc-page" data-page="${page-1}" aria-label="Previous page" ${page===1?'disabled':''}>←</button>` + numbers.map(p=>`<button type="button" class="ipc-page" data-page="${p}" aria-label="Page ${p} of ${totalPages}" ${p===page?'aria-current="page"':''}>${p}</button>`).join('') + `<button type="button" class="ipc-page" data-page="${page+1}" aria-label="Next page" ${page===totalPages?'disabled':''}>→</button>`;
+    if (announce) el('ipc-status').textContent = `${year}: page ${page} of ${totalPages}. ${el('ipc-range').textContent}.`;
+  }
+  function showStory(id) {
+    const item = NEWS.find(n=>n.id===id);
+    if (!item) return;
+    selectedId = id;
+    el('ipc-detail-meta').textContent = fullDate(item) + ' / ' + item.category;
+    el('ipc-detail-title').textContent = item.title;
+    el('ipc-detail-text').textContent = item.text;
+    el('ipc-detail-media').replaceChildren();
+    appendImage(el('ipc-detail-media'), item, 'ipc-detail-image');
+    el('ipc-results').hidden = true;
+    el('ipc-pagination').hidden = true;
+    el('ipc-detail').hidden = false;
+    el('ipc-detail-title').focus({preventScroll:true});
+    el('ipc-status').textContent = 'Full update opened. Use Back to updates to return.';
+  }
+
+  // Draw the whole widget from a payload {news:[...]}. Returns false when there is nothing to show.
+  function render(payload) {
+    const list = payload && Array.isArray(payload.news) ? payload.news.filter(n => n && /^\d{4}-\d{2}/.test(n.date || '')) : [];
+    if (!list.length) return false;
+    const sig = JSON.stringify(list);
+    if (sig === shown) return true;
+    shown = sig;
+    NEWS = list;
+    sorted = [...NEWS].sort((a, b) => b.date.localeCompare(a.date));
+    years = [...new Set(sorted.map(n => n.date.slice(0,4)))];
+    year = years[0]; page = 1;
+    featured = sorted.filter(n => n.feature).slice(0,3);
+    ['ipc-years','ipc-pagination'].forEach(id => { el(id).hidden = false; });
+    el('ipc-archive-title').textContent = 'Explore the archive';
+    el('ipc-results').removeAttribute('role');
+    el('ipc-featured').hidden = featured.length === 0;
+    el('ipc-featured').innerHTML = featured.map(n => {
+      const f = n.feature;
+      return `<article class="ipc-card"><div class="ipc-card-meta"><span class="ipc-latest">HIGHLIGHT</span><time datetime="${esc(n.date)}">${esc(fullDate(n).toUpperCase())}</time></div><p class="ipc-topic">${esc(f.topic)}</p><h3>${esc(f.headline)}</h3><p class="ipc-summary">${esc(f.summary)}</p><div class="ipc-card-footer" ${!f.event && !f.eventDetails ? 'hidden' : ''}><p class="ipc-event">${esc(f.event)}</p><p class="ipc-event-detail">${esc(f.eventDetails)}</p></div><button type="button" class="ipc-feature-open" data-feature="${esc(n.id)}" aria-label="Read update: ${esc(n.title)}">Read update <span aria-hidden="true">→</span></button></article>`;
+    }).join('');
+    el('ipc-featured').querySelectorAll('.ipc-card').forEach((card, index) => {
+      const box = document.createElement('div');
+      appendImage(box, featured[index], 'ipc-card-image');
+      if (box.firstChild) card.querySelector('.ipc-topic').before(box);
+    });
+    renderYears(); renderRows(false);
+    return true;
+  }
+  function showUnavailable() {
+    el('ipc-featured').hidden = true;
+    el('ipc-years').hidden = true;
+    el('ipc-pagination').hidden = true;
+    el('ipc-archive-title').textContent = 'Lab updates';
+    el('ipc-results').textContent = 'News is temporarily unavailable. Please try again later.';
+    el('ipc-results').setAttribute('role', 'status');
+  }
+
+  root.addEventListener('click', event => {
+    const button = event.target.closest('button');
+    if (!button || button.disabled) return;
+    touched = true;
+    if (button.dataset.feature) {
+      featureOpener = button;
+      const item = NEWS.find(n=>n.id===button.dataset.feature);
+      if (!item) return;
+      year = item.date.slice(0,4);
+      page = Math.floor(currentItems().findIndex(n=>n.id===item.id)/pageSize())+1;
+      renderYears(); renderRows(false);
+      showStory(button.dataset.feature);
+      el('ipc-detail').scrollIntoView({block:'nearest',behavior:'instant'});
+    } else if (button.dataset.year) {
+      featureOpener = null;
+      year = button.dataset.year; page = 1;
+      renderYears(); renderRows();
+      root.querySelector(`[data-year="${year}"]`).focus({preventScroll:true});
+    } else if (button.dataset.page) {
+      page = Number(button.dataset.page); renderRows();
+      root.querySelector('[aria-current="page"]').focus({preventScroll:true});
+    } else if (button.dataset.story) { featureOpener = null; showStory(button.dataset.story); }
+    else if (button.id === 'ipc-back') {
+      const previous = selectedId;
+      page = Math.floor(currentItems().findIndex(n=>n.id===previous)/pageSize())+1;
+      renderRows(false);
+      const opener = featureOpener || root.querySelector(`[data-story="${previous}"]`);
+      if (opener) opener.focus();
+      featureOpener = null;
+      el('ipc-status').textContent = 'Returned to updates.';
+    }
+  });
+  media.addEventListener('change', () => { if (NEWS.length && !selectedId) { page=1; renderRows(); } });
+
+  // 1) Show at once: what this browser saw last time, else the copy built into this page.
+  let cached = null;
+  try { cached = JSON.parse(localStorage.getItem(KEY) || 'null'); } catch (e) {}
+  let built = null;
+  try { built = JSON.parse(document.getElementById('ipc-payload').textContent); } catch (e) {}
+  const ok = render(cached) || render(built);
+  // 2) Refresh from the sheet in the background (Apps Script takes about 2 s).
+  // If the reader has already clicked something, keep their view; the new list is used next time.
+  fetch(FEED + '&_=' + Date.now(), { cache: 'no-store' })
+    .then(r => r.ok ? r.json() : Promise.reject(r.status))
+    .then(d => {
+      if (!d || d.error || !Array.isArray(d.news) || !d.news.length) return;
+      try { localStorage.setItem(KEY, JSON.stringify({ news: d.news })); } catch (e) {}
+      if (!touched) render(d);
+    })
+    .catch(() => { if (!ok) showUnavailable(); });
+})();
+</script>
+</body>
+</html>

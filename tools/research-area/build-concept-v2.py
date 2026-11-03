@@ -4,6 +4,7 @@ usage: python -I tools/build-concept-v2.py <repo root>
 The research renders come with overlay paths (assets/<name>.json, 1200x660 space) exported
 from tools/render-research.html; they become animated "power flow" strokes over each image.
 """
+import re
 import json, os, sys
 
 root = os.path.join(sys.argv[1], sys.argv[2] if len(sys.argv) > 2 else 'concept-v2')
@@ -128,7 +129,40 @@ def projects():
     return projects_block(json.load(open(f, encoding='utf-8')), '')
 
 
-html = tpl.replace('{{VISION_SVG}}', VISION).replace('{{STACK}}', stack()).replace('{{PROJECTS}}', projects())
+# Sponsors & collaborators strip at the bottom of the page: two rows of logo cards moving in
+# opposite directions (CSS only; each row holds the list twice so the loop is seamless).
+SPONSORS = [  # (name, logo file in assets/partners or None for a text mark, width, height)
+    ('National Research Foundation of Korea', 'nrf.svg', 141, 42),
+    ('Samsung', 'samsung.png', 360, 153),
+    ('Hyundai Motor Group', 'hyundai.png', 360, 141),
+    ('Korea Aerospace Research Institute (KARI)', 'kari.svg', 443, 112),
+    ('Korea Institute of Machinery and Materials (KIMM)', 'kimm.png', 360, 87),
+    ('Intel', None, 0, 0),
+    ('Chang Sung Corporation (CSC)', 'changsung.png', 360, 146),
+    ('Korea Electronics Technology Institute (KETI)', 'keti.png', 266, 51),
+]
+
+def sponsors():
+    def card(s):
+        name, f, w, h = s
+        inner = (f'<img src="assets/partners/{f}" width="{w}" height="{h}" alt="{name}" loading="lazy" decoding="async">'
+                 if f else f'<span class="m-word">{name}</span>')
+        return f'<li class="m-card">{inner}</li>'
+    def row(items, cls):
+        cards = ''.join(card(s) for s in items)
+        copy = re.sub(r' alt="[^"]*"', ' alt=""', cards)  # the second copy is only there for the loop
+        return (f'<div class="marquee{cls}"><ul class="m-track">{cards}</ul>'
+                f'<ul class="m-track" aria-hidden="true">{copy}</ul></div>')
+    half = len(SPONSORS) // 2
+    return ('<section class="sponsors" aria-labelledby="sponsors-title">\n'
+            '    <div class="sec-head"><p class="kicker">Working together</p><h2 id="sponsors-title">Our Sponsors &amp; Collaborators</h2>'
+            '<p>Our research is funded by and carried out with these companies and institutes.</p></div>\n'
+            '    ' + row(SPONSORS, '') + '\n'
+            '    ' + row(SPONSORS[half:] + SPONSORS[:half], ' rev') + '\n'
+            '  </section>')
+
+
+html = tpl.replace('{{VISION_SVG}}', VISION).replace('{{SPONSORS}}', sponsors()).replace('{{STACK}}', stack()).replace('{{PROJECTS}}', projects())
 for n in ['circuit', 'pdn', 'magnetics', 'twin']:
     html = html.replace('{{ART_%s}}' % n, art(n))
 assert '{{' not in html

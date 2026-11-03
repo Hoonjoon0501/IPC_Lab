@@ -18,7 +18,7 @@
 
 // Run the looping figure animations only while the figure is visible.
 (() => {
-  const els = document.querySelectorAll('.art, .twin-stage, .vision-figure, .stack');
+  const els = document.querySelectorAll('.art, .twin-stage, .vision-figure, .stack, .sponsors');
   if (!('IntersectionObserver' in window)) { els.forEach(e => e.classList.add('in-view')); return; }
   const io = new IntersectionObserver(es => es.forEach(e => e.target.classList.toggle('in-view', e.isIntersecting)), { rootMargin: '100px' });
   els.forEach(e => io.observe(e));

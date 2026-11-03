@@ -17,7 +17,7 @@
 .topic.flip .art { order: 2; }
 .topic .art { border-radius: 18px; overflow: hidden; }
 .topic .art.dark { background: radial-gradient(ellipse at 50% 40%, #16335c 0%, #0b1a30 75%); }
-.topic .art.dark .flow-svg .flow { stroke: #cfe6ff; filter: drop-shadow(0 0 4px #4f9dff); stroke-dasharray: 18 82; animation-duration: 1.6s; }
+.topic .art.dark .flow-svg .flow { stroke: #cfe6ff; stroke-width: 3.5; stroke-dasharray: 18 82; animation-duration: 1.6s; }
 .topic .art.dark .flow-svg .base { stroke-opacity: 0; }
 .flow-svg { overflow: hidden; }
 .topic-copy h3 { margin: 6px 0 18px; font-size: clamp(22px, 2.4vw, 28px); line-height: 1.2; font-weight: 700; }

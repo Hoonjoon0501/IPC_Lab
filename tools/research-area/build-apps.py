@@ -169,11 +169,13 @@ def page(i, a):
   <link rel="preconnect" href="https://script.googleusercontent.com" crossorigin>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" onload="this.onload=null;this.rel='stylesheet'">
+  <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"></noscript>
   <script>if (window.self !== window.top) document.documentElement.classList.add('embedded');</script>
   <link rel="preload" as="image" href="../assets/apps/{a["key"]}-photo.webp">
   <link rel="stylesheet" href="../concept-v2.css">
   <link rel="stylesheet" href="applications.css">
+  <script src="../concept-v2.js" defer></script>
 </head>
 <body>
 <main>

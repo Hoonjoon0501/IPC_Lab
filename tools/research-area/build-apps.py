@@ -67,7 +67,7 @@ APPS = [
      ('Impedance matching system', 'photo:matching', '../assets/apps/rf-evc-photo',
       'Changes in load impedance can cause impedance mismatches and reflected power, potentially damaging the RF system.',
       'Matching networks that track the load quickly and accurately.'),
-     ('RF magnetics', 'photo:rfmag', '../assets/apps/rf-magnetics-photo',
+     ('High-Power High-Frequency Magnetics', 'photo:rfmag', '../assets/apps/rf-magnetics-photo',
       'Air-core inductors are bulky and leak magnetic field.',
       'Magnetic-core components designed for high-frequency, high-power operation.'),
    ]},

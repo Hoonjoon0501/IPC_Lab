@@ -18,10 +18,13 @@
     const per = period(p);
     return `<li><span class="proj-logo">${logo(p)}</span><div class="proj-copy"><h3>${esc(p.title)}</h3><p>${tag}${esc(p.partner)}</p></div>${per ? `<span class="proj-period">${esc(per)}</span>` : ''}</li>`;
   };
-  fetch(url + (url.includes('?') ? '&' : '?') + (app ? 'app=' + encodeURIComponent(app) : 'all=1') + '&_=' + Date.now(), { cache: 'no-store' })
-    .then(r => r.ok ? r.json() : Promise.reject(r.status))
-    .then(d => {
-      const items = (d.projects || []).filter(p => !app || p.app === app).sort((a, b) => (+a.order || 999) - (+b.order || 999));
+  const KEY = 'ipc-projects:' + (app || 'all');
+  let shown = '';
+  const render = d => {
+    const sig = JSON.stringify(d.projects || []);
+    if (sig === shown) return;
+    shown = sig;
+    const items = (d.projects || []).filter(p => !app || p.app === app).sort((a, b) => (+a.order || 999) - (+b.order || 999));
       const now = items.filter(p => p.status !== 'completed'), done = items.filter(p => p.status === 'completed');
       const cur = root.querySelector('.proj-list.current');
       if (cur) cur.innerHTML = now.map(row).join('') || '<li class="proj-empty">No ongoing projects.</li>';
@@ -32,6 +35,11 @@
         det.querySelector('.proj-list').innerHTML = done.map(row).join('');
       }
       root.hidden = !now.length && !done.length && !!app;
-    })
-    .catch(() => {}); // keep the static copy
+  };
+  // Show the last list this browser saw right away, then refresh from the sheet (Apps Script takes 1-3 s).
+  try { const c = JSON.parse(localStorage.getItem(KEY) || 'null'); if (c) render(c); } catch (e) {}
+  fetch(url + (url.includes('?') ? '&' : '?') + (app ? 'app=' + encodeURIComponent(app) : 'all=1') + '&_=' + Date.now(), { cache: 'no-store' })
+    .then(r => r.ok ? r.json() : Promise.reject(r.status))
+    .then(d => { render(d); try { localStorage.setItem(KEY, JSON.stringify({ projects: d.projects })); } catch (e) {} })
+    .catch(() => {}); // keep what is shown
 })();

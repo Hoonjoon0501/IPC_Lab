@@ -1,15 +1,12 @@
 /**
- * News feed for the fast static News page (IPC_Lab/news/index.html).
- *   <news web app URL>?type=news  →  {"news":[...]}  (the same list the News page shows)
+ * News feed for the fast static News page (IPC_Lab/news/index.html on GitHub Pages).
+ *   <this web app URL>?type=news  ->  {"news":[...], "error":false}
+ * Called from doGet(e) when e.parameter.type === "news". Uses readNews_() from Code.gs,
+ * kept for 60 s so sheet edits appear within about a minute.
  *
- * Setup (Apps Script "IPC Lab News"):
- *   1. Add this file (+ → Script → name it NewsFeed) and paste this code.
- *   2. In doGet(e), right next to the existing ?type=projects line, add:
- *        if (e && e.parameter && e.parameter.type === 'news') return newsFeed_(e);
- *   3. Deploy → Manage deployments → pencil → Version: New version → Deploy (keeps the same URL).
- *
- * It reuses the existing News page: it renders doGet without ?type, takes the news list out of it,
- * and keeps the result for 60 s, so sheet edits appear within about a minute.
+ * Installed 2026-11-03 in Apps Script "IPC Lab News" as file NewsFeed.gs, with this line in doGet:
+ *   if (e && e.parameter && e.parameter.type === 'news') return newsFeed_(e);
+ * Deployed as version 15 of the existing web app deployment (same URL).
  */
 const NEWS_CACHE_SECONDS = 60;
 
@@ -17,10 +14,13 @@ function newsFeed_(e) {
   const cache = CacheService.getScriptCache();
   let body = cache.get('news-json');
   if (!body) {
-    const html = doGet({ parameter: {} }).getContent();
-    const m = html.match(/<script id="ipc-payload" type="application\/json">([\s\S]*?)<\/script>/);
-    body = m ? m[1] : JSON.stringify({ news: [], error: true });
-    try { cache.put('news-json', body, NEWS_CACHE_SECONDS); } catch (err) {}  // over 100 KB (images): skip caching
+    try {
+      body = JSON.stringify({ news: readNews_().news, error: false });
+      try { cache.put('news-json', body, NEWS_CACHE_SECONDS); } catch (err) {}  // over 100 KB (images): no cache
+    } catch (error) {
+      console.error('IPC news feed could not be loaded.');
+      body = JSON.stringify({ news: [], error: true });
+    }
   }
   const cb = e && e.parameter && e.parameter.callback;
   if (cb && /^[A-Za-z_$][\w.$]*$/.test(cb)) {

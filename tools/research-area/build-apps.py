@@ -67,7 +67,7 @@ APPS = [
      ('Impedance matching system', 'photo:matching', '../assets/apps/rf-evc-photo',
       'Changes in load impedance can cause impedance mismatches and reflected power, potentially damaging the RF system.',
       'Matching networks that track the load quickly and accurately.'),
-     ('RF magnetics', 'magnetics', '../assets/magnetics',
+     ('RF magnetics', 'photo:rfmag', '../assets/apps/rf-magnetics-photo',
       'Air-core inductors are bulky and leak magnetic field.',
       'Magnetic-core components designed for high-frequency, high-power operation.'),
    ]},
@@ -143,7 +143,7 @@ def page(i, a):
     for k, (title, name, src, problem, approach) in enumerate(a['topics']):
         dark = ' dark' if name == 'robot' else ''
         art = (f'<div class="art chart">{resonance_chart()}</div>' if name == 'chart:resonance' else
-               f'<div class="art photo"><img src="{src}.webp" loading="lazy" decoding="async" alt="{title}"></div>' if name.startswith('photo:') else
+               f'<div class="art photo"><img src="{src}.webp?v=2" loading="lazy" decoding="async" alt="{title}"></div>' if name.startswith('photo:') else
                f'<div class="art{dark}"><img src="{src}.webp" width="1200" height="660" loading="lazy" decoding="async" alt="">{flow_svg(src, name)}</div>')
         topics.append(f'''    <article class="topic{" flip" if k % 2 else ""}">
       {art}
@@ -201,6 +201,16 @@ def page(i, a):
   </nav>
 </main>
 <footer class="site-foot embed-foot"><p class="credit">{credit(a["key"])}</p></footer>
+<script>
+  // Open each application page at its top. Inside the Google Site the page sits in an iframe and the
+  // site keeps its own scroll position, so also bring the top of this page into view in the parent.
+  if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
+  window.scrollTo(0, 0);
+  if (window.self !== window.top) {{
+    const top = document.querySelector('.app-hero');
+    if (top) top.scrollIntoView({{ block: 'start' }});
+  }}
+</script>
 </body>
 </html>
 '''

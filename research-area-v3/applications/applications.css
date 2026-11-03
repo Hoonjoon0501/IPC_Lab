@@ -56,5 +56,5 @@
 .app-next a:hover img { transform: none; }
 
 /* Lab photos as topic figures: whole image visible on a light background */
-.topic .art.photo { aspect-ratio: 1200 / 660; background: #eef2f7; }
-.topic .art.photo img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; }
+.topic .art.photo { aspect-ratio: 1200 / 660; background: none; }
+.topic .art.photo img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }

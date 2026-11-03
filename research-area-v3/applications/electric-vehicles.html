@@ -54,7 +54,7 @@
     <ul class="proj-list current"><li><span class="proj-logo"><img src="../assets/partners/hyundai.png" alt="Hyundai" loading="lazy" decoding="async"></span><div class="proj-copy"><h3>Electric-vehicle charging architectures (vehicle-to-vehicle charging)</h3><p>Hyundai Motor Company</p></div><span class="proj-period">Since 2026.03</span></li><li><span class="proj-logo"><img src="../assets/partners/hyundai.png" alt="Hyundai" loading="lazy" decoding="async"></span><div class="proj-copy"><h3>Matrix-type power conversion for electric vehicles</h3><p>Hyundai Motor Company</p></div></li><li><span class="proj-logo"><img src="../assets/partners/changsung.png" alt="Chang Sung" loading="lazy" decoding="async"></span><div class="proj-copy"><h3>Next-generation magnetic components for electric vehicles</h3><p>Consortium led by Chang Sung Corporation, with Hyundai Motor Company and research institutes</p></div><span class="proj-period">Since 2026</span></li></ul>
     <details class="proj-done" hidden><summary><span>Completed projects (<span class="proj-count">0</span>)</span></summary><ul class="proj-list"></ul></details>
   </section>
-  <script src="../assets/projects-config.js?v=202611032201"></script><script src="../assets/projects.js?v=202611032201" defer></script>
+  <script src="../assets/projects-config.js?v=202611032211"></script><script src="../assets/projects.js?v=202611032211" defer></script>
 
   <nav class="app-next" aria-label="Applications">
     <p class="kicker">Explore other applications</p>
@@ -68,5 +68,15 @@
   </nav>
 </main>
 <footer class="site-foot embed-foot"><p class="credit">Header photo: Electric car charging at a station at dusk (illustrative image generated with ChatGPT).</p></footer>
+<script>
+  // Open each application page at its top. Inside the Google Site the page sits in an iframe and the
+  // site keeps its own scroll position, so also bring the top of this page into view in the parent.
+  if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
+  window.scrollTo(0, 0);
+  if (window.self !== window.top) {
+    const top = document.querySelector('.app-hero');
+    if (top) top.scrollIntoView({ block: 'start' });
+  }
+</script>
 </body>
 </html>

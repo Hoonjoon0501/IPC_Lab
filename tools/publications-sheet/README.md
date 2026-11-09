@@ -14,9 +14,11 @@ Add `Publications.gs` to the existing **IPC Lab News** project. Add this line at
 if (e && e.parameter && e.parameter.type === 'publications') return publicationsFeed_(e);
 ```
 
-Keep the existing `cellImage_` helper for optional in-cell illustrations. The feed also supports HTTPS image URLs. It emits only rows whose status is exactly `공개`; internal notes are excluded. No publication illustrations have been seeded.
+The shared `cellImage_` helper in `Code.gs` reads optional in-cell illustrations. Its maintained replacement is `Cell-image.gs`; replace the existing function instead of creating a second definition. Google-hosted image requests include the script owner's existing OAuth token, restricted to Google image hosts, and failed HTTP responses are logged without image URLs or credentials. The feed also supports HTTPS image URLs. It emits only rows whose status is exactly `공개`; internal notes are excluded. No publication illustrations have been seeded.
 
 Update the existing main deployment through **Deploy > Manage deployments > Edit > New version**. Keep its existing URL. The page uses that URL with `?type=publications`.
+
+On 2026-11-09, the shared image helper was updated in main deployment version 16 to authenticate Google image requests. Fresh anonymous web-app requests for J29, J28 and J27 returned images successfully after the change; cache bypass requests had failed before it.
 
 ## Editing
 
@@ -28,4 +30,4 @@ The initial records were transcribed from the supplied CV, updated March 2026: 2
 
 ## Checks
 
-Run `node tests/publications.cjs` and `node tests/publication-images.cjs`. These check metadata without image downloads, draft exclusion, row identity checks, chunked server caching, browser cache reuse, expiry, forced refresh and storage/network failure recovery. For visual review, serve the repository with any static server and open `/publications/`; the production feed is used by default. Verify type/year/search filters, recognition badges, empty results, keyboard access and mobile layout. For future illustration tests, use a draft row first and publish only an approved image.
+Run `node tests/publications.cjs`, `node tests/publication-images.cjs` and `node tests/cell-image.cjs`. These check metadata without image downloads, draft exclusion, row identity checks, chunked server caching, browser cache reuse, expiry, forced refresh, authenticated Google image requests, token host restrictions and storage/network failure recovery. For visual review, serve the repository with any static server and open `/publications/`; the production feed is used by default. Verify type/year/search filters, recognition badges, empty results, keyboard access and mobile layout. For future illustration tests, use a draft row first and publish only an approved image.
